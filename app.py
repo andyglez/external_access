@@ -18,6 +18,10 @@ def start():
     usr, pwd = data[0]
     return usr + pwd
 
+@app.route('/request', methods=['GET', 'POST'])
+def request_form():
+    return ''
+
 def query(s):
     cursor = db.get_connection.cursor()
     cursor.execute(s)
