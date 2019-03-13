@@ -45,3 +45,10 @@ create_pending = '''create table if not exists Pending(
 insert_roles = '''insert into DBRoles (username, roles)
                 select UserName, \'default\' 
                 from Users'''
+
+
+def initial_setup():
+    query(create_db_roles, False)
+    query(create_pending, False)
+    if len(query('select * from DBRoles')) == 0:
+        query(insert_roles)

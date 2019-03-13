@@ -19,7 +19,7 @@
 
 <body py:match="item.tag=='{http://www.w3.org/1999/xhtml}body'" py:attrs="item.items() + [('onload','setFocus();')]">
     <div class="menu" style="float:left;">
-        {% if is_root %}
+        {% if session['roles']['is_root'] %}
             <ul id="menu">
                 <li>
                     <a href="{{ url_for('start') }}">Reporte de Usuarios</a> |
@@ -50,7 +50,7 @@
 
     <div style="float:none; clear:both; width:100%; border-bottom:1px solid #7F9DB9;"></div>
 
-    <div py:content="[item.text]+item[:]">page content</div>
+    {% block body %}{% endblock %}  
 </body>
 
 </html>
