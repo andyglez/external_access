@@ -38,8 +38,13 @@ def request_form():
     if len(data) > 0:
         flash('El usuario ' + request.form['user'] + ' ya existe', category='error')
         return redirect(url_for('request_form'))
+    data = db.query('select * from Pending where phone=\'' + request.form['phone'] + '\'')
+    if len(data) > 0:
+        flash('El teléfono ' + request.form['phone'] + ' ya está anclado a otra cuenta')
+        return redirect(url_for('request_form'))
     full_name = request.form['name'] + ' ' + request.form['last_name']
-    db.query('insert into Pending (username, name, password, phone) values(\'' + request.form['user'] + '\',\'' + full_name + '\',\'' + request.form['password'] + '\',\'' + request.form['phone'] + '\')')
+    db.query('insert into Pending (username, name, password, phone) ' + 
+            'values(\'' + request.form['user'] + '\',\'' + full_name + '\',\'' + request.form['password'] + '\',\'' + request.form['phone'] + '\')')
     flash('Operación exitosa. Contacte con su administrador de red en un par de días')
     return redirect(url_for('start'))
 
