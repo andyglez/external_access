@@ -19,7 +19,7 @@ def start():
         return render_template('login.html')
     data = db.query('select UserName, Password from Users where Username=\'' + request.form['user']+'\' and Password=\'' + request.form['password']+ '\'')
     if len(data) == 0:
-        flash('Incorrect User Name or Password')
+        flash('Nombre de usuario o contraseña incorrectos', category='error')
         return redirect(url_for('start'))
     usr, pwd = data[0]
     result, _ = db.query('select roles, username from DBRoles where UserName = \'' + usr + '\'')[0]
@@ -34,5 +34,12 @@ def index(username, roles):
 def request_form():
     if request.method == 'GET':
         return render_template('request.html')
-    return ''
+    data = db.query('select * from Users where Username=\'' + request.form['user'] + '\'')
+    if len(data) > 0:
+        flash('El usuario ' + request.form['user'] + ' ya existe', category='error')
+        return redirect(url_for('request_form'))
+    full_name = request.form['name'] + ' ' + request.form['last_name']
+    db.query('insert into Pending (username, name, password, phone) values(\'' + request.form['user'] + '\',\'' + full_name + '\',\'' + request.form['password'] + '\',\'' + request.form['phone'] + '\')')
+    flash('Operación exitosa. Contacte con su administrador de red en un par de días')
+    return redirect(url_for('start'))
 
