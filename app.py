@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from os import urandom
 from settings import database as db
+from utils import userinfo
 
 app = Flask(__name__)
 app.secret_key = str(urandom(24))
@@ -23,12 +24,13 @@ def start():
         return redirect(url_for('start'))
     usr, pwd = data[0]
     result, _ = db.query('select roles, username from DBRoles where UserName = \'' + usr + '\'')[0]
-    roles = result.split(',')
-    return index(usr, roles)
+    session['roles'] = result.split(',')
+    session['user'] = usr
+    return redirect(url_for('index'))
 
 @app.route('/index', methods=['GET', 'POST'])
-def index(username, roles):
-    return 'I\'m at index'
+def index():
+    return render_template('index.html', is_root=userinfo.is_root(session['roles']))
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_form():
@@ -48,3 +50,10 @@ def request_form():
     flash('Operación exitosa. Contacte con su administrador de red en un par de días')
     return redirect(url_for('start'))
 
+@app.route('/logout')
+def logout():
+    if 'user' in session:
+        session['user'] = ''
+    if 'roles' in session:
+        session['roles'] = []
+    return render_template('login.html')

@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
+    py:extends="sitetemplate">
+
+<head py:match="item.tag=='{http://www.w3.org/1999/xhtml}head'" py:attrs="item.items()">
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+    <title py:replace="''">Acceso Telefónico</title>
+    <meta py:replace="item[:]" name="description" content="master template"/>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+    <script>
+    function setFocus() {
+        if (defaultInput) {
+            document.getElementById(defaultInput).focus();
+        }
+    }
+    </script>
+</head>
+
+<body py:match="item.tag=='{http://www.w3.org/1999/xhtml}body'" py:attrs="item.items() + [('onload','setFocus();')]">
+    <div class="menu" style="float:left;">
+        {% if is_root %}
+            <ul id="menu">
+                <li>
+                    <a href="{{ url_for('start') }}">Reporte de Usuarios</a> |
+                </li>
+                <li>
+                    <a href="{{ url_for('start') }}">Reporte de Centros</a> |
+                </li>
+                <li>
+                    <a href="{{ url_for('start') }}">Ver perfil...</a> |
+                </li>
+                <li>
+                    <a href="{{ url_for('start') }}">Ver detalles de conexión...</a> |
+                </li>
+                <li>
+                    <a href="{{ url_for('start') }}">Buscar por nombre...</a> |
+                </li>
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="menu" style="float:right;">
+        <ul>
+            <li>
+                | <a href="{{ url_for('start') }}">Salir</a>
+            </li>
+        </ul>
+    </div>
+
+    <div style="float:none; clear:both; width:100%; border-bottom:1px solid #7F9DB9;"></div>
+
+    <div py:content="[item.text]+item[:]">page content</div>
+</body>
+
+</html>
