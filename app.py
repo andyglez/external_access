@@ -16,7 +16,13 @@ def start():
         flash('Incorrect User Name or Password')
         return redirect(url_for('start'))
     usr, pwd = data[0]
-    return usr + pwd
+    result, _ = query('select roles, username from DBRoles where UserName = \'' + usr + '\'')[0]
+    roles = result.split(',')
+    return index(usr, roles)
+
+@app.route('/index', methods=['GET', 'POST'])
+def index(username, roles):
+    return 'I\'m at index'
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_form():
