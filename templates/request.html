@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:py="http://purl.org/kid/ns#">
+<head>
+    <meta content="text/html; charset=UTF-8"
+        http-equiv="content-type" py:replace="''"/>
+    <title>Autenticación</title>
+</head>
+
+<body onload="document.forms[0].user.focus();">
+    <center>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible" role="alert" style="background-color:lightblue">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form action="" method="POST">
+            <table>
+                <tr>
+                    <td>
+                        Nombre:
+                    </td>
+                    <td>
+                        <input type="text" name="name" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Apellidos:
+                    </td>
+                    <td>
+                        <input type="text" name="last_name"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Usuario:
+                    </td>
+                    <td>
+                        <input type="text" name="user"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Contraseña:
+                    </td>
+                    <td>
+                        <input type="password" name="password"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Teléfono:
+                    </td>
+                    <td>
+                        <input type="text" name="phone"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="Pedir registro"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </center>
+</body>
+</html>
