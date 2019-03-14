@@ -26,7 +26,9 @@ def start():
 
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('self_usage.html', seconds_to_time=lambda x: time_conversion.seconds_to_time(x))
+    return render_template('self_usage.html', 
+            seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
+            percent = session['consumed'] * 100 / session['quota']['total'])
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_form():
@@ -55,6 +57,8 @@ def load_user_data(usr, pwd, grp):
     quota = db.query(qb.get_quota(grp))
     bonus = db.query(qb.get_quota_bonus(usr))
     session['quota'] = userinfo.get_user_quota(quota, bonus)
+    consumed = db.query(qb.get_acct_consumed(usr))
+    session['consumed'] = sum([stp - stt for u, stt, stp in consumed])
 
 def is_a_valid_request(username, phone):
     data = db.query(qb.check_existance(username))

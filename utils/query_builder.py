@@ -31,3 +31,12 @@ def check_phone(phone):
 def insert_into_pending(username, fullname, password, phone):
     return '''insert into Pending (username, name, password, phone)
             values(\'{0}\',\'{1}\',\'{2}\',\'{3}\')'''.format(username, fullname, password, phone)
+
+def get_acct_consumed(username):
+    return '''select UserName,AcctStartTime,AcctStopTime
+                from radacct
+                where UserName = \'{0}\'
+                and AcctStartTime >= \'{1}\'
+                and AcctStartTime <= \'{2}\''''.format(username
+                ,datetime(datetime.now().year, datetime.now().month, datetime.now().day)
+                ,datetime(datetime.now().year, datetime.now().month, datetime.now().day + 1))
