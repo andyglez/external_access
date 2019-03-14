@@ -17,7 +17,7 @@ def get_quota(groupname):
             where GroupName = \'{}\''''.format(groupname)
 
 def get_quota_bonus(username):
-    return '''select Bonus
+    return '''select Bonus,UserName
             from QuotaBonus
             where UserName = \'{0}\'
             and Expires > \'{1}\''''.format(username, datetime.now())
