@@ -28,6 +28,7 @@ def get_user_quota(group, bonus):
     roaming, _ = group[len(group) - 1]
     b = sum([x for x,_ in bonus])
     return {
+        'total': int(session) + b,
         'value': int(session),
         'roaming': int(roaming),
         'bonus': b

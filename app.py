@@ -3,7 +3,7 @@ from utils import query_builder as qb
 from utils import messages as msg
 from os import urandom
 from settings import database as db
-from utils import userinfo
+from utils import userinfo, time_conversion
 
 app = Flask(__name__)
 app.secret_key = str(urandom(24))
@@ -26,7 +26,7 @@ def start():
 
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    return render_template('self_usage.html', seconds_to_time=lambda x: time_conversion.seconds_to_time(x))
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_form():

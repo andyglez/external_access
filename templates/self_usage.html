@@ -1,20 +1,11 @@
-{% extends "layout.html" %}
+{% extends "index.html" %}
 {% block body %}
 
 <div class="block block-details">
     <div style="padding-left:13px;">
-        {% 'Cuota: %s (%s + %s)' % (secondsToTime(quota), secondsToTime(userInfo.quota), secondsToTime(userInfo.bonus)) %}
-    </div>
-    <div style="float:left;margin-left:13px; margin-right:5px; height: 18px; width: 700px; border:1px solid #194373;">
-        <div style="height:18px; width: {{int(7 * percent)}}px; background-color: #4780C2;"></div>
-    </div>
-    <div style="padding-left:10px; font-weight : bold; font-size : 12pt; color : black;">
-        {% '%.2f' % percent %} %
-    </div>
-    <div style="clear:both;padding-left:13px;">
-        Consumo de la cuota: {% secondsToTime(details.total) %}
-    </div>
-    <div style="padding-left:13px;">
-        Tiempo restante: {% secondsToTime(non_used) %}
+        {{ 'Cuota: {0} ({1} + {2})'
+        .format(seconds_to_time(session['quota']['total']), seconds_to_time(session['quota']['value']), seconds_to_time(session['quota']['bonus'])) }}
     </div>
 </div>
+
+{% endblock %}
