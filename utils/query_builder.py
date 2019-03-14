@@ -20,7 +20,7 @@ def get_quota_bonus(username):
     return '''select Bonus,UserName
             from QuotaBonus
             where UserName = \'{0}\'
-            and Expires > \'{1}\''''.format(username, datetime.now())
+            and date_format(Expires, "%Y-%m-%d") > \'{1}\''''.format(username, datetime.now().date().isoformat())
 
 def check_existance(username):
     return 'select * from Users where Username=\'{}\''.format(username)
@@ -36,7 +36,7 @@ def get_acct_consumed(username):
     return '''select UserName,AcctStartTime,AcctStopTime
                 from radacct
                 where UserName = \'{0}\'
-                and AcctStartTime >= \'{1}\'
-                and AcctStartTime <= \'{2}\''''.format(username
-                ,datetime(datetime.now().year, datetime.now().month, datetime.now().day)
-                ,datetime(datetime.now().year, datetime.now().month, datetime.now().day + 1))
+                and date_format(AcctStartTime, "%Y-%m-%d") >= \'{1}\'
+                and date_format(AcctStopTime, "%Y-%m-%d") < \'{2}\''''.format(username
+                ,datetime(datetime.now().year, datetime.now().month, 1).date().isoformat()
+                ,datetime(datetime.now().year, datetime.now().month, datetime.now().day + 1).date().isoformat())

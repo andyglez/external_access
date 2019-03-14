@@ -4,6 +4,7 @@ from utils import messages as msg
 from os import urandom
 from settings import database as db
 from utils import userinfo, time_conversion
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = str(urandom(24))
@@ -58,7 +59,7 @@ def load_user_data(usr, pwd, grp):
     bonus = db.query(qb.get_quota_bonus(usr))
     session['quota'] = userinfo.get_user_quota(quota, bonus)
     consumed = db.query(qb.get_acct_consumed(usr))
-    session['consumed'] = sum([stp - stt for u, stt, stp in consumed])
+    session['consumed'] = sum([stp.timestamp() - stt.timestamp() for u, stt, stp in consumed])
 
 def is_a_valid_request(username, phone):
     data = db.query(qb.check_existance(username))
