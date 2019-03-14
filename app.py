@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from utils.query_builder import get_user, get_roles, get_quota
-from utils.messages import wrong_usr_pwd
+from utils import query_builder as qb
+from utils import messages as msg
 from os import urandom
 from settings import database as db
 from utils import userinfo
@@ -17,9 +17,9 @@ if __name__ == '__main__':
 def start():
     if request.method == 'GET':
         return render_template('login.html')
-    data = db.query(get_user(request.form['user'], request.form['password']))
+    data = db.query(qb.get_user(request.form['user'], request.form['password']))
     if len(data) == 0:
-        flash(wrong_usr_pwd(), category='error')
+        flash(msg.wrong_user_pass(), category='error')
         return redirect(url_for('start'))
     load_user_data(*data[0])
     return redirect(url_for('index'))
@@ -32,18 +32,11 @@ def index():
 def request_form():
     if request.method == 'GET':
         return render_template('request.html')
-    data = db.query('select * from Users where Username=\'' + request.form['user'] + '\'')
-    if len(data) > 0:
-        flash('El usuario ' + request.form['user'] + ' ya existe', category='error')
-        return redirect(url_for('request_form'))
-    data = db.query('select * from Pending where phone=\'' + request.form['phone'] + '\'')
-    if len(data) > 0:
-        flash('El teléfono ' + request.form['phone'] + ' ya está anclado a otra cuenta')
+    if not is_a_valid_request(request.form['user'], request.form['phone']):
         return redirect(url_for('request_form'))
     full_name = request.form['name'] + ' ' + request.form['last_name']
-    db.query('insert into Pending (username, name, password, phone) ' + 
-            'values(\'' + request.form['user'] + '\',\'' + full_name + '\',\'' + request.form['password'] + '\',\'' + request.form['phone'] + '\')')
-    flash('Operación exitosa. Contacte con su administrador de red en un par de días')
+    db.query(qb.insert_into_pending(request.form['user'], fullname, request.form['password'], request.form['phone']))
+    flash(msg.request_sent_successfully())
     return redirect(url_for('start'))
 
 @app.route('/logout')
@@ -54,8 +47,22 @@ def logout():
         session['roles'] = {}
     return render_template('login.html')
 
+
 def load_user_data(usr, pwd, grp):
-    result, _ = db.query(get_roles(usr))[0]
+    result, _ = db.query(qb.get_roles(usr))[0]
     session['user'] = usr
     session['roles'] = userinfo.get_user_roles(result.split(','))
-    session['quota'] = userinfo.get_user_quota(db.query(get_quota(grp)))
+    quota = db.query(qb.get_quota(grp))
+    bonus = db.query(qb.get_quota_bonus(usr))
+    session['quota'] = userinfo.get_user_quota(quota, bonus)
+
+def is_a_valid_request(username, phone):
+    data = db.query(qb.check_existance(username))
+    if len(data) > 0:
+        flash(msg.user_already_exists(username), category='error')
+        return False
+    data = db.query(qb.check_phone(phone))
+    if len(data) > 0:
+        flash(msg.phone_already_in_use())
+        return False
+    return True

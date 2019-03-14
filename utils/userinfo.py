@@ -23,10 +23,12 @@ def get_user_roles(roles):
         'is_default': check_default(roles)
     }
 
-def get_user_quota(group):
-    session, _ = group[0]
-    roaming, _ = group[1]
+def get_user_quota(group, bonus):
+    session, _ = group[len(group) - 2]
+    roaming, _ = group[len(group) - 1]
+    b = sum([x for x,_ in bonus])
     return {
-        'value': session,
-        'roaming': roaming
+        'value': int(session),
+        'roaming': int(roaming),
+        'bonus': b
     }
