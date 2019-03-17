@@ -74,6 +74,36 @@ def get_words(word, lang='es'):
             'en' : 'Enter',
             'es' : 'Entrar',
             'ca' : 'Entrar'
+        },
+        'language' : {
+            'en' : 'Select your language',
+            'es' : 'Escoja su idioma',
+            'ca' : 'Tria la seva llengua'
+        },
+        'app_name' : {
+            'en' : 'External Access',
+            'es' : 'Acceso Telefónico',
+            'ca' : 'Accés Telefònico'
+        },
+        'exit' : {
+            'en' : 'Exit',
+            'es' : 'Salir',
+            'ca' : 'Sortir'
+        },
+        'quota' : {
+            'en' : 'Quota',
+            'es' : 'Cuota',
+            'ca' : 'Quota'
+        },
+        'consumed' : {
+            'en' : 'Quota consumed',
+            'es' : 'Consumo de la cuota',
+            'ca' : 'Consum de la quota'
+        },
+        'remain' : {
+            'en' : 'Remaining time',
+            'es' : 'Tiempo restante',
+            'ca' : 'Temps restant'
         }
     }
     return wds[word][lang]

@@ -19,7 +19,7 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        <form action="" method="POST">
+        <form action="" method="POST" name="login">
             <table>
                 <tr>
                     <td>
@@ -56,6 +56,23 @@
                 </a>
             </td>
         </tr>
+
+        <form action="" method="POST" name="choose">
+            <table>
+                <tr>
+                    <td>
+                        <input type="submit" value="{{ word('language', session['lang'])}}" default='es'/>
+                    </td>
+                    <td>
+                        <select name="language" default="{{session['lang']}}">
+                            <option>es</option>
+                            <option>en</option>
+                            <option>ca</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </center>
 </body>
 </html>

@@ -4,7 +4,7 @@
 
     <head py:match="item.tag=='{http://www.w3.org/1999/xhtml}head'" py:attrs="item.items()">
         <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-        <title py:replace="''">Acceso Telefónico</title>
+        <title py:replace="''">{{ word('app_name', session['lang']) }}</title>
         <meta py:replace="item[:]" name="description" content="master template"/>
 
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
@@ -43,7 +43,7 @@
         <div class="menu" style="float:right;">
             <ul>
                 <li>
-                    | <a href="{{ url_for('start') }}">Salir</a>
+                    | <a href="{{ url_for('start') }}">{{ word('exit', session['lang']) }}</a>
                 </li>
             </ul>
         </div>

@@ -3,11 +3,13 @@
 
 <div class="block block-details">
     <div style="padding-left:13px;">
-        <h3>Bienvenido {{session['user']}}</h3>
+        <h3>{{ word('welcome', session['lang']) }} {{session['user']}}</h3>
     </div>
     <div style="padding-left:13px;">
-        {{ 'Cuota: {0} ({1} + {2})'.format(seconds_to_time(session['quota']['total']),
-        seconds_to_time(session['quota']['value']), seconds_to_time(session['quota']['bonus'])) }}
+        {{ '{0}: {1} ({2} + {3})'.format(word('quota', session['lang']),
+        seconds_to_time(session['quota']['total']),
+        seconds_to_time(session['quota']['value']),
+        seconds_to_time(session['quota']['bonus'])) }}
     </div>
     <div style="float:left;margin-left:13px; margin-right:5px; height: 18px; width: 700px; border:1px solid #194373;">
         <div style="height:18px; width: {{(7 * percent)}}px; background-color:#4780C2;"/></div>
@@ -16,15 +18,15 @@
         {{'%.2f' % percent}} %
     </div>
     <div style="clear:both;padding-left:13px;">
-        Consumo de la cuota: {{seconds_to_time(session['consumed'])}}
+        {{ word('consumed', session['lang']) }}: {{seconds_to_time(session['consumed'])}}
     </div>
     <div style="padding-left:13px;">
-        Tiempo restante: {{seconds_to_time(session['quota']['total'] - session['consumed'])}}
+        {{ word('remain', session['lang']) }}: {{seconds_to_time(session['quota']['total'] - session['consumed'])}}
     </div>
 </div>
 
 <form action="" method="POST">
-    <input type="submit" value="Detalles"/>
+    <input type="submit" value="{{ word('details', session['lang']) }}"/>
 </form>
 
 {% if showing_details %}

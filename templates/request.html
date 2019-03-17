@@ -5,7 +5,7 @@
 <head>
     <meta content="text/html; charset=UTF-8"
         http-equiv="content-type" py:replace="''"/>
-    <title>Autenticación</title>
+    <title>{{ word('ask', session['lang'])}}</title>
 </head>
 
 <body onload="document.forms[0].user.focus();">
@@ -21,14 +21,14 @@
         {% endwith %}
         <td>
             <a href="{{ url_for('start') }}">
-                Descartar e ir atrás
+                {{ word('dismiss', session['lang'])}}
             </a>
         </td>
         <form action="" method="POST">
             <table>
                 <tr>
                     <td>
-                        Nombre:
+                        {{ word('name', session['lang'])}}:
                     </td>
                     <td>
                         <input type="text" name="name" />
@@ -36,7 +36,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Apellidos:
+                        {{ word('last_name', session['lang'])}}:
                     </td>
                     <td>
                         <input type="text" name="last_name"/>
@@ -44,7 +44,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Usuario:
+                        {{ word('user', session['lang']) }}:
                     </td>
                     <td>
                         <input type="text" name="user"/>
@@ -52,7 +52,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Contraseña:
+                        {{ word('password', session['lang']) }}:
                     </td>
                     <td>
                         <input type="password" name="password"/>
@@ -60,7 +60,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Teléfono:
+                        {{ word('phone', session['lang'])}}:
                     </td>
                     <td>
                         <input type="text" name="phone"/>
@@ -69,7 +69,7 @@
                 <tr>
                     <td></td>
                     <td>
-                        <input type="submit" value="Pedir registro"/>
+                        <input type="submit" value="{{ word('ask', session['lang']) }}"/>
                     </td>
                 </tr>
             </table>

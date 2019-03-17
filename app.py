@@ -22,9 +22,12 @@ def start():
         session['lang'] = 'es'
     if request.method == 'GET':
         return render_template('login.html', word=get_words)
+    if 'language' in request.form:
+        session['lang'] = request.form['language']
+        return redirect(url_for('start'))
     data = db.query(qb.get_user(request.form['user'], request.form['password']))
     if len(data) == 0:
-        flash(msg.wrong_user_pass(), category='error')
+        flash(msg.wrong_user_pass(session['lang']), category='error')
         return redirect(url_for('start'))
     load_user_data(*data[0])
     return redirect(url_for('index'))
@@ -33,6 +36,7 @@ def start():
 def index():
     session['current'] = 'index'
     return render_template('self_usage.html',
+            word= get_words,
             len= lambda x: len(x),
             seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
             percent = session['consumed'] * 100 / session['quota']['total'],
@@ -42,12 +46,12 @@ def index():
 def request_form():
     session['current'] = 'request_form'
     if request.method == 'GET':
-        return render_template('request.html')
+        return render_template('request.html', word=get_words)
     if not is_a_valid_request(request.form['user'], request.form['phone']):
         return redirect(url_for('request_form'))
     full_name = request.form['name'] + ' ' + request.form['last_name']
     db.query(qb.insert_into_pending(request.form['user'], fullname, request.form['password'], request.form['phone']))
-    flash(msg.request_sent_successfully())
+    flash(msg.request_sent_successfully(session['lang']))
     return redirect(url_for('start'))
 
 @app.route('/logout')
@@ -84,15 +88,15 @@ def load_user_data(usr, pwd, grp):
     consumed = db.query(qb.get_acct_consumed(usr))
     session['consumed'] = sum([stp.timestamp() - stt.timestamp() for u, stt, stp, phone in consumed])
     session['details'] = [(phone, stt, stp, stp.timestamp() - stt.timestamp()) for u, stt, stp, phone in consumed]
-    session['headers'] = [x for x in msg.get_headers()]
+    session['headers'] = [x for x in msg.get_headers(session['lang'])]
 
 def is_a_valid_request(username, phone):
     data = db.query(qb.check_existance(username))
     if len(data) > 0:
-        flash(msg.user_already_exists(username), category='error')
+        flash(msg.user_already_exists(username, session['lang']), category='error')
         return False
     data = db.query(qb.check_phone(phone))
     if len(data) > 0:
-        flash(msg.phone_already_in_use())
+        flash(msg.phone_already_in_use(session['lang']))
         return False
     return True
