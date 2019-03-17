@@ -33,7 +33,7 @@ def insert_into_pending(username, fullname, password, phone):
             values(\'{0}\',\'{1}\',\'{2}\',\'{3}\')'''.format(username, fullname, password, phone)
 
 def get_acct_consumed(username):
-    return '''select UserName,AcctStartTime,AcctStopTime
+    return '''select UserName,AcctStartTime,AcctStopTime,CallingStationId
                 from radacct
                 where UserName = \'{0}\'
                 and date_format(AcctStartTime, "%Y-%m-%d") >= \'{1}\'

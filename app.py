@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from languages import messages as msg
+from languages.interface import get_words
 from utils import query_builder as qb
-from utils import messages as msg
 from os import urandom
 from settings import database as db
 from utils import userinfo, time_conversion
@@ -16,8 +17,11 @@ if __name__ == '__main__':
 
 @app.route('/', methods=['GET', 'POST'])
 def start():
+    session['current'] = 'start'
+    if 'lang' not in session:
+        session['lang'] = 'es'
     if request.method == 'GET':
-        return render_template('login.html')
+        return render_template('login.html', word=get_words)
     data = db.query(qb.get_user(request.form['user'], request.form['password']))
     if len(data) == 0:
         flash(msg.wrong_user_pass(), category='error')
@@ -27,12 +31,16 @@ def start():
 
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('self_usage.html', 
+    session['current'] = 'index'
+    return render_template('self_usage.html',
+            len= lambda x: len(x),
             seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
-            percent = session['consumed'] * 100 / session['quota']['total'])
+            percent = session['consumed'] * 100 / session['quota']['total'],
+            showing_details = request.method == 'POST')
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_form():
+    session['current'] = 'request_form'
     if request.method == 'GET':
         return render_template('request.html')
     if not is_a_valid_request(request.form['user'], request.form['phone']):
@@ -51,6 +59,21 @@ def logout():
     return render_template('login.html')
 
 
+@app.route('/es')
+def es():
+    session['lang'] = 'es'
+    return redirect(url_for(session['current']))
+
+@app.route('/en')
+def en():
+    session['lang'] = 'en'
+    return redirect(url_for(session['current']))
+
+@app.route('/ca')
+def ca():
+    session['lang'] = 'ca'
+    return redirect(url_for(session['current']))
+
 def load_user_data(usr, pwd, grp):
     result, _ = db.query(qb.get_roles(usr))[0]
     session['user'] = usr
@@ -59,7 +82,9 @@ def load_user_data(usr, pwd, grp):
     bonus = db.query(qb.get_quota_bonus(usr))
     session['quota'] = userinfo.get_user_quota(quota, bonus)
     consumed = db.query(qb.get_acct_consumed(usr))
-    session['consumed'] = sum([stp.timestamp() - stt.timestamp() for u, stt, stp in consumed])
+    session['consumed'] = sum([stp.timestamp() - stt.timestamp() for u, stt, stp, phone in consumed])
+    session['details'] = [(phone, stt, stp, stp.timestamp() - stt.timestamp()) for u, stt, stp, phone in consumed]
+    session['headers'] = [x for x in msg.get_headers()]
 
 def is_a_valid_request(username, phone):
     data = db.query(qb.check_existance(username))

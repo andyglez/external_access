@@ -3,13 +3,16 @@
 
 <div class="block block-details">
     <div style="padding-left:13px;">
+        <h3>Bienvenido {{session['user']}}</h3>
+    </div>
+    <div style="padding-left:13px;">
         {{ 'Cuota: {0} ({1} + {2})'.format(seconds_to_time(session['quota']['total']),
         seconds_to_time(session['quota']['value']), seconds_to_time(session['quota']['bonus'])) }}
     </div>
     <div style="float:left;margin-left:13px; margin-right:5px; height: 18px; width: 700px; border:1px solid #194373;">
-        <div style="height:18px; width: {{(7 * percent)}}px; background-color:#4780C2;"/>
+        <div style="height:18px; width: {{(7 * percent)}}px; background-color:#4780C2;"/></div>
     </div>
-    <div style="padding-left:10px; font-weight : bold; font-size : 12pt; color : black;">
+    <div style="padding-left:13px; font-weight : bold; font-size : 12pt; color : black;">
         {{'%.2f' % percent}} %
     </div>
     <div style="clear:both;padding-left:13px;">
@@ -19,5 +22,27 @@
         Tiempo restante: {{seconds_to_time(session['quota']['total'] - session['consumed'])}}
     </div>
 </div>
+
+<form action="" method="POST">
+    <input type="submit" value="Detalles"/>
+</form>
+
+{% if showing_details %}
+<table class="table">
+    <tr>
+        {% for h in session['headers'] %}
+            <td class="td header", colspan="{{len(h)}}">{{h}}</td>
+        {% endfor %}
+    </tr>
+    {% for (phone, stt, stp, consumed) in session['details'] %}
+        <tr>
+            <td class="data" colspan="{{len(session['headers'][0])}}"> {{phone}} </td>
+            <td class="data" colspan="{{len(session['headers'][1])}})"> {{stt}} </td>
+            <td class="data" colspan="{{len(session['headers'][2])}})"> {{stp}} </td>
+            <td class="data" colspan="{{len(session['headers'][3])}})"> {{consumed}} </td>
+        </tr>
+    {% endfor %}    
+    </table>
+{% endif %}
 
 {% endblock %}

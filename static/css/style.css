@@ -126,3 +126,24 @@
 .even {
     background-color : #E8F1F8;
 }
+
+.dropbtn {
+    padding: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    position: absolute;
+}
+
+.dropdown-content a {
+    text-decoration: none;
+    position: relative;
+    display: block;
+}

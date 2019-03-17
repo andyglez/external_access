@@ -25,3 +25,22 @@ def request_sent_successfully(language='es'):
         'es': 'Operación exitosa. Contacte con su administrador de red en un par de días'
     }
     return message[language]
+
+def get_headers(language='es'):
+    phone = {
+        'en': 'Phone',
+        'es': 'Teléfono'
+    }
+    start_time = {
+        'en': 'Start Time',
+        'es': 'Tiempo de Inicio'
+    }
+    stop_time = {
+        'en': 'Stop Time',
+        'es': 'Tiempo Final'
+    }
+    consumed = {
+        'en': 'Consumed',
+        'es': 'Consumido'
+    }
+    return [phone[language], start_time[language], stop_time[language], consumed[language]]

@@ -5,7 +5,7 @@
 <head>
     <meta content="text/html; charset=UTF-8"
         http-equiv="content-type" py:replace="''"/>
-    <title>Autenticación</title>
+    <title>{{word('auth_title', session['lang'])}}</title>
 </head>
 
 <body onload="document.forms[0].user.focus();">
@@ -23,7 +23,7 @@
             <table>
                 <tr>
                     <td>
-                        Usuario:
+                        {{ word('user', session['lang'])}}:
                     </td>
                     <td>
                         <input type="text" name="user" />
@@ -31,7 +31,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Contraseña:
+                        {{ word('password', session['lang'])}}:
                     </td>
                     <td>
                         <input type="password" name="password"/>
@@ -40,7 +40,7 @@
                 <tr>
                     <td></td>
                     <td>
-                        <input type="submit" value="Entrar"/>
+                        <input type="submit" value="{{ word('enter', session['lang'])}}"/>
                     </td>
                 </tr>
             </table>
@@ -48,11 +48,11 @@
         
         <tr>
             <td>
-                No se ha registrado aún?
+                {{ word('unregistered', session['lang']) }}
             </td>
             <td>
                 <a href="{{ url_for('request_form') }}">
-                    Pedir registro
+                    {{ word('ask', session['lang']) }}
                 </a>
             </td>
         </tr>
