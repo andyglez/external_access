@@ -63,6 +63,10 @@ def logout():
     return render_template('login.html')
 
 
+@app.route('/profile')
+def profile():
+    return ''
+
 @app.route('/es')
 def es():
     session['lang'] = 'es'

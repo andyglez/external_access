@@ -104,6 +104,11 @@ def get_words(word, lang='es'):
             'en' : 'Remaining time',
             'es' : 'Tiempo restante',
             'ca' : 'Temps restant'
+        },
+        'profile': {
+            'en' : 'See Profile...',
+            'es' : 'Ver Perfil...',
+            'ca' : 'Veure Perfil...'
         }
     }
     return wds[word][lang]

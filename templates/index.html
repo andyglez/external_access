@@ -19,8 +19,11 @@
 
     <body py:match="item.tag=='{http://www.w3.org/1999/xhtml}body'" py:attrs="item.items() + [('onload','setFocus();')]">
         <div class="menu" style="float:left;">
-            {% if session['roles']['is_root'] %}
-                <ul id="menu">
+            <ul id="menu">
+                <li>
+                    <a href="{{ url_for('profile') }}">Ver perfil...</a> |
+                </li>
+                {% if session['roles']['is_root'] %}
                     <li>
                         <a href="{{ url_for('start') }}">Reporte de Usuarios</a> |
                     </li>
@@ -28,17 +31,14 @@
                         <a href="{{ url_for('start') }}">Reporte de Centros</a> |
                     </li>
                     <li>
-                        <a href="{{ url_for('start') }}">Ver perfil...</a> |
-                    </li>
-                    <li>
                         <a href="{{ url_for('start') }}">Ver detalles de conexión...</a> |
                     </li>
                     <li>
                         <a href="{{ url_for('start') }}">Buscar por nombre...</a> |
                     </li>
-                </ul>
-            {% endif %}
-        </div>
+                {% endif %}
+            </ul>
+    </div>
 
         <div class="menu" style="float:right;">
             <ul>
