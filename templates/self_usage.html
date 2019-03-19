@@ -18,7 +18,7 @@
         {{'%.2f' % percent}} %
     </div>
     <div style="clear:both;padding-left:13px;">
-        {{ word('consumed', session['lang']) }}: {{seconds_to_time(session['consumed'])}}
+        {{ word('quota_consumed', session['lang']) }}: {{seconds_to_time(session['consumed'])}}
     </div>
     <div style="padding-left:13px;">
         {{ word('remain', session['lang']) }}: {{seconds_to_time(session['quota']['total'] - session['consumed'])}}

@@ -1,5 +1,5 @@
 def user_defined():
-    return ['user', 'roles', 'show_details', 'quota', 'consumed', 'details', 'headers']
+    return ['user', 'roles', 'show_details', 'quota', 'consumed', 'details', 'headers', 'modify']
 
 class Cookies:
     def __init__(self, dictionary):

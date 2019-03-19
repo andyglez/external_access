@@ -100,7 +100,7 @@ def get_words(word, lang='es'):
             'es' : 'Cuota',
             'ca' : 'Quota'
         },
-        'consumed' : {
+        'quota_consumed' : {
             'en' : 'Quota consumed',
             'es' : 'Consumo de la cuota',
             'ca' : 'Consum de la quota'
@@ -134,6 +134,21 @@ def get_words(word, lang='es'):
             'en' : 'Address',
             'es' : 'Dirección',
             'ca' : 'Direcció'
+        },
+        'modify' : {
+            'en' : 'Modify Password',
+            'es' : 'Modificar Contraseña',
+            'ca' : 'Modificar Contrasenya'
+        },
+        'new': {
+            'en' : 'New',
+            'es' : 'Nueva',
+            'ca' : 'Nova'
+        },
+        'verify': {
+            'en' : 'Verify',
+            'es' : 'Verifique',
+            'ca' : 'Verifiqui'
         }
     }
     return wds[word][lang]

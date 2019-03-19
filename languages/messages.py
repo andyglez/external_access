@@ -38,6 +38,22 @@ def logout_successful(language='es'):
     }
     return message[language]
 
+def bad_password(language='es'):
+    message = {
+        'en' : 'Wrong Password',
+        'es' : 'Contraseña incorrecta',
+        'ca' : 'Contrasenya incorrecta'
+    }
+    return message[language]
+
+def mismatch_new_password(language='es'):
+    message = {
+        'en' : 'New and Verify Password fields must match',
+        'es' : 'Los campos Nueva y Verifique Contraseña deben coincidir',
+        'ca' : 'Els camps Nova i Verifiqui Contrasenya deuen coincidir'
+    }
+    return message[language]
+
 def get_headers(language='es'):
     phone = {
         'en': 'Phone',

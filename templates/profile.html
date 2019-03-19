@@ -27,6 +27,49 @@
         <td>:</td>
         <td>{{ data[4] }}</td>
     </tr>
+    {% if not mod_pwd %}
+    <tr>
+        <td>
+            <form action="" method="POST">
+                <input type="submit" value="{{ word('modify', session['lang']) }}">
+            </form>
+        </td>
+    </tr>
+    {% endif %}
+    {% if mod_pwd %}
+        <form action="" method="POST">
+            <tr>
+                <td>
+                    {{ word('password', session['lang']) }}                  
+                </td>
+                <td></td>
+                <td>
+                    <input type="password" name="old_password">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ word('new', session['lang']) }} {{ word('password', session['lang']) }}
+                </td>
+                <td></td>
+                <td>
+                    <input type="password" name="new_password">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ word('verify', session['lang']) }} {{ word('password', session['lang'])}}
+                </td>
+                <td></td>
+                <td>
+                    <input type="password" name="verify_password">
+                </td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="{{ word('modify', session['lang']) }}"></td>
+            </tr>
+        </form>
+    {% endif %}
 </table>
 
 {% endblock %}

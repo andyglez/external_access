@@ -73,9 +73,18 @@ def logout():
 def profile(user):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
+    if not cookies.contains('modify'):
+        cookies.set('modify', False)
+    user_data = db.query(qb.get_profile_data(cookies.get('user')))[0]
+    if request.method == 'POST':
+        if 'old_password' in request.form and checked(request.form, user_data[-1]):
+            db.query(qb.update_password(user, request.form['new_password']))
+        cookies.set('modify', not cookies.get('modify'))
+        return redirect(url_for('profile', user=user))
     return render_template('profile.html', 
                     word=get_words, 
-                    data=db.query(qb.get_profile_data(cookies.get('user')))[0])
+                    data=user_data,
+                    mod_pwd=cookies.get('modify'))
 
 @app.route('/es')
 def es():
@@ -112,5 +121,14 @@ def is_a_valid_request(username, phone):
     data = db.query(qb.check_phone(phone))
     if len(data) > 0:
         flash(msg.phone_already_in_use(session['lang']))
+        return False
+    return True
+
+def checked(form, pwd):
+    if form['old_password'] != pwd:
+        flash(msg.bad_password(cookies.get('lang')))
+        return False
+    elif form['new_password'] != form['verify_password']:
+        flash(msg.mismatch_new_password(cookies.get('lang')))
         return False
     return True

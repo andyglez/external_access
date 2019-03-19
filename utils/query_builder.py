@@ -42,6 +42,10 @@ def get_acct_consumed(username):
                 ,datetime(datetime.now().year, datetime.now().month, datetime.now().day + 1).date().isoformat())
 
 def get_profile_data(username):
-    return '''select UserName, Name, Area, email, address
+    return '''select UserName, Name, Area, email, address, Password
                 from Users
                 where Username = \'{}\''''.format(username)
+
+def update_password(username, password):
+    return '''update Users set Password = \'{0}\'
+                where UserName = \'{1}\''''.format(password, username)
