@@ -37,6 +37,10 @@ def index():
     if 'user' not in session:
         return render_template('login.html')
     session['current'] = 'index'
+    if 'show_details' not in session:
+        session['show_details'] = False
+    if request.method == 'POST':
+        session['show_details'] = not session['show_details']
     return render_template('self_usage.html',
             word= get_words,
             len= lambda x: len(x),
@@ -58,10 +62,13 @@ def request_form():
 
 @app.route('/logout')
 def logout():
-    if 'user' in session:
-        session['user'] = ''
-    if 'roles' in session:
-        session['roles'] = {}
+    session.pop('user')
+    session.pop('roles')
+    session.pop('show_details')
+    session.pop('quota')
+    session.pop('consumed')
+    session.pop('details')
+    session.pop('headers')
     return render_template('login.html')
 
 
