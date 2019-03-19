@@ -30,6 +30,14 @@ def request_sent_successfully(language='es'):
     }
     return message[language]
 
+def logout_successful(language='es'):
+    message = {
+        'en' : 'Logout successfull',
+        'es' : 'Su sesión ha cerrado exitosamente',
+        'ca' : 'La seva sessió ha tancat amb èxit'
+    }
+    return message[language]
+
 def get_headers(language='es'):
     phone = {
         'en': 'Phone',

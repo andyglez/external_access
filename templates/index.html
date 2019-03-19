@@ -21,7 +21,10 @@
         <div class="menu" style="float:left;">
             <ul id="menu">
                 <li>
-                    <a href="{{ url_for('profile') }}">Ver perfil...</a> |
+                    <a href="{{ url_for('index') }}">{{word('home', session['lang'])}}</a> |
+                </li>
+                <li>
+                    <a href="{{ url_for('profile', user=session['user']) }}">Ver perfil...</a> |
                 </li>
                 {% if session['roles']['is_root'] %}
                     <li>

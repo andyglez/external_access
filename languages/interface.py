@@ -50,10 +50,15 @@ def get_words(word, lang='es'):
             'es' : 'Bienvenido',
             'ca' : 'Benvingut'
         },
-        'details' : {
+        'more_details' : {
             'en' : 'Show Details',
             'es' : 'Mostrar Detalles',
             'ca' : 'Mostrar Detalls'
+        },
+        'less_details' : {
+            'en' : 'Less Details',
+            'es' : 'Menos Detalles',
+            'ca' : 'Menys Detalls'
         },
         'start' : {
             'en' : 'Start Time',
@@ -109,6 +114,26 @@ def get_words(word, lang='es'):
             'en' : 'See Profile...',
             'es' : 'Ver Perfil...',
             'ca' : 'Veure Perfil...'
+        },
+        'home' : {
+            'en' : 'Home',
+            'es' : 'Inicio',
+            'ca' : 'Inici'
+        },
+        'area' : {
+            'en' : 'Area',
+            'es' : 'Area',
+            'ca' : 'Area'
+        },
+        'email' : {
+            'en' : 'Email',
+            'es' : 'Correo',
+            'ca' : 'Correu'
+        },
+        'address' : {
+            'en' : 'Address',
+            'es' : 'Dirección',
+            'ca' : 'Direcció'
         }
     }
     return wds[word][lang]

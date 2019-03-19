@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from languages import messages as msg
 from languages.interface import get_words
 from utils import query_builder as qb
+from utils.cookies import Cookies
 from os import urandom
 from settings import database as db
 from utils import userinfo, time_conversion
@@ -11,46 +12,47 @@ app = Flask(__name__)
 app.secret_key = str(urandom(24))
 
 db.initial_setup()
+cookies = Cookies(session)
 if __name__ == '__main__':    
     app.run(debug=True, host='0.0.0.0', port=5000)
 
 
 @app.route('/', methods=['GET', 'POST'])
 def start():
-    session['current'] = 'start'
-    if 'lang' not in session:
-        session['lang'] = 'es'
+    cookies.set('current', 'start')
+    if not cookies.contains('lang'):
+        cookies.set('lang', 'es')
     if request.method == 'GET':
         return render_template('login.html', word=get_words)
     if 'language' in request.form:
-        session['lang'] = request.form['language']
+        cookies.set('lang', request.form['language'])
         return redirect(url_for('start'))
     data = db.query(qb.get_user(request.form['user'], request.form['password']))
     if len(data) == 0:
-        flash(msg.wrong_user_pass(session['lang']), category='error')
+        flash(msg.wrong_user_pass(cookies.get('lang')), category='error')
         return redirect(url_for('start'))
     load_user_data(*data[0])
     return redirect(url_for('index'))
 
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    if 'user' not in session:
-        return render_template('login.html')
-    session['current'] = 'index'
-    if 'show_details' not in session:
-        session['show_details'] = False
+    cookies.set('current', 'index')
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    if not cookies.contains('show_details'):
+        cookies.set('show_details', False)
     if request.method == 'POST':
-        session['show_details'] = not session['show_details']
+        cookies.set('show_details', not cookies.get('show_details'))
     return render_template('self_usage.html',
             word= get_words,
             len= lambda x: len(x),
             seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
             percent = session['consumed'] * 100 / session['quota']['total'],
-            showing_details = request.method == 'POST')
+            showing_details = cookies.get('show_details'))
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_form():
-    session['current'] = 'request_form'
+    cookies.set('current', 'request_form')
     if request.method == 'GET':
         return render_template('request.html', word=get_words)
     if not is_a_valid_request(request.form['user'], request.form['phone']):
@@ -62,19 +64,18 @@ def request_form():
 
 @app.route('/logout')
 def logout():
-    session.pop('user')
-    session.pop('roles')
-    session.pop('show_details')
-    session.pop('quota')
-    session.pop('consumed')
-    session.pop('details')
-    session.pop('headers')
-    return render_template('login.html')
+    cookies.clear_all()
+    flash(msg.logout_successful(session['lang']))
+    return redirect(url_for('start'))
 
 
-@app.route('/profile')
-def profile():
-    return ''
+@app.route('/profile/<user>', methods=['GET', 'POST'])
+def profile(user):
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    return render_template('profile.html', 
+                    word=get_words, 
+                    data=db.query(qb.get_profile_data(cookies.get('user')))[0])
 
 @app.route('/es')
 def es():

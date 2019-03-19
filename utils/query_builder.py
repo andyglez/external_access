@@ -40,3 +40,8 @@ def get_acct_consumed(username):
                 and date_format(AcctStopTime, "%Y-%m-%d") < \'{2}\''''.format(username
                 ,datetime(datetime.now().year, datetime.now().month, 1).date().isoformat()
                 ,datetime(datetime.now().year, datetime.now().month, datetime.now().day + 1).date().isoformat())
+
+def get_profile_data(username):
+    return '''select UserName, Name, Area, email, address
+                from Users
+                where Username = \'{}\''''.format(username)

@@ -16,7 +16,7 @@ get_connection = MySQLdb.Connection(*(host, user, pwrd, dbse), **kargs)
 def query(s, is_select=True):
     cursor = get_connection.cursor()
     cursor.execute(s)
-    lst = [i for i in cursor.fetchall()] if is_select else []
+    lst = [[i for i in row] for row in cursor.fetchall()] if is_select else []
     cursor.close()
     get_connection.commit()
     return lst

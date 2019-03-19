@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+{% block body %}
+
+<table>
+    <tr>
+        <td>{{ word('user', session['lang']) }}</td>
+        <td>:</td>
+        <td>{{ data[0]}}</td>
+    </tr>
+    <tr>
+        <td>{{ word('name', session['lang']) }}</td>
+        <td>:</td>
+        <td>{{ data[1] }}</td>
+    </tr>
+    <tr>
+        <td>{{ word('area', session['lang'])}}</td>
+        <td>:</td>
+        <td>{{ data[2] }}</td>
+    </tr>
+    <tr>
+        <td>{{ word('email', session['lang'])}}</td>
+        <td>:</td>
+        <td>{{ data[3] }}</td>
+    </tr>
+    <tr>
+        <td>{{ word('address', session['lang'])}}</td>
+        <td>:</td>
+        <td>{{ data[4] }}</td>
+    </tr>
+</table>
+
+{% endblock %}
