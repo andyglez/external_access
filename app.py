@@ -34,6 +34,8 @@ def start():
 
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+    if 'user' not in session:
+        return render_template('login.html')
     session['current'] = 'index'
     return render_template('self_usage.html',
             word= get_words,
