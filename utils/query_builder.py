@@ -51,4 +51,11 @@ def update_password(username, password):
                 where UserName = \'{1}\''''.format(password, username)
 
 def get_users():
-    return 'select UserName, Name, Area from Users';
+    return 'select UserName, Name, Area from Users'
+
+def insert_removed_user(username, name, area, executor, reason):
+    return '''insert into RemovedUsers (username, name, area, removed_by, reason)
+            values(\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\')'''.format(username, name, area, executor, reason)
+
+def delete_users(username):
+    return 'delete from Users where UserName = \'{0}\''.format(username)

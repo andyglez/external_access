@@ -41,6 +41,15 @@ create_pending = '''create table if not exists Pending(
                         primary key(username)
                         ) Engine=innodb'''
 
+create_removed_acct = '''create table if not exists RemovedUsers(
+                            entry_id int auto_increment,
+                            username varchar(255) not null,
+                            name varchar(255) not null,
+                            area varchar(100) not null,
+                            removed_by varchar(255) not null,
+                            reason varchar(255),
+                            primary key(entry_id)
+                            ) Engine=innodb'''
 # Data insertion
 insert_roles = '''insert into DBRoles (username, roles)
                 select UserName, \'default\' 
@@ -50,5 +59,6 @@ insert_roles = '''insert into DBRoles (username, roles)
 def initial_setup():
     query(create_db_roles, False)
     query(create_pending, False)
+    query(create_removed_acct, False)
     if len(query('select * from DBRoles')) == 0:
         query(insert_roles)

@@ -19,6 +19,13 @@
                 <td class="data"> <a href="{{ url_for('profile', user=username)}}">{{username}}</a> | </td>
                 <td class="data"> {{name}} | </td>
                 <td class="data"> {{area}} </td>
+                {% if session['roles']['is_root'] or session['roles']['is_dean'] %}
+                    <td class="data">
+                        <form action="{{ url_for('remove', user=username, name=name, area=area) }}" method="GET">
+                            <input type="submit" value="{{ word('force', session['lang'])}}"/>
+                        </form>
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %} 
     </table>

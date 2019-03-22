@@ -30,11 +30,6 @@
                     <li>
                         <a href="{{ url_for('search') }}">{{ word('search_by_name', session['lang']) }}...</a> |
                     </li>
-                    {% if session['roles']['is_dean'] or session['roles']['is_root'] %}
-                        <li>
-                            <a href="{{ url_for('start') }}">{{ word('force', session['lang']) }}...</a> |
-                        </li>
-                    {% endif %}
                     {% if session['roles']['is_root'] %}
                         <li>
                             <a href="{{ url_for('start') }}">{{ word('create', session['lang']) }}...</a> |

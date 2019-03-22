@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block body %}
+
+<form action="" method="POST">
+    <table>
+        <tr>
+            <td><input type="text" name="reason"/></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="{{ word('force', session['lang']) }}"/></td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

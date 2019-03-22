@@ -106,6 +106,16 @@ def search():
     cookies.set('query_value', request.form['query'] if request.method == 'POST' else '')
     return render_template('search.html',word=get_words, flag=cookies.get('query_sent'), data=data, len= lambda x: len(x))
 
+@app.route('/remove?user=<user>&name=<name>&area=<area>', methods=['GET', 'POST'])
+def remove(user, name, area):
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    if request.method == 'POST' and 'reason' in request.form:
+        db.query(qb.insert_removed_user(user, name, area, cookies.get('user'), request.form['reason']), False)
+        db.query(qb.delete_users(user))
+        return redirect(url_for('search'))
+    return render_template('delete.html', word=get_words)
+
 @app.route('/es')
 def es():
     session['lang'] = 'es'
