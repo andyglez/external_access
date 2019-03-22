@@ -38,6 +38,7 @@
         <td>:</td>
         <td>{{ data[6] }}</td>
     </tr>
+{% if is_modifyer %}
     {% if not mod_pwd %}
     <tr>
         <td>
@@ -47,6 +48,7 @@
         </td>
     </tr>
     {% endif %}
+{% endif %}
     {% if mod_pwd %}
         <form action="" method="POST">
             <tr>

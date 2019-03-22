@@ -86,6 +86,7 @@ def profile(user):
     return render_template('profile.html', 
                     word=get_words, 
                     data=info,
+                    is_modifyer=(info[0] == cookies.get('user') or (not cookies.get('roles')['is_dean'])),
                     mod_pwd=cookies.get('modify'))
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -99,7 +100,7 @@ def search():
         cookies.set('data', [])
     data = ([(u, n, a) for u, n, a in db.query(qb.get_users()) if request.form['query'] in n.lower() and a == cookies.get('info')[2]] 
             if cookies.get('roles')['is_dean'] 
-            else [(u, n, a) for u, n, a in db.query(qb.get_users()) if request.form['query'] in n.lower()])
+            else [(u, n, a) for u, n, a in db.query(qb.get_users()) if request.form['query'] in n.lower()]) \
             if request.method == 'POST' else []
     cookies.set('query_sent', request.method == 'POST')
     cookies.set('query_value', request.form['query'] if request.method == 'POST' else '')
