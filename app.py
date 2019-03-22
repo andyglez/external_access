@@ -97,9 +97,12 @@ def search():
         cookies.set('query_sent', False)
     if not cookies.contains('data'):
         cookies.set('data', [])
-    data = ([(u, n, a) for u, n, a in db.query(qb.get_users()) if a == cookies.get('info')[2]] if cookies.get('roles')['is_dean'] else
-           [(u, n, a) for u, n, a in db.query(qb.get_users()) if request.form['query'] in n.lower()]) if request.method == 'POST' else []
+    data = ([(u, n, a) for u, n, a in db.query(qb.get_users()) if request.form['query'] in n.lower() and a == cookies.get('info')[2]] 
+            if cookies.get('roles')['is_dean'] 
+            else [(u, n, a) for u, n, a in db.query(qb.get_users()) if request.form['query'] in n.lower()])
+            if request.method == 'POST' else []
     cookies.set('query_sent', request.method == 'POST')
+    cookies.set('query_value', request.form['query'] if request.method == 'POST' else '')
     return render_template('search.html',word=get_words, flag=cookies.get('query_sent'), data=data, len= lambda x: len(x))
 
 @app.route('/es')

@@ -169,6 +169,11 @@ def get_words(word, lang='es'):
             'en' : 'See Pendings',
             'es' : 'Ver Pendientes',
             'ca' : 'Veure Arracades'
+        },
+        'no_results' : {
+            'en' : 'No results were found',
+            'es' : 'No se encontraron resultados',
+            'ca' : 'No s\'han trobat resultats'
         }
     }
     return wds[word][lang]

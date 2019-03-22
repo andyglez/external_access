@@ -1,5 +1,5 @@
 def user_defined():
-    return ['user', 'roles', 'show_details', 'quota', 'consumed', 'details', 'headers', 'modify', 'query_sent']
+    return ['user', 'roles', 'show_details', 'quota', 'consumed', 'details', 'headers', 'modify', 'query_sent', 'query_value']
 
 def user_view():
     return ['modify', 'show_details', 'query_sent']

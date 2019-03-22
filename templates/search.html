@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+{% block body %}
+
+<form action="" method="POST">
+    <table>
+        <tr>
+            <td><input type="text" name="query" value="{{ session['query_value'] }}"/></td>
+            <td><input type="submit" value="{{ word('search_by_name', session['lang']) }}"/></td>
+        </tr>
+    </table>
+</form>
+
+
+{% if flag %}
+    {% if len(data) > 0 %}
+    <table class="table">
+        {% for username, name, area in data %}
+            <tr>
+                <td class="data"> <a href="{{ url_for('profile', user=username)}}">{{username}}</a> | </td>
+                <td class="data"> {{name}} | </td>
+                <td class="data"> {{area}} </td>
+            </tr>
+        {% endfor %} 
+    </table>
+    {% endif %}
+    {% if len(data) == 0 %}
+    <h3>{{ word('no_results', session['lang']) }}</h3>
+    {% endif %}
+{% endif %}
+{% endblock %}
