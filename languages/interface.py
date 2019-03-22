@@ -111,9 +111,9 @@ def get_words(word, lang='es'):
             'ca' : 'Temps restant'
         },
         'profile': {
-            'en' : 'See Profile...',
-            'es' : 'Ver Perfil...',
-            'ca' : 'Veure Perfil...'
+            'en' : 'See Profile',
+            'es' : 'Ver Perfil',
+            'ca' : 'Veure Perfil'
         },
         'home' : {
             'en' : 'Home',
@@ -149,6 +149,26 @@ def get_words(word, lang='es'):
             'en' : 'Verify',
             'es' : 'Verifique',
             'ca' : 'Verifiqui'
+        },
+        'search_by_name' : {
+            'en' : 'Search by name',
+            'es' : 'Buscar por nombre',
+            'ca' : 'Buscar per nom'
+        },
+        'force' : {
+            'en' : 'Force Elimination',
+            'es' : 'Forzar Eliminación',
+            'ca' : 'Forçar Eliminació'
+        },
+        'create' : {
+            'en' : 'Create User',
+            'es' : 'Crear Usuario',
+            'ca' : 'Crear Usuari'
+        },
+        'pendings' : {
+            'en' : 'See Pendings',
+            'es' : 'Ver Pendientes',
+            'ca' : 'Veure Arracades'
         }
     }
     return wds[word][lang]

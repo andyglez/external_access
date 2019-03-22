@@ -24,21 +24,25 @@
                     <a href="{{ url_for('index') }}">{{word('home', session['lang'])}}</a> |
                 </li>
                 <li>
-                    <a href="{{ url_for('profile', user=session['user']) }}">Ver perfil...</a> |
+                    <a href="{{ url_for('profile', user=session['user']) }}">{{ word('profile', session['lang']) }}...</a> |
                 </li>
-                {% if session['roles']['is_root'] %}
+                {% if not session['roles']['is_default'] %}
                     <li>
-                        <a href="{{ url_for('start') }}">Reporte de Usuarios</a> |
+                        <a href="{{ url_for('start') }}">{{ word('search_by_name', session['lang']) }}...</a> |
                     </li>
-                    <li>
-                        <a href="{{ url_for('start') }}">Reporte de Centros</a> |
-                    </li>
-                    <li>
-                        <a href="{{ url_for('start') }}">Ver detalles de conexión...</a> |
-                    </li>
-                    <li>
-                        <a href="{{ url_for('start') }}">Buscar por nombre...</a> |
-                    </li>
+                    {% if session['roles']['is_dean'] or session['roles']['is_root'] %}
+                        <li>
+                            <a href="{{ url_for('start') }}">{{ word('force', session['lang']) }}...</a> |
+                        </li>
+                    {% endif %}
+                    {% if session['roles']['is_root'] %}
+                        <li>
+                            <a href="{{ url_for('start') }}">{{ word('create', session['lang']) }}...</a> |
+                        </li>
+                        <li>
+                            <a href="{{ url_for('start') }}">{{ word('pendings', session['lang'])}}</a>
+                        </li>
+                    {% endif %}                    
                 {% endif %}
             </ul>
     </div>
