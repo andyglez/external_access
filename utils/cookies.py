@@ -1,6 +1,9 @@
 def user_defined():
     return ['user', 'roles', 'show_details', 'quota', 'consumed', 'details', 'headers', 'modify']
 
+def user_view():
+    return ['modify', 'show_details']
+
 class Cookies:
     def __init__(self, dictionary):
         self.dictionary = dictionary
@@ -19,3 +22,8 @@ class Cookies:
 
     def contains(self, key):
         return key in self.dictionary
+
+    def reset_all_flags(self, excepted=''):
+        for ck in user_view():
+            if ck != excepted:
+                self.dictionary[ck] = False

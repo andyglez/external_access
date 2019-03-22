@@ -36,6 +36,7 @@ def start():
 
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+    cookies.reset_all_flags(excepted='show_details')
     cookies.set('current', 'index')
     if not cookies.contains('user'):
         return redirect(url_for('start'))
@@ -71,6 +72,7 @@ def logout():
 
 @app.route('/profile/<user>', methods=['GET', 'POST'])
 def profile(user):
+    cookies.reset_all_flags('modify')
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if not cookies.contains('modify'):
