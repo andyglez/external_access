@@ -77,16 +77,30 @@ def profile(user):
         return redirect(url_for('start'))
     if not cookies.contains('modify'):
         cookies.set('modify', False)
-    user_data = db.query(qb.get_profile_data(cookies.get('user')))[0]
+    info = get_info(user)
     if request.method == 'POST':
-        if 'old_password' in request.form and checked(request.form, user_data[-1]):
+        if 'old_password' in request.form and checked(request.form, info[-1]):
             db.query(qb.update_password(user, request.form['new_password']))
         cookies.set('modify', not cookies.get('modify'))
         return redirect(url_for('profile', user=user))
     return render_template('profile.html', 
                     word=get_words, 
-                    data=user_data,
+                    data=info,
                     mod_pwd=cookies.get('modify'))
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    cookies.reset_all_flags('query_sent')
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    if not cookies.contains('query_sent'):
+        cookies.set('query_sent', False)
+    if not cookies.contains('data'):
+        cookies.set('data', [])
+    data = ([(u, n, a) for u, n, a in db.query(qb.get_users()) if a == cookies.get('info')[2]] if cookies.get('roles')['is_dean'] else
+           [(u, n, a) for u, n, a in db.query(qb.get_users()) if request.form['query'] in n.lower()]) if request.method == 'POST' else []
+    cookies.set('query_sent', request.method == 'POST')
+    return render_template('search.html',word=get_words, flag=cookies.get('query_sent'), data=data, len= lambda x: len(x))
 
 @app.route('/es')
 def es():
@@ -107,6 +121,7 @@ def load_user_data(usr, pwd, grp):
     result, _ = db.query(qb.get_roles(usr))[0]
     session['user'] = usr
     session['roles'] = userinfo.get_user_roles(result.split(','))
+    session['info'] = get_info(usr)
     quota = db.query(qb.get_quota(grp))
     bonus = db.query(qb.get_quota_bonus(usr))
     session['quota'] = userinfo.get_user_quota(quota, bonus)
@@ -114,6 +129,9 @@ def load_user_data(usr, pwd, grp):
     session['consumed'] = sum([stp.timestamp() - stt.timestamp() for u, stt, stp, phone in consumed])
     session['details'] = [(phone, stt, stp, stp.timestamp() - stt.timestamp()) for u, stt, stp, phone in consumed]
     session['headers'] = [x for x in msg.get_headers(session['lang'])]
+
+def get_info(user):
+    return db.query(qb.get_profile_data(user))[0]
 
 def is_a_valid_request(username, phone):
     data = db.query(qb.check_existance(username))

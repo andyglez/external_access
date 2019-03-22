@@ -1,8 +1,8 @@
 def user_defined():
-    return ['user', 'roles', 'show_details', 'quota', 'consumed', 'details', 'headers', 'modify']
+    return ['user', 'roles', 'show_details', 'quota', 'consumed', 'details', 'headers', 'modify', 'query_sent']
 
 def user_view():
-    return ['modify', 'show_details']
+    return ['modify', 'show_details', 'query_sent']
 
 class Cookies:
     def __init__(self, dictionary):

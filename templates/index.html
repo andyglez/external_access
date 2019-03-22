@@ -28,7 +28,7 @@
                 </li>
                 {% if not session['roles']['is_default'] %}
                     <li>
-                        <a href="{{ url_for('start') }}">{{ word('search_by_name', session['lang']) }}...</a> |
+                        <a href="{{ url_for('search') }}">{{ word('search_by_name', session['lang']) }}...</a> |
                     </li>
                     {% if session['roles']['is_dean'] or session['roles']['is_root'] %}
                         <li>
