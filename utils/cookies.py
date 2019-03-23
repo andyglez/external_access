@@ -15,7 +15,7 @@ class Cookies:
         self.dictionary[key] = value
 
     def clear(self, key):
-        return self.dictionary.pop(key)
+        return self.dictionary.pop(key) if key in self.dictionary else 0
 
     def clear_all(self):
         return [self.clear(cookie) for cookie in user_defined()]

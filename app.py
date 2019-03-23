@@ -65,6 +65,9 @@ def request_form():
 
 @app.route('/logout')
 def logout():
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    cookies.reset_all_flags()
     cookies.clear_all()
     flash(msg.logout_successful(session['lang']))
     return redirect(url_for('start'))
@@ -78,6 +81,8 @@ def profile(user):
     if not cookies.contains('modify'):
         cookies.set('modify', False)
     info = get_info(user)
+    if check_role_permissions(user, info):
+        return redirect(url_for('index'))
     if request.method == 'POST':
         if 'old_password' in request.form and checked(request.form, info[-1]):
             db.query(qb.update_password(user, request.form['new_password']))
@@ -90,21 +95,27 @@ def profile(user):
                     mod_pwd=cookies.get('modify'))
 
 @app.route('/search', methods=['GET', 'POST'])
-def search():
-    cookies.reset_all_flags('query_sent')
+def search_none():
     if not cookies.contains('user'):
         return redirect(url_for('start'))
-    if not cookies.contains('query_sent'):
-        cookies.set('query_sent', False)
-    if not cookies.contains('data'):
-        cookies.set('data', [])
-    data = ([(u, n, a) for u, n, a in db.query(qb.get_users()) if request.form['query'] in n.lower() and a == cookies.get('info')[2]] 
+    if request.method == 'POST':
+        if request.form['query'] == '':
+            return redirect(url_for('search_none'))
+        return redirect(url_for('search', query=request.form['query']))
+    return render_template('search.html', word=get_words)
+
+@app.route('/search?query=<query>', methods=['GET', 'POST'])
+def search(query=''):
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    if request.method == 'POST':
+        return redirect(url_for('search', query=request.form['query']))
+    
+    data = ([(u, n, a) for u, n, a in db.query(qb.get_users()) if query in n.lower() and a == cookies.get('info')[2]] 
             if cookies.get('roles')['is_dean'] 
-            else [(u, n, a) for u, n, a in db.query(qb.get_users()) if request.form['query'] in n.lower()]) \
-            if request.method == 'POST' else []
-    cookies.set('query_sent', request.method == 'POST')
-    cookies.set('query_value', request.form['query'] if request.method == 'POST' else '')
-    return render_template('search.html',word=get_words, flag=cookies.get('query_sent'), data=data, len= lambda x: len(x))
+            else [(u, n, a) for u, n, a in db.query(qb.get_users()) if query in n.lower()])
+    cookies.set('query_value', query)
+    return render_template('search.html',word=get_words, flag=True, data=data, len= lambda x: len(x))
 
 @app.route('/remove?user=<user>&name=<name>&area=<area>', methods=['GET', 'POST'])
 def remove(user, name, area):
@@ -115,21 +126,6 @@ def remove(user, name, area):
         db.query(qb.delete_users(user))
         return redirect(url_for('search'))
     return render_template('delete.html', word=get_words)
-
-@app.route('/es')
-def es():
-    session['lang'] = 'es'
-    return redirect(url_for(session['current']))
-
-@app.route('/en')
-def en():
-    session['lang'] = 'en'
-    return redirect(url_for(session['current']))
-
-@app.route('/ca')
-def ca():
-    session['lang'] = 'ca'
-    return redirect(url_for(session['current']))
 
 def load_user_data(usr, pwd, grp):
     result, _ = db.query(qb.get_roles(usr))[0]
@@ -145,7 +141,8 @@ def load_user_data(usr, pwd, grp):
     session['headers'] = [x for x in msg.get_headers(session['lang'])]
 
 def get_info(user):
-    return db.query(qb.get_profile_data(user))[0]
+    v = db.query(qb.get_profile_data(user))
+    return v[0] if len(v) > 0 else v
 
 def is_a_valid_request(username, phone):
     data = db.query(qb.check_existance(username))
@@ -166,3 +163,12 @@ def checked(form, pwd):
         flash(msg.mismatch_new_password(cookies.get('lang')))
         return False
     return True
+
+def check_role_permissions(user, info):
+    if user != cookies.get('user') and cookies.get('roles')['is_default']:
+        return True
+    if len(info) == 0:
+        return True
+    if user != cookies.get('user') and cookies.get('roles')['is_dean'] and cookies.get('info')[2] != info[2]:
+        return True
+    return False

@@ -28,7 +28,7 @@
                 </li>
                 {% if not session['roles']['is_default'] %}
                     <li>
-                        <a href="{{ url_for('search') }}">{{ word('search_by_name', session['lang']) }}...</a> |
+                        <a href="{{ url_for('search_none')}}">{{ word('search_by_name', session['lang']) }}...</a> |
                     </li>
                     {% if session['roles']['is_root'] %}
                         <li>
@@ -45,7 +45,7 @@
         <div class="menu" style="float:right;">
             <ul>
                 <li>
-                    | <a href="{{ url_for('start') }}">{{ word('exit', session['lang']) }}</a>
+                    | <a href="{{ url_for('logout') }}">{{ word('exit', session['lang']) }}</a>
                 </li>
             </ul>
         </div>
