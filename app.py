@@ -43,13 +43,19 @@ def index():
         return redirect(url_for('start'))
     if not cookies.contains('show_details'):
         cookies.set('show_details', False)
+    quota = db.query(qb.get_quota(grp))
+    bonus = db.query(qb.get_quota_bonus(usr))
+    cookies.set('quota', userinfo.get_user_quota(quota, bonus))
+    consumed = db.query(qb.get_acct_consumed(usr))
+    cookies.set('consumed', sum([stp.timestamp() - stt.timestamp() for u, stt, stp, phone in consumed]))
+    cookies.set('details', [(phone, stt, stp, stp.timestamp() - stt.timestamp()) for u, stt, stp, phone in consumed])
     if request.method == 'POST':
         cookies.set('show_details', not cookies.get('show_details'))
     return render_template('self_usage.html',
             word= get_words,
             len= lambda x: len(x),
             seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
-            percent = session['consumed'] * 100 / session['quota']['total'],
+            percent = cookies.get('consumed') * 100 / cookies.get('quota')['total'],
             showing_details = cookies.get('show_details'))
 
 @app.route('/request', methods=['GET', 'POST'])
@@ -182,12 +188,6 @@ def load_user_data(usr, pwd, grp):
     session['user'] = usr
     session['roles'] = userinfo.get_user_roles(result.split(','))
     session['info'] = get_info(usr)
-    quota = db.query(qb.get_quota(grp))
-    bonus = db.query(qb.get_quota_bonus(usr))
-    session['quota'] = userinfo.get_user_quota(quota, bonus)
-    consumed = db.query(qb.get_acct_consumed(usr))
-    session['consumed'] = sum([stp.timestamp() - stt.timestamp() for u, stt, stp, phone in consumed])
-    session['details'] = [(phone, stt, stp, stp.timestamp() - stt.timestamp()) for u, stt, stp, phone in consumed]
     session['headers'] = [x for x in msg.get_headers(session['lang'])]
 
 def get_info(user):
