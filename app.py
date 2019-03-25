@@ -177,7 +177,6 @@ def pending():
     if not cookies.get('roles')['is_root']:
         return redirect(url_for('index'))
     data = db.query(qb.get_pendings())
-    print(data)
     headers = [x[0] for x in db.query('show columns in Pending') if x[0] != 'password']
     return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x))
     
