@@ -174,6 +174,21 @@ def get_words(word, lang='es'):
             'en' : 'No results were found',
             'es' : 'No se encontraron resultados',
             'ca' : 'No s\'han trobat resultats'
+        },
+        'notes' : {
+            'en' : 'Notes',
+            'es' : 'Notas',
+            'ca' : 'Notes'
+        },
+        'group' : {
+            'en' : 'Group',
+            'es' : 'Grupo',
+            'ca' : 'Grup'
+        },
+        'authorized' : {
+            'en' : 'Authorized until',
+            'es' : 'Autorizado hasta',
+            'ca' : 'Autoritzat fins'
         }
     }
     return wds[word][lang]

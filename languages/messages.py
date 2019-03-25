@@ -54,6 +54,14 @@ def mismatch_new_password(language='es'):
     }
     return message[language]
 
+def user_creation_successfull(language='es'):
+    message = {
+        'en' : 'User has been created successfully',
+        'es' : 'Usuario ha sido creado con éxito',
+        'ca' : 'Usuari ha sigut creat amb éxit'
+    }
+    return message[language]
+
 def get_headers(language='es'):
     phone = {
         'en': 'Phone',

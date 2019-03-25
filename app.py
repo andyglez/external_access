@@ -98,6 +98,8 @@ def profile(user):
 def search_none():
     if not cookies.contains('user'):
         return redirect(url_for('start'))
+    if cookies.get('roles')['is_default']:
+        return redirect(url_for('index'))
     if request.method == 'POST':
         if request.form['query'] == '':
             return redirect(url_for('search_none'))
@@ -108,6 +110,8 @@ def search_none():
 def search(query=''):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
+    if cookies.get('roles')['is_default']:
+        return redirect(url_for('index'))
     if request.method == 'POST':
         return redirect(url_for('search', query=request.form['query']))
     
@@ -121,11 +125,35 @@ def search(query=''):
 def remove(user, name, area):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
+    if not (cookies.get('roles')['is_dean'] or cookies.get('roles')['is_root']):
+        return redirect(url_for('index'))
     if request.method == 'POST' and 'reason' in request.form:
         db.query(qb.insert_removed_user(user, name, area, cookies.get('user'), request.form['reason']), False)
         db.query(qb.delete_users(user))
-        return redirect(url_for('search'))
+        return redirect(url_for('search', query=cookies.get('query_value')))
     return render_template('delete.html', word=get_words)
+
+@app.route('/create', methods=['GET', 'POST'])
+def create_user():
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    if not cookies.get('roles')['is_root']:
+        return redirect(url_for('index'))
+    groups = [x[0] for x in db.query(qb.get_group_names())]
+    roles = ['root', 'admin', 'ddi', 'dean', 'default']
+    areas = [x[0] for x in db.query(qb.get_areas())]
+    if request.method == 'POST':
+        if len(get_info(request.form['user'])) > 0:
+            flash(msg.user_already_exists(request.form['user'], session['lang']))
+        else:
+            form = request.form
+            data = (form['user'], form['name'], form['pass'], form['area'],
+                    form['id'], form['email'], form['address'], form['phone'],
+                    form['notes'], form['group'], form['authorized'] if form['authorized'] else datetime.today().isoformat())
+            db.query(qb.insert_new_user(data))
+            db.query(qb.insert_into_dbroles(form['user'], form['roles']))
+            flash(msg.user_creation_successfull(session['lang']))
+    return render_template('create.html', word=get_words, group=groups, roles=roles, areas=areas)
 
 def load_user_data(usr, pwd, grp):
     result, _ = db.query(qb.get_roles(usr))[0]

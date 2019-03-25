@@ -59,3 +59,18 @@ def insert_removed_user(username, name, area, executor, reason):
 
 def delete_users(username):
     return 'delete from Users where UserName = \'{0}\''.format(username)
+
+def get_group_names():
+    return 'select GroupName from radgroupcheck where id < 5'
+
+def get_areas():
+    return 'select Area from Areas'
+
+def insert_new_user(data):
+    user, name, pwd, area, idn, email, address, phone, notes, group, auth = data
+    return '''insert into Users (UserName, Name, Password, Area, id, email, address, phone, notes, GroupName, autorizo_hasta)
+                values (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\')'''\
+                .format(user, name, pwd, area, idn, email, address, phone, notes, group, auth)
+
+def insert_into_dbroles(user, rol):
+    return 'insert into DBRoles (username, roles) values (\'{0}\', \'{1}\')'.format(user, rol)

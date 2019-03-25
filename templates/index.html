@@ -32,7 +32,7 @@
                     </li>
                     {% if session['roles']['is_root'] %}
                         <li>
-                            <a href="{{ url_for('start') }}">{{ word('create', session['lang']) }}...</a> |
+                            <a href="{{ url_for('create_user') }}">{{ word('create', session['lang']) }}...</a> |
                         </li>
                         <li>
                             <a href="{{ url_for('start') }}">{{ word('pendings', session['lang'])}}</a>
