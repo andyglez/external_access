@@ -14,3 +14,15 @@ def encrypt(text):
         else:
             return ''
     return ''
+
+def check(text, crypted):
+    if mode == 'plain':
+        return text == crypted
+    elif 'radcrypt' in mode:
+        if 'simple' in mode:
+            p = Popen(["radcrypt", "-c", text, crypted], stdout=PIPE, stderr=PIPE, universal_newlines=True)
+            output, _ = p.communicate()
+            return 'OK' in output
+        else:
+            return False
+    return False

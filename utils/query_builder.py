@@ -1,10 +1,9 @@
 from datetime import datetime
 
-def get_user(username, password):
+def get_user(username):
     return '''select UserName, Password, GroupName
                 from Users 
-                where Username= \'{0}\' 
-                and Password=\'{1}\''''.format(username, password)
+                where Username= \'{0}\''''.format(username)
 
 def get_roles(username):
     return '''select roles, username

@@ -28,9 +28,8 @@ def start():
     if 'language' in request.form:
         cookies.set('lang', request.form['language'])
         return redirect(url_for('start'))
-    crypted = cr.encrypt(request.form['password'])
-    data = db.query(qb.get_user(request.form['user'], crypted))
-    if len(data) == 0:
+    data = db.query(qb.get_user(request.form['user']))
+    if len(data) == 0 or not cr.check(request.form['password'], data[0][1]):
         flash(msg.wrong_user_pass(cookies.get('lang')), category='error')
         return redirect(url_for('start'))
     load_user_data(*data[0])
