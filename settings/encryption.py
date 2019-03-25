@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 #Configuration file for setting different modes of encryption to use with the freeradius database
 #Modes can be 'plain' or 'radcrypt simple'
-mode = 'plain'
+mode = 'radcrypt simple'
 
 def encrypt(text):
     if mode == 'plain':

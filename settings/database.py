@@ -5,7 +5,7 @@ import MySQLdb
 
 #-------------------------- MySQL Database Settings ------------------------
 # Made for connections through a mySQL database server
-host = '192.168.5.27'
+host = 'localhost'
 user = 'radius'
 pwrd = 'holamundo'
 dbse = 'radius'
