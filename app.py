@@ -43,10 +43,10 @@ def index():
         return redirect(url_for('start'))
     if not cookies.contains('show_details'):
         cookies.set('show_details', False)
-    quota = db.query(qb.get_quota(grp))
-    bonus = db.query(qb.get_quota_bonus(usr))
+    quota = db.query(qb.get_quota(cookies.get('group')))
+    bonus = db.query(qb.get_quota_bonus(cookies.get('user')))
     cookies.set('quota', userinfo.get_user_quota(quota, bonus))
-    consumed = db.query(qb.get_acct_consumed(usr))
+    consumed = db.query(qb.get_acct_consumed(cookies.get('user')))
     cookies.set('consumed', sum([stp.timestamp() - stt.timestamp() for u, stt, stp, phone in consumed]))
     cookies.set('details', [(phone, stt, stp, stp.timestamp() - stt.timestamp()) for u, stt, stp, phone in consumed])
     if request.method == 'POST':
@@ -186,6 +186,7 @@ def pending():
 def load_user_data(usr, pwd, grp):
     result, _ = db.query(qb.get_roles(usr))[0]
     session['user'] = usr
+    cookies.set('group', grp)
     session['roles'] = userinfo.get_user_roles(result.split(','))
     session['info'] = get_info(usr)
     session['headers'] = [x for x in msg.get_headers(session['lang'])]
