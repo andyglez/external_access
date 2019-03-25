@@ -5,6 +5,7 @@ from utils import query_builder as qb
 from utils.cookies import Cookies
 from os import urandom
 from settings import database as db
+from settings import encryption as cr
 from utils import userinfo, time_conversion
 from datetime import datetime
 
@@ -27,7 +28,8 @@ def start():
     if 'language' in request.form:
         cookies.set('lang', request.form['language'])
         return redirect(url_for('start'))
-    data = db.query(qb.get_user(request.form['user'], request.form['password']))
+    crypted = cr.encrypt(request.form['password'])
+    data = db.query(qb.get_user(request.form['user'], crypted))
     if len(data) == 0:
         flash(msg.wrong_user_pass(cookies.get('lang')), category='error')
         return redirect(url_for('start'))
@@ -59,7 +61,8 @@ def request_form():
     if not is_a_valid_request(request.form['user'], request.form['phone']):
         return redirect(url_for('request_form'))
     full_name = request.form['name'] + ' ' + request.form['last_name']
-    db.query(qb.insert_into_pending(request.form['user'], fullname, request.form['password'], request.form['phone']))
+    crypted = cr.encrypt(request.form['password'])
+    db.query(qb.insert_into_pending(request.form['user'], fullname, crypted, request.form['phone']))
     flash(msg.request_sent_successfully(session['lang']))
     return redirect(url_for('start'))
 
@@ -88,7 +91,8 @@ def profile(user):
     roles = [x for x in all_roles if x != rol]
     if request.method == 'POST':
         if 'old_password' in request.form and checked(request.form, info[-1]):
-            db.query(qb.update_password(user, request.form['new_password']))
+            crypted = cr.encrypt(request.form['new_password'])
+            db.query(qb.update_password(user, crypted))
             cookies.set('modify', not cookies.get('modify'))
         elif 'rol' in request.form:
             db.query(qb.update_rol(user, request.form['rol']))
@@ -154,7 +158,8 @@ def create_user():
             flash(msg.user_already_exists(request.form['user'], session['lang']))
         else:
             form = request.form
-            data = (form['user'], form['name'], form['pass'], form['area'],
+            crypted = cr.encrypt(form['pass'])
+            data = (form['user'], form['name'], crypted, form['area'],
                     form['id'], form['email'], form['address'], form['phone'],
                     form['notes'], form['group'], form['authorized'] if form['authorized'] else datetime.today().isoformat())
             db.query(qb.insert_new_user(data))
@@ -202,7 +207,7 @@ def is_a_valid_request(username, phone):
     return True
 
 def checked(form, pwd):
-    if form['old_password'] != pwd:
+    if cr.encrypt(form['old_password']) != pwd:
         flash(msg.bad_password(cookies.get('lang')))
         return False
     elif form['new_password'] != form['verify_password']:
