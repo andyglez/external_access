@@ -77,3 +77,6 @@ def insert_into_dbroles(user, rol):
 
 def update_rol(user, rol):
     return 'update DBRoles set roles = \'{0}\' where username = \'{1}\''.format(rol, user)
+
+def get_pendings():
+    return 'select * from Pending'

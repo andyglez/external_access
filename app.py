@@ -162,6 +162,17 @@ def create_user():
             flash(msg.user_creation_successfull(session['lang']))
     return render_template('create.html', word=get_words, group=groups, roles=roles, areas=areas)
 
+@app.route('/pending')
+def pending():
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    if not cookies.get('roles')['is_root']:
+        return redirect(url_for('index'))
+    data = db.query(qb.get_pendings())
+    print(data)
+    headers = [x[0] for x in db.query('show columns in Pending') if x[0] != 'password']
+    return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x))
+    
 def load_user_data(usr, pwd, grp):
     result, _ = db.query(qb.get_roles(usr))[0]
     session['user'] = usr
