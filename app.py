@@ -14,8 +14,6 @@ app.secret_key = str(urandom(24))
 
 db.initial_setup()
 cookies = Cookies(session)
-if __name__ == '__main__':    
-    app.run(debug=True, host='0.0.0.0', port=5000)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -223,3 +221,6 @@ def check_role_permissions(user, info):
     if user != cookies.get('user') and cookies.get('roles')['is_dean'] and cookies.get('info')[2] != info[2]:
         return True
     return False
+
+if __name__ == '__main__':    
+    app.run(debug=True, host='0.0.0.0', port=5000)
