@@ -189,6 +189,11 @@ def get_words(word, lang='es'):
             'en' : 'Authorized until',
             'es' : 'Autorizado hasta',
             'ca' : 'Autoritzat fins'
+        },
+        'change' : {
+            'en' : 'Change Rol',
+            'es' : 'Cambiar Rol',
+            'ca' : 'Canviar Rol'
         }
     }
     return wds[word][lang]

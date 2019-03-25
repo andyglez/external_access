@@ -74,3 +74,6 @@ def insert_new_user(data):
 
 def insert_into_dbroles(user, rol):
     return 'insert into DBRoles (username, roles) values (\'{0}\', \'{1}\')'.format(user, rol)
+
+def update_rol(user, rol):
+    return 'update DBRoles set roles = \'{0}\' where username = \'{1}\''.format(rol, user)

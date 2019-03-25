@@ -38,6 +38,25 @@
         <td>:</td>
         <td>{{ data[6] }}</td>
     </tr>
+{% if session['roles']['is_root'] %}
+    <form action="" method="POST">
+        <tr>
+            <td>Rol</td>
+            <td>:</td>
+            <td>{{ rol }}</td>
+            <td>
+                <select name=rol>
+                    {% for x in roles %}
+                        <option>{{x}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <input type="submit" value="{{ word('change', session['lang']) }}">
+            </td>
+        </tr>
+    </form>
+{% endif %}
 {% if is_modifyer %}
     {% if not mod_pwd %}
     <tr>

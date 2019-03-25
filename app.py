@@ -81,18 +81,25 @@ def profile(user):
     if not cookies.contains('modify'):
         cookies.set('modify', False)
     info = get_info(user)
+    all_roles = ['root', 'admin', 'ddi', 'dean', 'default']
     if check_role_permissions(user, info):
         return redirect(url_for('index'))
+    rol, _ = db.query(qb.get_roles(user))[0]
+    roles = [x for x in all_roles if x != rol]
     if request.method == 'POST':
         if 'old_password' in request.form and checked(request.form, info[-1]):
             db.query(qb.update_password(user, request.form['new_password']))
-        cookies.set('modify', not cookies.get('modify'))
+            cookies.set('modify', not cookies.get('modify'))
+        elif 'rol' in request.form:
+            db.query(qb.update_rol(user, request.form['rol']))
         return redirect(url_for('profile', user=user))
     return render_template('profile.html', 
                     word=get_words, 
                     data=info,
                     is_modifyer=(info[0] == cookies.get('user') or (not cookies.get('roles')['is_dean'])),
-                    mod_pwd=cookies.get('modify'))
+                    mod_pwd=cookies.get('modify'),
+                    rol=rol,
+                    roles=roles)
 
 @app.route('/search', methods=['GET', 'POST'])
 def search_none():
