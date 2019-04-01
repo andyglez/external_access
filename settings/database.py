@@ -11,14 +11,16 @@ pwrd = 'holamundo'
 dbse = 'radius'
 kargs = dict(use_unicode=1, connect_timeout=10)
 
-get_connection = MySQLdb.Connection(*(host, user, pwrd, dbse), **kargs)
+def get_connection():
+    return MySQLdb.Connection(*(host, user, pwrd, dbse), **kargs)
 
 def query(s, is_select=True):
-    cursor = get_connection.cursor()
+    conn = get_connection()
+    cursor = conn.cursor()
     cursor.execute(s)
     lst = [[i for i in row] for row in cursor.fetchall()] if is_select else []
     cursor.close()
-    get_connection.commit()
+    conn.commit()
     return lst
 #---------------------------------------------------------------------
 
