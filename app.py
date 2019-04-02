@@ -93,17 +93,18 @@ def profile(user):
     rol, _ = db.query(qb.get_roles(user))[0]
     roles = [x for x in all_roles if x != rol]
     if request.method == 'POST':
+        cookies.set('modify', not cookies.get('modify'))
         if 'old_password' in request.form and checked(request.form, info[-1]):
             crypted = cr.encrypt(request.form['new_password'])
             db.query(qb.update_password(user, crypted))
-            cookies.set('modify', not cookies.get('modify'))
         elif 'rol' in request.form:
             db.query(qb.update_rol(user, request.form['rol']))
+            cookies.set('modify', False)
         return redirect(url_for('profile', user=user))
     return render_template('profile.html', 
                     word=get_words, 
                     data=info,
-                    is_modifyer=(info[0] == cookies.get('user') or (not cookies.get('roles')['is_dean'])),
+                    is_modifyer=(info[0] == cookies.get('user') or not (cookies.get('roles')['is_dean'] or cookies.get('roles')['is_ddi'])),
                     mod_pwd=cookies.get('modify'),
                     rol=rol,
                     roles=roles)
@@ -204,7 +205,7 @@ def is_a_valid_request(username, phone):
     return True
 
 def checked(form, pwd):
-    if cr.encrypt(form['old_password']) != pwd:
+    if not cr.check(form['old_password'], pwd):
         flash(msg.bad_password(cookies.get('lang')))
         return False
     elif form['new_password'] != form['verify_password']:

@@ -10,7 +10,7 @@ def encrypt(text):
         if 'simple' in mode:
             p = Popen(["radcrypt", text], stdout=PIPE, stderr=PIPE, universal_newlines=True)
             output, _ = p.communicate()
-            return output
+            return "".join([x for x in output if x != '\n'])
         else:
             return ''
     return ''
