@@ -131,7 +131,7 @@ def search(query=''):
         return redirect(url_for('search', query=request.form['query']))
     
     data = ([(u, n, a) for u, n, a in db.query(qb.get_users()) if query in n.lower() and a == cookies.get('info')[2]] 
-            if cookies.get('roles')['is_dean'] 
+            if cookies.get('roles')['is_dean'] or cookies.get('roles')['is_admin']
             else [(u, n, a) for u, n, a in db.query(qb.get_users()) if query in n.lower()])
     cookies.set('query_value', query)
     return render_template('search.html',word=get_words, flag=True, data=data, len= lambda x: len(x))
