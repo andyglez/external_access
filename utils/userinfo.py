@@ -33,3 +33,6 @@ def get_user_quota(group, bonus):
         'roaming': int(roaming),
         'bonus': b
     }
+
+def percentage(consumed, total):
+    return consumed * 100 / total

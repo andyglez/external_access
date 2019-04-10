@@ -12,10 +12,10 @@
         seconds_to_time(session['quota']['bonus'])) }}
     </div>
     <div style="float:left;margin-left:13px; margin-right:5px; height: 18px; width: 700px; border:1px solid #194373;">
-        <div style="height:18px; width: {{(7 * percent)}}px; background-color:#4780C2;"/></div>
+        <div style="height:18px; width: {{(7 * regular)}}px; background-color:#4780C2;"/></div>
     </div>
     <div style="padding-left:13px; font-weight : bold; font-size : 12pt; color : black;">
-        {{'%.2f' % percent}} %
+        {{'%.2f' % regular}} %
     </div>
     <div style="clear:both;padding-left:13px;">
         {{ word('quota_consumed', session['lang']) }}: {{seconds_to_time(session['consumed'])}}
@@ -24,6 +24,29 @@
         {{ word('remain', session['lang']) }}: {{seconds_to_time(session['quota']['total'] - session['consumed'])}}
     </div>
 </div>
+{% if session['quota']['roaming'] > 1 %}
+<div class="block block-details">
+    <div style="padding-left:13px;">
+        <h3>Roaming</h3>
+    </div>
+    <div style="padding-left:13px;">
+        {{ '{0}: {1}'.format(word('quota', session['lang']),
+        seconds_to_time(session['quota']['roaming'])) }}
+    </div>
+    <div style="float:left;margin-left:13px; margin-right:5px; height: 18px; width: 700px; border:1px solid #194373;">
+        <div style="height:18px; width: {{(7 * roaming)}}px; background-color:#4780C2;"/></div>
+    </div>
+    <div style="padding-left:13px; font-weight : bold; font-size : 12pt; color : black;">
+        {{'%.2f' % roaming}} %
+    </div>
+    <div style="clear:both;padding-left:13px;">
+        {{ word('quota_consumed', session['lang']) }}: {{seconds_to_time(session['roaming'])}}
+    </div>
+    <div style="padding-left:13px;">
+        {{ word('remain', session['lang']) }}: {{seconds_to_time(session['quota']['roaming'] - session['roaming'])}}
+    </div>
+</div>
+{% endif %}
 
 <form action="" method="POST">
     <input type="submit" value="{{ word('less_details', session['lang']) if showing_details else word('more_details', session['lang'])}}"/>
