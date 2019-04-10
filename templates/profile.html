@@ -57,6 +57,17 @@
         </tr>
     </form>
 {% endif %}
+
+{% if session['roles']['is_root'] or session['roles']['is_admin'] %}
+    <form action="{{ url_for('index', user=user, group=group) }}" method="GET">
+        <tr>
+            <td>
+                <input type="submit" value="{{ word('more_details', session['lang']) }}">
+            </td>
+        </tr>
+    </form>
+{% endif %}
+
 {% if is_modifyer %}
     {% if not mod_pwd %}
     <tr>

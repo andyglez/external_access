@@ -3,7 +3,12 @@
 
 <div class="block block-details">
     <div style="padding-left:13px;">
-        <h3>{{ word('welcome', session['lang']) }} {{session['user']}}</h3>
+        {% if self_data %}
+            <h3>{{ word('welcome', session['lang']) }} {{session['user']}}</h3>
+        {% endif %}
+        {% if not self_data %}
+            <a href="{{ url_for('profile', user=user) }}">{{ word('profile', session['lang']) }}: {{user}}</a>
+        {% endif %}
     </div>
     <div style="padding-left:13px;">
         {{ '{0}: {1} ({2} + {3})'.format(word('quota', session['lang']),
@@ -65,6 +70,13 @@
             <td class="data" colspan="{{len(session['headers'][1])}})"> {{stt}} </td>
             <td class="data" colspan="{{len(session['headers'][2])}})"> {{stp}} </td>
             <td class="data" colspan="{{len(session['headers'][3])}})"> {{consumed}} </td>
+            {% if session['roles']['is_root'] or session['roles']['is_admin'] %}
+            <td class="data">
+                <form action="{{ url_for('delete', user=user, phone=phone, consumed=consumed, group=group) }}" method="GET">
+                    <input type="submit" value="{{ word('force', session['lang']) }}" name="delete"/>
+                </form>
+            </td>
+            {% endif %}
         </tr>
     {% endfor %}    
     </table>

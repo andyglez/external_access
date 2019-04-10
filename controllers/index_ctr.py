@@ -9,8 +9,8 @@ def set_cookies(cookies):
     if not cookies.contains('show_details'):
         cookies.set('show_details', False)
 
-def set_data_to_cookies(cookies):
-    data = build_data_from_user_quota(cookies.get('user'), cookies.get('group'), cookies.get('phone'))
+def set_data_to_cookies(user, group, phone, cookies):
+    data = build_data_from_user_quota(user, group, phone)
     (quota, regular_consumed, roaming_consumed, details, perc_regular, perc_roam) = data
     cookies.set('quota', quota)
     cookies.set('consumed', regular_consumed)
@@ -27,6 +27,11 @@ def build_data_from_user_quota(user, group, phone):
     roaming_consumed = sum([b.timestamp() - a.timestamp() for u, a, b, p in consumed if p not in phone])
     details = [(p, stt, stp, stp.timestamp() - stt.timestamp()) for u, stt, stp, p in consumed]
     return (quota, regular_consumed, roaming_consumed, details, regular_consumed * 100 / quota['total'], roaming_consumed * 100 / quota['roaming'])
+
+def delete_record(user, phone, consumed):
+    return db.query('''delete from radacct
+                        where username=\'{0}\' and
+                        callingstationid=\'{1}\' and acctsessiontime=\'{2}\''''.format(user, phone, consumed), False)
 
 def get_quota(groupname):
     return db.query('''select Value, GroupName

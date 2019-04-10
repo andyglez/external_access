@@ -21,7 +21,7 @@
         <div class="menu" style="float:left;">
             <ul id="menu">
                 <li>
-                    <a href="{{ url_for('index') }}">{{word('home', session['lang'])}}</a> |
+                    <a href="{{ url_for('index', user=session['user'], group=session['group']) }}">{{word('home', session['lang'])}}</a> |
                 </li>
                 <li>
                     <a href="{{ url_for('profile', user=session['user']) }}">{{ word('profile', session['lang']) }}...</a> |

@@ -8,7 +8,7 @@ from settings import database as db
 from settings import encryption as cr
 from utils import userinfo, time_conversion
 from datetime import datetime
-from controllers import main, login, index_ctr, request_ctr, profile_ctr, search_ctr, remove_ctr, create_ctr, pending_ctr
+from controllers import main, login, index_ctr, request_ctr, profile_ctr, search_ctr, remove_ctr, create_ctr, pending_ctr, logout_ctr
 
 app = Flask(__name__)
 app.secret_key = str(urandom(24))
@@ -29,20 +29,28 @@ def start():
     if not value:
         flash(message, category='error')
         return redirect(url_for('start'))
-    return redirect(url_for('index'))
+    return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
 
-@app.route('/index', methods=['GET', 'POST'])
-def index():
+@app.route('/index?user=<user>&group=<group>', methods=['GET', 'POST'])
+def index(user, group):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
+    if user != cookies.get('user') and not (cookies.get('roles')['is_root'] or cookies.get('roles')['is_admin']):
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     index_ctr.set_cookies(cookies)
-    (regular, roaming) = index_ctr.set_data_to_cookies(cookies)
+    phone = login.get_profile_data(user)[0][5]
+    (regular, roaming) = index_ctr.set_data_to_cookies(user, group, phone, cookies)
     if request.method == 'POST':
         cookies.set('show_details', not cookies.get('show_details'))
     return render_template('self_usage.html', word= get_words, len= lambda x: len(x),
             seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
-            regular = regular, roaming = roaming,
+            regular = regular, roaming = roaming, user = user, group = group, self_data=(user == cookies.get('user')),
             showing_details = cookies.get('show_details'))
+
+@app.route('/delete?user=<user>&phone=<phone>&consumed=<consumed>&group=<group>')
+def delete(user, phone, consumed, group):
+    index_ctr.delete_record(user, phone, consumed)
+    return redirect(url_for('index', user=user, group=group)) 
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_form():
@@ -60,9 +68,7 @@ def request_form():
 def logout():
     if not cookies.contains('user'):
         return redirect(url_for('start'))
-    cookies.reset_all_flags()
-    cookies.clear_all()
-    flash(msg.logout_successful(session['lang']))
+    flash(logout_ctr.clear_session(cookies))
     return redirect(url_for('start'))
 
 
@@ -73,12 +79,12 @@ def profile(user):
     profile_ctr.set_cookies(cookies)
     info = login.get_profile_data(user)[0]
     if profile_ctr.check_role_permissions(user, info, cookies):
-        return redirect(url_for('index'))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     (current, rest) = profile_ctr.current_roles(user)
     if request.method == 'POST':
         profile_ctr.save_profile_action(user, request.form, info[-1], cookies)
         return redirect(url_for('profile', user=user))
-    return render_template('profile.html', word=get_words, data=info, rol=current, roles=rest,
+    return render_template('profile.html', word=get_words, data=info, rol=current, roles=rest, user=user, group=login.get_basic_info(user)[0][-1],
                     is_modifyer=(info[0] == cookies.get('user') or not (cookies.get('roles')['is_dean'] or cookies.get('roles')['is_ddi'])),
                     mod_pwd=cookies.get('modify'))
 
@@ -87,7 +93,7 @@ def search_none():
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if search_ctr.dont_have_permissions(cookies.get('roles')):
-        return redirect(url_for('index'))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     if request.method == 'POST':
         if request.form['query'] == '':
             return redirect(url_for('search_none'))
@@ -99,7 +105,7 @@ def search(query=''):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if search_ctr.dont_have_permissions(cookies.get('roles')):
-        return redirect(url_for('index'))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     if request.method == 'POST':
         return redirect(url_for('search', query=request.form['query']))
     data = search_ctr.search(cookies, query)
@@ -110,7 +116,7 @@ def remove(user, name, area):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if remove_ctr.dont_have_permissions(cookies.get('roles')):
-        return redirect(url_for('index'))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     if request.method == 'POST' and 'reason' in request.form:
         remove_ctr.log_removal(user, name, area, cookies.get('user'), request.form['reason'])
         return redirect(url_for('search', query=cookies.get('query_value')))
@@ -121,7 +127,7 @@ def create_user():
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if create_ctr.dont_have_permissions(cookies.get('roles')):
-        return redirect(url_for('index'))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     (groups, roles, areas) = create_ctr.load_visual_options()
     if request.method == 'POST':
         if len(login.get_profile_data(request.form['user'])) > 0:
@@ -135,7 +141,7 @@ def pending():
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if pending_ctr.dont_have_permissions(cookies.get('roles')):
-        return redirect(url_for('index'))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     (data, headers) = pending_ctr.get_data()
     return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x))
 
