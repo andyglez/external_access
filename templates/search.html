@@ -1,11 +1,33 @@
 {% extends "index.html" %}
 {% block body %}
 
+<div class="menu" style="float:left;">
+        <ul id="menu">
+            <li>
+                <a href="{{ url_for('search_none', category='name') }}">{{word('name', session['lang'])}}</a> |
+            </li>
+            <li>
+                <a href="{{ url_for('search_none', category='user') }}">{{ word('user', session['lang']) }}...</a> |
+            </li>
+            <li>
+                <a href="{{ url_for('search_none', category='email') }}">{{ word('email', session['lang']) }}...</a> |
+            </li>
+            <li>
+                <a href="{{ url_for('search_none', category='phone') }}">{{ word('phone', session['lang']) }}...</a> |
+            </li>
+            <li>
+                <a href="{{ url_for('search_none', category='area') }}">{{ word('area', session['lang']) }}...</a> |
+            </li>
+        </ul>
+</div>
+
+<div style="float:none; clear:both; width:100%; border-bottom:1px solid #7F9DB9;"></div>
+
 <form action="" method="POST">
     <table>
         <tr>
             <td><input type="text" name="query" value="{{ session['query_value'] }}"/></td>
-            <td><input type="submit" value="{{ word('search_by_name', session['lang']) }}"/></td>
+            <td><input type="submit" value="{{ word('search', session['lang']) }} {{ word(category, session['lang']) }}"/></td>
         </tr>
     </table>
 </form>
@@ -14,7 +36,7 @@
 {% if flag %}
     {% if len(data) > 0 %}
     <table class="table">
-        {% for username, name, area in data %}
+        {% for username, name, area, email, phone in data %}
             <tr>
                 <td class="data"> <a href="{{ url_for('profile', user=username)}}">{{username}}</a> | </td>
                 <td class="data"> {{name}} | </td>

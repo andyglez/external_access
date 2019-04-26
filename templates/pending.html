@@ -3,12 +3,14 @@
 
 <table class="table">
     <tr>
+        <td class="td header", colspan="2">ID</td>
         {% for h in headers %}
             <td class="td header", colspan="{{len(h)}}">{{h}}</td>
         {% endfor %}
     </tr>
-    {% for row in data %}
+    {% for i, row in enumerate(data) %}
         <tr>
+            <td class="data" colspan="2"> {{i + 1}} </td>
             <td class="data" colspan="{{len(headers[0])}}"> {{row[0]}} </td>
             <td class="data" colspan="{{len(headers[1])}})"> {{row[1]}} </td>
             <td class="data" colspan="{{len(headers[2])}})"> {{row[2]}} </td>

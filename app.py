@@ -45,7 +45,7 @@ def index(user, group):
     return render_template('self_usage.html', word= get_words, len= lambda x: len(x),
             seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
             regular = regular, roaming = roaming, user = user, group = group, self_data=(user == cookies.get('user')),
-            showing_details = cookies.get('show_details'))
+            showing_details = cookies.get('show_details'), enumerate=lambda x: enumerate(x))
 
 @app.route('/delete?user=<user>&phone=<phone>&consumed=<consumed>&group=<group>')
 def delete(user, phone, consumed, group):
@@ -90,28 +90,28 @@ def profile(user):
                     is_modifyer=(info[0] == cookies.get('user') or not (cookies.get('roles')['is_dean'] or cookies.get('roles')['is_ddi'])),
                     mod_pwd=cookies.get('modify'))
 
-@app.route('/search', methods=['GET', 'POST'])
-def search_none():
+@app.route('/search?category=<category>', methods=['GET', 'POST'])
+def search_none(category='name'):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if search_ctr.dont_have_permissions(cookies.get('roles')):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     if request.method == 'POST':
         if request.form['query'] == '':
-            return redirect(url_for('search_none'))
-        return redirect(url_for('search', query=request.form['query']))
-    return render_template('search.html', word=get_words)
+            return redirect(url_for('search_none',category=category))
+        return redirect(url_for('search', category=category, query=request.form['query']))
+    return render_template('search.html', word=get_words, category=category)
 
-@app.route('/search?query=<query>', methods=['GET', 'POST'])
-def search(query=''):
+@app.route('/search?category=<category>&query=<query>', methods=['GET', 'POST'])
+def search(category, query=''):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if search_ctr.dont_have_permissions(cookies.get('roles')):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     if request.method == 'POST':
-        return redirect(url_for('search', query=request.form['query']))
-    data = search_ctr.search(cookies, query)
-    return render_template('search.html',word=get_words, flag=True, data=data, len= lambda x: len(x))
+        return redirect(url_for('search', category=category, query=request.form['query']))
+    data = search_ctr.search(cookies, query, category)
+    return render_template('search.html',word=get_words, flag=True, data=data, len= lambda x: len(x), category=category)
 
 @app.route('/remove?user=<user>&name=<name>&area=<area>', methods=['GET', 'POST'])
 def remove(user, name, area):
@@ -145,7 +145,7 @@ def pending():
     if pending_ctr.dont_have_permissions(cookies.get('roles')):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     (data, headers) = pending_ctr.get_data()
-    return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x))
+    return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x), enumerate=lambda x: enumerate(x))
 
 if __name__ == '__main__':    
     app.run(debug=True, host='0.0.0.0', port=5000)

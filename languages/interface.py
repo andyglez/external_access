@@ -150,10 +150,15 @@ def get_words(word, lang='es'):
             'es' : 'Verifique',
             'ca' : 'Verifiqui'
         },
-        'search_by_name' : {
-            'en' : 'Search by name',
-            'es' : 'Buscar por nombre',
-            'ca' : 'Buscar per nom'
+        'search' : {
+            'en' : 'Search',
+            'es' : 'Buscar',
+            'ca' : 'Buscar'
+        },
+        'search_by' : {
+            'en' : 'Search by',
+            'es' : 'Buscar por',
+            'ca' : 'Buscar per'
         },
         'force' : {
             'en' : 'Force Elimination',

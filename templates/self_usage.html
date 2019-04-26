@@ -60,12 +60,14 @@
 {% if showing_details %}
 <table class="table">
     <tr>
+        <td class="td header", colspan="2">ID</td>
         {% for h in session['headers'] %}
             <td class="td header", colspan="{{len(h)}}">{{h}}</td>
         {% endfor %}
     </tr>
-    {% for (phone, stt, stp, consumed) in session['details'] %}
+    {% for (i, (phone, stt, stp, consumed)) in enumerate(session['details']) %}
         <tr>
+            <td class="data" colspan="2"> {{i + 1}} </td>
             <td class="data" colspan="{{len(session['headers'][0])}}"> {{phone}} </td>
             <td class="data" colspan="{{len(session['headers'][1])}})"> {{stt}} </td>
             <td class="data" colspan="{{len(session['headers'][2])}})"> {{stp}} </td>
