@@ -82,7 +82,9 @@ def profile(user):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     (current, rest) = profile_ctr.current_roles(user)
     if request.method == 'POST':
-        profile_ctr.save_profile_action(user, request.form, info[-1], cookies)
+        (flag, msg) = profile_ctr.save_profile_action(user, request.form, info[-1], cookies)
+        if not msg == '':
+            flash(msg)
         return redirect(url_for('profile', user=user))
     return render_template('profile.html', word=get_words, data=info, rol=current, roles=rest, user=user, group=login.get_basic_info(user)[0][-1],
                     is_modifyer=(info[0] == cookies.get('user') or not (cookies.get('roles')['is_dean'] or cookies.get('roles')['is_ddi'])),

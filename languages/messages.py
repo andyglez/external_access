@@ -54,6 +54,14 @@ def mismatch_new_password(language='es'):
     }
     return message[language]
 
+def successfull_pass_change(language='es'):
+    message = {
+        'en' : 'Password successfully changed',
+        'es' : 'La contraseña ha sido cambiada con éxito',
+        'ca' : 'La contrasenya ha sigut cambiat amb éxit'
+    }
+    return message[language]
+
 def user_creation_successfull(language='es'):
     message = {
         'en' : 'User has been created successfully',

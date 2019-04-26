@@ -16,7 +16,9 @@ def checked(form, pwd, lang):
         return (False, msg.bad_password(lang))
     elif form['new_password'] != form['verify_password']:
         return (False, msg.mismatch_new_password(lang))
-    return (True, '')
+    elif form['new_password'] == '':
+        return (False, msg.bad_password(lang))
+    return (True, msg.successfull_pass_change(lang))
 
 def set_cookies(cookies):
     cookies.reset_all_flags('modify')
@@ -31,12 +33,17 @@ def current_roles(user):
 
 def save_profile_action(user, form, password, cookies):
     cookies.set('modify', not cookies.get('modify'))
-    if 'old_password' in form and checked(form, password, cookies.get('lang')):
-        crypted = cr.encrypt(form['new_password'])
-        update_password(user, crypted)
+    if 'old_password' in form:
+        (flag, msg) = checked(form, password, cookies.get('lang'))
+        if flag:
+            crypted = cr.encrypt(form['new_password'])
+            update_password(user, crypted)
+        return (flag, msg)
     elif 'rol' in form:
         update_rol(user, form['rol'])
         cookies.set('modify', False)
+        return (True, 'Rol updated')
+    return (False, '')
 
 def update_password(username, password):
     return db.query('''update Users set Password = \'{0}\'
