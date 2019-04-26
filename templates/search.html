@@ -37,7 +37,7 @@
     {% if len(data) > 0 and current <= total %}
     <table class="table">
         {% for (i, (username, name, area, email, phone)) in enumerate(data) %}
-            {% in_page(i) %}
+            {% if in_page(i) %}
                 <tr>
                     <td class="data"> <a href="{{ url_for('profile', user=username)}}">{{username}}</a> | </td>
                     <td class="data"> {{name}} | </td>
