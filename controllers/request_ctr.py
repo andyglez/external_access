@@ -24,4 +24,4 @@ def check_email(email):
 
 def insert_into_pending(username, email, fullname, password, phone):
     return db.query('''insert into Pending (username, email, name, password, phone)
-                        values(\'{0}\',\'{1}\',\'{2}\',\'{3}\')'''.format(username, email, fullname, password, phone), False)
+                        values(\'{0}\',\'{1}\',\'{2}\',\'{3}\',\'{4}\')'''.format(username, email, fullname, password, phone), False)
