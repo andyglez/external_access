@@ -57,7 +57,7 @@ def request_form():
     cookies.set('current', 'request_form')
     if request.method == 'GET':
         return render_template('request.html', word=get_words)
-    value, message = request_ctr.is_a_valid_request(request.form['user'], request.form['phone'])
+    value, message = request_ctr.is_a_valid_request(request.form['user'], request.form['email'], cookies.get('lang'))
     if not value:
         flash(message, category='error')
         return redirect(url_for('request_form'))

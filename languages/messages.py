@@ -14,11 +14,11 @@ def user_already_exists(username, language='es'):
     }
     return message[language]
 
-def phone_already_in_use(phone, language='es'):
+def email_already_in_use(email, language='es'):
     message = {
-        'en': 'Phone '+phone+' is already anchored to another account',
-        'es': 'El teléfono '+phone+' ya está anclado a otra cuenta',
-        'ca': 'El teléfon '+phone+' ja està ancorat amb altre conta'
+        'en': 'Email: '+email+' is already anchored to another account',
+        'es': 'La dirección: '+email+' ya está anclado a otra cuenta',
+        'ca': 'La direcció: '+email+' ja està ancorat amb altre conta'
     }
     return message[language]
 
