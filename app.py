@@ -99,19 +99,25 @@ def search_none(category='name'):
     if request.method == 'POST':
         if request.form['query'] == '':
             return redirect(url_for('search_none',category=category))
-        return redirect(url_for('search', category=category, query=request.form['query']))
-    return render_template('search.html', word=get_words, category=category)
+        return redirect(url_for('search', category=category, query=request.form['query'], page=1))
+    return render_template('search.html', word=get_words, category=category, page=1)
 
-@app.route('/search?category=<category>&query=<query>', methods=['GET', 'POST'])
-def search(category, query=''):
+@app.route('/search?category=<category>&query=<query>&page=<page>', methods=['GET', 'POST'])
+def search(category, query='', page=1):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if search_ctr.dont_have_permissions(cookies.get('roles')):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group')))
     if request.method == 'POST':
-        return redirect(url_for('search', category=category, query=request.form['query']))
+        return redirect(url_for('search', category=category, query=request.form['query'], page=str(page)))
     data = search_ctr.search(cookies, query, category)
-    return render_template('search.html',word=get_words, flag=True, data=data, len= lambda x: len(x), category=category)
+    total = len(data) // 10 if len(data) % 10 == 0 else (len(data) // 10) + 1
+    if int(page) > total and total > 0:
+        return redirect(url_for('search', category=category, query=query, page=1))
+    return render_template('search.html',word=get_words, flag=True, data=data, len= lambda x: len(x),
+                            category=category, page=page, enumerate=lambda x:enumerate(x),
+                            in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10,
+                            current=int(page), total=total)
 
 @app.route('/remove?user=<user>&name=<name>&area=<area>', methods=['GET', 'POST'])
 def remove(user, name, area):

@@ -34,25 +34,47 @@
 
 
 {% if flag %}
-    {% if len(data) > 0 %}
+    {% if len(data) > 0 and current <= total %}
     <table class="table">
-        {% for username, name, area, email, phone in data %}
-            <tr>
-                <td class="data"> <a href="{{ url_for('profile', user=username)}}">{{username}}</a> | </td>
-                <td class="data"> {{name}} | </td>
-                <td class="data"> {{area}} </td>
-                {% if session['roles']['is_root'] or session['roles']['is_dean'] %}
-                    <td class="data">
-                        <form action="{{ url_for('remove', user=username, name=name, area=area) }}" method="GET">
-                            <input type="submit" value="{{ word('force', session['lang'])}}"/>
-                        </form>
-                    </td>
-                {% endif %}
-            </tr>
+        {% for (i, (username, name, area, email, phone)) in enumerate(data) %}
+            {% in_page(i) %}
+                <tr>
+                    <td class="data"> <a href="{{ url_for('profile', user=username)}}">{{username}}</a> | </td>
+                    <td class="data"> {{name}} | </td>
+                    <td class="data"> {{area}} </td>
+                    {% if session['roles']['is_root'] or session['roles']['is_dean'] %}
+                        <td class="data">
+                            <form action="{{ url_for('remove', user=username, name=name, area=area) }}" method="GET">
+                                <input type="submit" value="{{ word('force', session['lang'])}}"/>
+                            </form>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endif %}
         {% endfor %} 
     </table>
+
+    <h3>{{ word('results', session['lang']) }}: {{ word('page', session['lang']) }} {{current}}/{{total}}</h3>
+    <h4>
+        {% if current != 1 %}
+            <a href="{{ url_for('search', category=category, query=session['query_value'], page=1) }}">{{ word('first', session['lang']) }} </a>
+            ...
+        {% endif %}    
+        {% if current > 1 %}
+            <a href="{{ url_for('search', category=category, query=session['query_value'], page=current - 1) }}">{{ word('prev', session['lang']) }} </a>
+            .
+        {% endif %}
+        {% if current < total %}
+            <a href="{{ url_for('search', category=category, query=session['query_value'], page=current + 1) }}">{{ word('next', session['lang']) }} </a>
+        {% endif %}
+        {% if current != total %}
+            ...
+            <a href="{{ url_for('search', category=category, query=session['query_value'], page=total) }}">{{ word('last', session['lang']) }} </a>            
+        {% endif %}
+    </h4>
+
     {% endif %}
-    {% if len(data) == 0 %}
+    {% if len(data) == 0 or current > total %}
     <h3>{{ word('no_results', session['lang']) }}</h3>
     {% endif %}
 {% endif %}

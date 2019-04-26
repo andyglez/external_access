@@ -199,6 +199,36 @@ def get_words(word, lang='es'):
             'en' : 'Change Rol',
             'es' : 'Cambiar Rol',
             'ca' : 'Canviar Rol'
+        },
+        'results': {
+            'en' : 'Showing results',
+            'es' : 'Mostrando resultados',
+            'ca' : 'Mostrant resultats'
+        },
+        'page' : {
+            'en' : 'Page',
+            'es' : 'Página',
+            'ca' : 'Página'
+        },
+        'first' : {
+            'en' : 'First',
+            'es' : 'Primera',
+            'ca' : 'Primera'
+        },
+        'prev' : {
+            'en' : 'Previous',
+            'es' : 'Anterior',
+            'ca' : 'Anterior'
+        },
+        'next' : {
+            'en' : 'Next',
+            'es' : 'Siguiente',
+            'ca' : 'Següent'
+        },
+        'last' : {
+            'en' : 'Last',
+            'es' : 'Ultima',
+            'ca' : 'Postrera'
         }
     }
     return wds[word][lang]
