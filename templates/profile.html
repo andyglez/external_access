@@ -67,7 +67,7 @@
     </form>
 {% endif %}
 
-{% if session['roles']['is_root'] or session['roles']['is_admin'] %}
+{% if session['roles']['is_root'] or session['roles']['is_admin'] or session['roles']['is_ddi'] %}
     <form action="{{ url_for('index', user=user, group=group, page=1) }}" method="GET">
         <tr>
             <td>
