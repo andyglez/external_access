@@ -35,7 +35,7 @@
             <td>{{ data[5] }} </td>
             {% endif %}
             {% if is_mod_phone %}
-            <td><input type="text" value="{{ data[5] }}" name="phone"</td>
+            <td><input type="text" value="{{ data[5] }}" name="phone" autocomplete="off"/></td>
             {% endif %}
             {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
             <td><input type="submit" value="{{ word('change', session['lang']) }} {{ word('phone', session['lang']) }}" name="button"></td>

@@ -28,7 +28,7 @@
 <form action="" method="POST">
     <table>
         <tr>
-            <td><input type="text" name="query" value="{{ session['query_value'] }}"/></td>
+            <td><input type="text" name="query" value="{{ session['query_value'] }}" autocomplete="off"/></td>
             <td><input type="submit" value="{{ word('search', session['lang']) }} {{ word(category, session['lang']) }}"/></td>
         </tr>
     </table>
