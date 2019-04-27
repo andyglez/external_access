@@ -28,11 +28,6 @@ def build_data_from_user_quota(user, group, phone):
     details = [(p, stt, stp, stp.timestamp() - stt.timestamp()) for u, stt, stp, p in consumed]
     return (quota, regular_consumed, roaming_consumed, details, regular_consumed * 100 / quota['total'], roaming_consumed * 100 / quota['roaming'])
 
-def delete_record(user, phone, consumed):
-    return db.query('''delete from radacct
-                        where username=\'{0}\' and
-                        callingstationid=\'{1}\' and acctsessiontime=\'{2}\''''.format(user, phone, consumed), False)
-
 def get_quota(groupname):
     return db.query('''select Value, GroupName
                         from radgroupcheck

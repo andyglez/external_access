@@ -59,7 +59,7 @@
 {% endif %}
 
 {% if session['roles']['is_root'] or session['roles']['is_admin'] %}
-    <form action="{{ url_for('index', user=user, group=group) }}" method="GET">
+    <form action="{{ url_for('index', user=user, group=group, page=1) }}" method="GET">
         <tr>
             <td>
                 <input type="submit" value="{{ word('more_details', session['lang']) }}">

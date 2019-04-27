@@ -73,13 +73,6 @@
                 <td class="data" colspan="{{len(session['headers'][1])}})"> {{stt}} </td>
                 <td class="data" colspan="{{len(session['headers'][2])}})"> {{stp}} </td>
                 <td class="data" colspan="{{len(session['headers'][3])}})"> {{consumed}} </td>
-                {% if session['roles']['is_root'] or session['roles']['is_admin'] %}
-                <td class="data">
-                    <form action="{{ url_for('delete', user=user, phone=phone, consumed=consumed, group=group) }}" method="GET">
-                        <input type="submit" value="{{ word('force', session['lang']) }}" name="delete"/>
-                    </form>
-                </td>
-                {% endif %}
             </tr>
         {% endif %}        
     {% endfor %}    
