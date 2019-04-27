@@ -56,7 +56,7 @@
         {% endfor %} 
     </table>
 
-    <h3>{{ word('results', session['lang']) }}: {{ word('page', session['lang']) }} {{current}}/{{total}} ({{len(data)}} {{ word('results', session['lang']) }})</h3>
+    <h3>{{ word('results', session['lang']) }}: {{ word('page', session['lang']) }} {{current}}/{{total}} ({{len(data)}} total)</h3>
     <h4>
         {% if current != 1 %}
             <a href="{{ url_for('search', category=category, query=session['query_value'], page=1) }}">{{ word('first', session['lang']) }} </a>
