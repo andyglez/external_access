@@ -21,7 +21,7 @@ def checked(form, pwd, lang):
     return (True, msg.successfull_pass_change(lang))
 
 def set_cookies(cookies):
-    cookies.reset_all_flags('modify')
+    cookies.reset_all_flags(['modify', 'is_mod_phone'])
     if not cookies.contains('modify'):
         cookies.set('modify', False)
     if not cookies.contains('is_mod_phone'):

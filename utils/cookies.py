@@ -2,7 +2,7 @@ def user_defined():
     return ['user', 'roles', 'show_details', 'quota', 'consumed', 'details', 'headers', 'modify', 'query_sent', 'query_value']
 
 def user_view():
-    return ['modify', 'show_details', 'query_sent']
+    return ['modify', 'show_details', 'query_sent', 'is_mod_phone']
 
 class Cookies:
     def __init__(self, dictionary):
@@ -23,7 +23,7 @@ class Cookies:
     def contains(self, key):
         return key in self.dictionary
 
-    def reset_all_flags(self, excepted=''):
+    def reset_all_flags(self, excepted=[]):
         for ck in user_view():
-            if ck != excepted:
+            if ck not in excepted:
                 self.dictionary[ck] = False
