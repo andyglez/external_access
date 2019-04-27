@@ -66,22 +66,44 @@
         {% endfor %}
     </tr>
     {% for (i, (phone, stt, stp, consumed)) in enumerate(session['details']) %}
-        <tr>
-            <td class="data" colspan="2"> {{i + 1}} </td>
-            <td class="data" colspan="{{len(session['headers'][0])}}"> {{phone}} </td>
-            <td class="data" colspan="{{len(session['headers'][1])}})"> {{stt}} </td>
-            <td class="data" colspan="{{len(session['headers'][2])}})"> {{stp}} </td>
-            <td class="data" colspan="{{len(session['headers'][3])}})"> {{consumed}} </td>
-            {% if session['roles']['is_root'] or session['roles']['is_admin'] %}
-            <td class="data">
-                <form action="{{ url_for('delete', user=user, phone=phone, consumed=consumed, group=group) }}" method="GET">
-                    <input type="submit" value="{{ word('force', session['lang']) }}" name="delete"/>
-                </form>
-            </td>
-            {% endif %}
-        </tr>
+        {% if in_page(i) %}
+            <tr>
+                <td class="data" colspan="2"> {{i + 1}} </td>
+                <td class="data" colspan="{{len(session['headers'][0])}}"> {{phone}} </td>
+                <td class="data" colspan="{{len(session['headers'][1])}})"> {{stt}} </td>
+                <td class="data" colspan="{{len(session['headers'][2])}})"> {{stp}} </td>
+                <td class="data" colspan="{{len(session['headers'][3])}})"> {{consumed}} </td>
+                {% if session['roles']['is_root'] or session['roles']['is_admin'] %}
+                <td class="data">
+                    <form action="{{ url_for('delete', user=user, phone=phone, consumed=consumed, group=group) }}" method="GET">
+                        <input type="submit" value="{{ word('force', session['lang']) }}" name="delete"/>
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+        {% endif %}        
     {% endfor %}    
-    </table>
+</table>
+
+<h3>{{ word('results', session['lang']) }}: {{ word('page', session['lang']) }} {{current}}/{{total}} ({{len(session['details'])}} total)</h3>
+    <h4>
+        {% if current != 1 %}
+            <a href="{{ url_for('index', user=user, group=group, page=1) }}">{{ word('first', session['lang']) }} </a>
+            ...
+        {% endif %}    
+        {% if current > 1 %}
+            <a href="{{ url_for('index', user=user, group=group, page=current - 1) }}">{{ word('prev', session['lang']) }} </a>
+            .
+        {% endif %}
+        {% if current < total %}
+            <a href="{{ url_for('index', user=user, group=group, page=current + 1) }}">{{ word('next', session['lang']) }} </a>
+        {% endif %}
+        {% if current != total %}
+            ...
+            <a href="{{ url_for('index', user=user, group=group, page=total) }}">{{ word('last', session['lang']) }} </a>            
+        {% endif %}
+    </h4>
+
 {% endif %}
 
 {% endblock %}
