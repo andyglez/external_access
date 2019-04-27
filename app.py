@@ -35,7 +35,7 @@ def start():
 def index(user, group, page=1):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
-    if user != cookies.get('user') and not (cookies.get('roles')['is_root'] or cookies.get('roles')['is_admin']):
+    if user != cookies.get('user') and not (cookies.get('roles')['is_root'] or cookies.get('roles')['is_admin'] or cookies.get('roles')['is_ddi']):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
     index_ctr.set_cookies(cookies)
     phone = login.get_profile_data(user)[0][5]
