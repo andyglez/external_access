@@ -43,6 +43,8 @@ def index(user, group, page=1):
     if request.method == 'POST':
         cookies.set('show_details', not cookies.get('show_details'))
     total = len(cookies.get('details')) // 10 if len(cookies.get('details')) % 10 == 0 else (len(cookies.get('details')) // 10) + 1
+    if int(page) > total and total > 0:
+        return redirect(url_for('index', user=user, group=group, page=1))
     return render_template('self_usage.html', word= get_words, len= lambda x: len(x),
             seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
             regular = regular, roaming = roaming, user = user, group = group, self_data=(user == cookies.get('user')),
@@ -141,14 +143,18 @@ def create_user():
             flash(create_ctr.create_user(request.form, cookies.get('lang')))
     return render_template('create.html', word=get_words, group=groups, roles=roles, areas=areas)
 
-@app.route('/pending')
-def pending():
+@app.route('/pending?page=<page>')
+def pending(page=1):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if pending_ctr.dont_have_permissions(cookies.get('roles')):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
     (data, headers) = pending_ctr.get_data()
-    return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x), enumerate=lambda x: enumerate(x))
+    total = len(data) // 10 if len(data) % 10 == 0 else (len(data) // 10) + 1
+    if int(page) > total and total > 0:
+        return redirect(url_for('pending', page=1))
+    return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x), enumerate=lambda x: enumerate(x),
+                            in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10,current=int(page), total=total)
 
 if __name__ == '__main__':    
     app.run(debug=True, host='0.0.0.0', port=5000)
