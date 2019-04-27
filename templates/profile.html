@@ -27,12 +27,21 @@
         <td>:</td>
         <td>{{ data[4] }}</td>
     </tr>
-    <tr>
-        <td>{{ word('phone', session['lang']) }} </td>
-        <td>:</td>
-        <td>{{ data[5] }} </td>
-    </tr>
-
+    <form action="" method="POST">
+        <tr>
+            <td>{{ word('phone', session['lang']) }} </td>
+            <td>:</td>
+            {% if not is_mod_phone %}
+            <td>{{ data[5] }} </td>
+            {% endif %}
+            {% if is_mod_phone %}
+            <td><input type="text" value="{{ data[5] }}" name="phone"</td>
+            {% endif %}
+            {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
+            <td><input type="submit" value="{{ word('change', session['lang']) }} {{ word('phone', session['lang']) }}" name="button"></td>
+            {% endif %}
+        </tr>
+    </form>
     <tr>
         <td>ID</td>
         <td>:</td>
@@ -52,7 +61,7 @@
                 </select>
             </td>
             <td>
-                <input type="submit" value="{{ word('change', session['lang']) }}">
+                <input type="submit" value="{{ word('change', session['lang']) }} Rol">
             </td>
         </tr>
     </form>

@@ -81,13 +81,20 @@ def profile(user):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
     (current, rest) = profile_ctr.current_roles(user)
     if request.method == 'POST':
+        if 'button' in request.form and not 'phone' in request.form:
+            cookies.set('is_mod_phone', True)
+            return redirect(url_for('profile', user=user))
+        if 'phone' in request.form:
+            profile_ctr.update_phone(user, request.form['phone'])
+            cookies.set('is_mod_phone', False)
+            return redirect(url_for('profile', user=user))
         (flag, msg) = profile_ctr.save_profile_action(user, request.form, info[-1], cookies)
         if not msg == '':
             flash(msg)
         return redirect(url_for('profile', user=user))
     return render_template('profile.html', word=get_words, data=info, rol=current, roles=rest, user=user, group=login.get_basic_info(user)[0][-1],
                     is_modifyer=(info[0] == cookies.get('user') or not (cookies.get('roles')['is_dean'] or cookies.get('roles')['is_ddi'])),
-                    mod_pwd=cookies.get('modify'))
+                    mod_pwd=cookies.get('modify'), is_mod_phone=cookies.get('is_mod_phone'))
 
 @app.route('/search?category=<category>', methods=['GET', 'POST'])
 def search_none(category='name'):

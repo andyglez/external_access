@@ -196,9 +196,9 @@ def get_words(word, lang='es'):
             'ca' : 'Autoritzat fins'
         },
         'change' : {
-            'en' : 'Change Rol',
-            'es' : 'Cambiar Rol',
-            'ca' : 'Canviar Rol'
+            'en' : 'Change',
+            'es' : 'Cambiar',
+            'ca' : 'Canviar'
         },
         'results': {
             'en' : 'Showing results',

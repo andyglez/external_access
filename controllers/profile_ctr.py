@@ -24,6 +24,8 @@ def set_cookies(cookies):
     cookies.reset_all_flags('modify')
     if not cookies.contains('modify'):
         cookies.set('modify', False)
+    if not cookies.contains('is_mod_phone'):
+        cookies.set('is_mod_phone', False)
 
 def current_roles(user):
     all_roles = ['root', 'admin', 'ddi', 'dean', 'default']
@@ -44,6 +46,10 @@ def save_profile_action(user, form, password, cookies):
         cookies.set('modify', False)
         return (True, 'Rol updated')
     return (False, '')
+
+def update_phone(username, phone):
+    return db.query('''update Users set phone = \'{0}\'
+                    where UserName = \'{1}\''''.format(phone, username), False)
 
 def update_password(username, password):
     return db.query('''update Users set Password = \'{0}\'
