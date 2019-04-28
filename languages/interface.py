@@ -229,6 +229,11 @@ def get_words(word, lang='es'):
             'en' : 'Last',
             'es' : 'Ultima',
             'ca' : 'Postrera'
+        },
+        'bonus': {
+            'en' : 'Add Bonus',
+            'es' : 'Bonificar',
+            'ca' : 'Bonificar'
         }
     }
     return wds[word][lang]

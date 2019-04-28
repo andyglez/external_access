@@ -47,6 +47,10 @@ def save_profile_action(user, form, password, cookies):
         return (True, 'Rol updated')
     return (False, '')
 
+def add_quota_bonus(user, bonus, comment, until):
+    return db.query('''insert into QuotaBonus (username, bonus, comment, expires)
+                    values(\'{0}\',\'{1}\',\'{2}\',\'{3}\')'''.format(user, bonus, comment, until))
+
 def update_phone(username, phone):
     return db.query('''update Users set phone = \'{0}\'
                     where UserName = \'{1}\''''.format(phone, username), False)

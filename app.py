@@ -81,6 +81,9 @@ def profile(user):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
     (current, rest) = profile_ctr.current_roles(user)
     if request.method == 'POST':
+        if 'bonus' in request.form:
+            profile_ctr.add_quota_bonus(user, request.form['bonus'], request.form['comment'], request.form['until'])
+            return redirect(url_for('profile', user=user))
         cookies.set('is_mod_phone', 'button' in request.form and not 'phone' in request.form)
         if cookies.get('is_mod_phone'):
             return redirect(url_for('profile', user=user))

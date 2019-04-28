@@ -122,6 +122,27 @@
             </tr>
         </form>
     {% endif %}
+
+    {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
+    <form action="" method="POST">
+        <tr>
+            <td>
+                <input type="submit" value="{{ word('bonus', session['lang']) }}">
+            </td>
+            <td>
+                <input type="text" value="0" autocomplete="off" name="bonus"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" autocomplete="off" name="comment">
+            </td>
+            <td>
+                <input type="date" name="until">
+            </td>
+        </tr>
+    </form>
+    {% endif %}
 </table>
 
 {% endblock %}
