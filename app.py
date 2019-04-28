@@ -43,13 +43,14 @@ def index(user, group, page=1):
     if request.method == 'POST':
         cookies.set('show_details', not cookies.get('show_details'))
     total = len(cookies.get('details')) // 10 if len(cookies.get('details')) % 10 == 0 else (len(cookies.get('details')) // 10) + 1
+    data = index_ctr.get_bonus_logs(user)
     if int(page) > total and total > 0:
         return redirect(url_for('index', user=user, group=group, page=1))
     return render_template('self_usage.html', word= get_words, len= lambda x: len(x),
             seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
             regular = regular, roaming = roaming, user = user, group = group, self_data=(user == cookies.get('user')),
             showing_details = cookies.get('show_details'), enumerate=lambda x: enumerate(x),
-            in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10, current=int(page), total=total)
+            in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10, current=int(page), total=total, data=data)
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_form():

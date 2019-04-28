@@ -28,6 +28,12 @@ def build_data_from_user_quota(user, group, phone):
     details = [(p, stt, stp, stp.timestamp() - stt.timestamp()) for u, stt, stp, p in consumed]
     return (quota, regular_consumed, roaming_consumed, details, regular_consumed * 100 / quota['total'], roaming_consumed * 100 / quota['roaming'])
 
+
+def get_bonus_logs(user):
+    return db.query('''select Bonus,Comment,Expires
+                        from QuotaBonus
+                        where UserName = \'{0}\'
+                        and date_format(Expires, "%Y-%m-%d") > \'{1}\''''.format(user, datetime.now().date().isoformat()))
 def get_quota(groupname):
     return db.query('''select Value, GroupName
                         from radgroupcheck

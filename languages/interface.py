@@ -234,6 +234,11 @@ def get_words(word, lang='es'):
             'en' : 'Add Bonus',
             'es' : 'Bonificar',
             'ca' : 'Bonificar'
+        },
+        'logs': {
+            'en' : 'Logs',
+            'es' : 'Registros',
+            'ca' : 'Registres'
         }
     }
     return wds[word][lang]
