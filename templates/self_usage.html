@@ -63,14 +63,12 @@
         <td class="td header", colspan="40">Expiration Date</td>
     </tr>
     {% for (i, (bonus, comment, expires)) in enumerate(data) %}
-        {% if in_page(i) %}
-            <tr>
-                <td class="data" colspan="2"> {{i + 1}} </td>
-                <td class="data" colspan="10"> {{bonus}} </td>
-                <td class="data" colspan="20"> {{comment}} </td>
-                <td class="data" colspan="40"> {{expires}} </td>
-            </tr>
-        {% endif %}        
+        <tr>
+            <td class="data" colspan="2"> {{i + 1}} </td>
+            <td class="data" colspan="10"> {{bonus}} </td>
+            <td class="data" colspan="20"> {{comment}} </td>
+            <td class="data" colspan="40"> {{expires}} </td>
+        </tr>     
     {% endfor %}    
 </table>
 {% endif %}  
