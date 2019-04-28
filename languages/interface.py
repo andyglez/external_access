@@ -239,6 +239,16 @@ def get_words(word, lang='es'):
             'en' : 'Logs',
             'es' : 'Registros',
             'ca' : 'Registres'
+        },
+        'general': {
+            'en' : 'General Info',
+            'es' : 'Información General',
+            'ca' : 'Informació General'
+        },
+        'func'   : {
+            'en' : 'Important Functions',
+            'es' : 'Funciones Importantes',
+            'ca' : 'Funcions Importants'
         }
     }
     return wds[word][lang]

@@ -1,7 +1,9 @@
 {% extends "index.html" %}
 {% block body %}
 
-<table>
+<div id="info">
+<table class="block">
+    <h3>{{ word('general', session['lang']) }}</h3>
     <tr>
         <td>{{ word('user', session['lang']) }}</td>
         <td>:</td>
@@ -31,15 +33,17 @@
         <tr>
             <td>{{ word('phone', session['lang']) }} </td>
             <td>:</td>
-            {% if not is_mod_phone %}
-            <td>{{ data[5] }} </td>
-            {% endif %}
-            {% if is_mod_phone %}
-            <td><input type="text" value="{{ data[5] }}" name="phone" autocomplete="off"/></td>
-            {% endif %}
-            {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-            <td><input type="submit" value="{{ word('change', session['lang']) }} {{ word('phone', session['lang']) }}" name="button"></td>
-            {% endif %}
+            <td>
+                {% if not is_mod_phone %}
+                    {{ data[5] }}
+                {% endif %}
+                {% if is_mod_phone %}
+                    <input type="text" value="{{ data[5] }}" name="phone" autocomplete="off"/>
+                {% endif %}
+                {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
+                    <input type="submit" value="{{ word('change', session['lang']) }} {{ word('phone', session['lang']) }}" name="button">
+                {% endif %}
+            </td>
         </tr>
     </form>
     <tr>
@@ -52,21 +56,22 @@
         <tr>
             <td>Rol</td>
             <td>:</td>
-            <td>{{ rol }}</td>
             <td>
+                {{ rol }}
                 <select name=rol>
                     {% for x in roles %}
                         <option>{{x}}</option>
                     {% endfor %}
                 </select>
-            </td>
-            <td>
                 <input type="submit" value="{{ word('change', session['lang']) }} Rol">
             </td>
         </tr>
     </form>
 {% endif %}
+</table>
 
+<table class="block">
+    <h3>{{ word('func', session['lang']) }}</h3>
 {% if session['roles']['is_root'] or session['roles']['is_admin'] or session['roles']['is_ddi'] %}
     <form action="{{ url_for('index', user=user, group=group, page=1) }}" method="GET">
         <tr>
@@ -94,7 +99,6 @@
                 <td>
                     {{ word('password', session['lang']) }}                  
                 </td>
-                <td></td>
                 <td>
                     <input type="password" name="old_password">
                 </td>
@@ -103,7 +107,6 @@
                 <td>
                     {{ word('new', session['lang']) }} {{ word('password', session['lang']) }}
                 </td>
-                <td></td>
                 <td>
                     <input type="password" name="new_password">
                 </td>
@@ -112,7 +115,6 @@
                 <td>
                     {{ word('verify', session['lang']) }} {{ word('password', session['lang'])}}
                 </td>
-                <td></td>
                 <td>
                     <input type="password" name="verify_password">
                 </td>
@@ -144,5 +146,5 @@
     </form>
     {% endif %}
 </table>
-
+</div>
 {% endblock %}
