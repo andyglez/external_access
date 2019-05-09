@@ -2,6 +2,10 @@ from settings import database as db, encryption as cr, email
 from languages import messages as msg
 from datetime import datetime
 from flask import url_for
+from suds.client import Client
+import urllib
+import ssl
+
 
 def is_a_valid_request(mail_address, lang):
     data = check_email(mail_address)
@@ -17,13 +21,17 @@ def is_a_valid_request(mail_address, lang):
 def make_request(mail, form, lang):
     crypted = cr.encrypt(form['password'])
     (username, area) = process_info(form['email'])
-    (name, dni, address) = consume_webservice(form['email'])
+    result = consume_webservice(form['email'])
+    if result == -1:
+        return 'error'
+    (name, dni, address) = result
     insert_into_pending(username, name, crypted, area, dni, form['email'], address, form['phone'], datetime.now().isoformat(), 'default', '')
 
     coworkers = db.query('select username, email from Users where area = \'{0}\''.format(area))
     dean = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{}\''.format(x))) > 0][0]
-    #print(dean)
-    send_mail(mail, username, dni)
+
+    data = (name, form['email'], area, address)
+    send_mail(mail, username, dni, dean, data)
     return msg.request_sent_successfully(lang)
 
 def check_existance(username):
@@ -44,7 +52,30 @@ def process_info(mail):
     return (username, area)
 
 def consume_webservice(mail):
-    return 'Prueba','99999999999','Dummylandia'
+    url = 'https://login.uh.cu/WebServices/CuoteService.asmx?WSDL'
+    ssl._create_default_https_context = ssl._create_unverified_context
+    client = Client(url)
 
-def send_mail(mail, username, dni):
-    email.send_auth_request(mail, 'http://tesis.home.cu'+url_for('authorize', username=username, dni=dni, author='andy'))
+    try:
+        results = client.service.DatosTrabajador(mail)
+        if not bool(results):
+            return -1
+        else:
+            return results[0][0]
+    except:
+        return -1
+
+def send_mail(mail, username, dni, dean, data):
+    (name, e_addr, area, address) = data
+    mail_objectives = email.get_mail_authorizers()
+    mail_objectives.append(dean)
+    for x in mail_objectives:
+        email.send_auth_request(mail,
+        'El usuario ' + username + ' ha sido correctamente validado en los servicios directorios de la Universidad\n' +
+        'Su información personal completa es la siguiente:\n' +
+        'Nombre : ' + name + '\n' +
+        'E-mail : ' + e_addr + '\n' + 
+        'Area   : ' + area + '\n' + 
+        'Direc. : ' + address + '\n' +
+        'Para completar la autorización del usuario dé click en el siguiente enlace\n' +
+        'http://tesis.home.cu'+url_for('authorize', username=username, dni=dni, author=x.split('@')[0]), recip=x)

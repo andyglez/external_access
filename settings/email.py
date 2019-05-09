@@ -7,10 +7,11 @@ mail_password = '***'
 mail_use_tls = False
 mail_use_ssl = True
 
-authorizers = [mail_username]
+def get_mail_authorizers():
+    return ['gcobreiro@rect.uh.cu','alina.ruiz@iris.uh.cu']
 
-def send_auth_request(mail, body):
-    msg = Message(subject='Auth request', recipients=authorizers, sender=mail_username)
+def send_auth_request(mail, body, recip):
+    msg = Message(subject='Auth request', recipients=recip, sender=mail_username)
     msg.body = body
     mail.send(msg)
 

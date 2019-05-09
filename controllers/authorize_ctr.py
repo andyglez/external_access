@@ -1,4 +1,4 @@
-from settings import database as db
+from settings import database as db, email
 
 def check_pending(username, dni, author):
     data = db.query('select * from Pending where username = \'{}\''.format(username))
@@ -8,8 +8,8 @@ def check_pending(username, dni, author):
         return False
 
     coworkers = db.query('select username, email from Users where area = \'{0}\''.format(data[0][3]))
-    dean = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{}\''.format(x))) > 0][0]
-    if author != dean:
+    dean = [x for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{}\''.format(x))) > 0][0]
+    if author != dean or author not in email.get_mail_authorizers():
         return False
     return True
 
