@@ -33,7 +33,7 @@ def get_areas():
 def insert_new_user(data):
     user, name, pwd, area, idn, email, address, phone, notes, group, auth = data
     return db.query('''insert into Users (UserName, Name, Password, Area, id, email, address, phone, notes, GroupName, autorizo_hasta)
-                    values (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\')'''\
+                    values (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\')'''
                     .format(user, name, pwd, area, idn, email, address, phone, notes, group, auth), False)
 
 def insert_into_dbroles(user, rol):

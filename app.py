@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_mail import Mail
 from languages import messages as msg
 from languages.interface import get_words
 from utils import query_builder as qb
@@ -8,14 +9,14 @@ from settings import database as db
 from settings import encryption as cr
 from utils import userinfo, time_conversion
 from datetime import datetime
-from controllers import main, login, index_ctr, request_ctr, profile_ctr, search_ctr, remove_ctr, create_ctr, pending_ctr, logout_ctr
+from controllers import main, login, index_ctr, request_ctr, profile_ctr, search_ctr, remove_ctr, create_ctr, pending_ctr, logout_ctr, authorize_ctr
 
 app = Flask(__name__)
 app.secret_key = str(urandom(24))
 
-main.init_app()
+main.init_app(app)
 cookies = Cookies(session)
-
+mail = Mail(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def start():
@@ -57,11 +58,11 @@ def request_form():
     cookies.set('current', 'request_form')
     if request.method == 'GET':
         return render_template('request.html', word=get_words)
-    value, message = request_ctr.is_a_valid_request(request.form['user'], request.form['email'], cookies.get('lang'))
+    value, message = request_ctr.is_a_valid_request(request.form['email'], cookies.get('lang'))
     if not value:
         flash(message, category='error')
         return redirect(url_for('request_form'))
-    request_ctr.make_request(request.form, cookies.get('lang'))
+    request_ctr.make_request(mail, request.form, cookies.get('lang'))
     return redirect(url_for('start'))
 
 @app.route('/logout')
@@ -166,6 +167,13 @@ def pending(page=1):
         return redirect(url_for('pending', page=1))
     return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x), enumerate=lambda x: enumerate(x),
                             in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10,current=int(page), total=total)
+
+@app.route('/authorize?username=<username>&ident=<dni>&authorized_by=<author>')
+def authorize(username, dni, author):
+    if not authorize_ctr.check_pending(username, dni, author):
+        return 'Error'
+    authorize_ctr.update_auth(username, dni, author)
+    return 'Success'
 
 if __name__ == '__main__':    
     app.run(debug=True, host='0.0.0.0', port=5000)

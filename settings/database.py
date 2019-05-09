@@ -37,10 +37,16 @@ create_db_roles = '''create table if not exists DBRoles(
 
 create_pending = '''create table if not exists Pending(
                         username varchar(255) not null,
-                        email varchar(255) not null,
                         name varchar(255) not null,
                         password varchar(255),
+                        area varchar(25) not null,
+                        id varchar(40) not null,
+                        email varchar(255) not null,
+                        address varchar(255) not null,
                         phone varchar(100) not null,
+                        notes varchar(100),
+                        groupname varchar(20) not null,
+                        authorized_by varchar(50),
                         primary key(username)
                         ) Engine=innodb'''
 
