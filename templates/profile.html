@@ -9,11 +9,25 @@
         <td>:</td>
         <td>{{ data[0]}}</td>
     </tr>
-    <tr>
-        <td>{{ word('name', session['lang']) }}</td>
-        <td>:</td>
-        <td>{{ data[1] }}</td>
-    </tr>
+    <form action="" method="POST">
+        <tr>
+            <td>{{ word('name', session['lang']) }}</td>
+            <td>:</td>
+            <td>
+                {% if not flags['is_mod_name'] %}
+                    {{ data[1] }}
+                {% endif %}
+                {% if flags['is_mod_name'] %}
+                    <input type="text" value="{{ data[1] }}" name="name" autocomplete="off"/>
+                {% endif %}
+            </td>
+            <td>
+                {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
+                    <input type="submit" value="{{ word('change', session['lang']) }} {{ word('name', session['lang']) }}" name="button_name">
+                {% endif %}
+            </td>
+        </tr>
+    </form>
     <tr>
         <td>{{ word('area', session['lang'])}}</td>
         <td>:</td>
@@ -24,40 +38,70 @@
         <td>:</td>
         <td>{{ data[3] }}</td>
     </tr>
-    <tr>
-        <td>{{ word('address', session['lang'])}}</td>
-        <td>:</td>
-        <td>{{ data[4] }}</td>
-    </tr>
+    <form action="" method="POST">
+        <tr>
+            <td>{{ word('address', session['lang'])}}</td>
+            <td>:</td>
+            <td>
+                {% if not flags['is_mod_addr'] %}
+                    {{ data[4] }}
+                {% endif %}
+                {% if flags['is_mod_addr'] %}
+                    <input type="text" value="{{ data[4] }}" name="addr" autocomplete="off"/>
+                {% endif %}
+            </td>
+            <td>
+                {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
+                    <input type="submit" value="{{ word('change', session['lang']) }} {{ word('address', session['lang']) }}" name="button_addr">
+                {% endif %}
+            </td>
+        </tr>
+    </form>
     <form action="" method="POST">
         <tr>
             <td>{{ word('phone', session['lang']) }} </td>
             <td>:</td>
             <td>
-                {% if not is_mod_phone %}
+                {% if not flags['is_mod_phone'] %}
                     {{ data[5] }}
                 {% endif %}
-                {% if is_mod_phone %}
+                {% if flags['is_mod_phone'] %}
                     <input type="text" value="{{ data[5] }}" name="phone" autocomplete="off"/>
                 {% endif %}
+            </td>
+            <td>
                 {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-                    <input type="submit" value="{{ word('change', session['lang']) }} {{ word('phone', session['lang']) }}" name="button">
+                    <input type="submit" value="{{ word('change', session['lang']) }} {{ word('phone', session['lang']) }}" name="button_phone">
                 {% endif %}
             </td>
         </tr>
     </form>
-    <tr>
-        <td>ID</td>
-        <td>:</td>
-        <td>{{ data[6] }}</td>
-    </tr>
+    <form action="" method="POST">
+        <tr>
+            <td>DNI</td>
+            <td>:</td>
+            <td>
+                {% if not flags['is_mod_carne'] %}
+                    {{ data[6] }}
+                {% endif %}
+                {% if flags['is_mod_carne'] %}
+                    <input type="text" value="{{ data[6] }}" name="carne" autocomplete="off"/>
+                {% endif %}
+            </td>
+            <td>
+                {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
+                    <input type="submit" value="{{ word('change', session['lang']) }} DNI" name="button_carne">
+                {% endif %}
+            </td>
+        </tr>
+    </form>
 {% if session['roles']['is_root'] %}
     <form action="" method="POST">
         <tr>
             <td>Rol</td>
             <td>:</td>
+            <td>{{ rol }}</td>
             <td>
-                {{ rol }}
                 <select name=rol>
                     {% for x in roles %}
                         <option>{{x}}</option>

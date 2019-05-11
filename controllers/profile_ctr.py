@@ -21,11 +21,11 @@ def checked(form, pwd, lang):
     return (True, msg.successfull_pass_change(lang))
 
 def set_cookies(cookies):
-    cookies.reset_all_flags(['modify', 'is_mod_phone'])
+    cookies.reset_all_flags(['modify', 'is_field_mod'])
     if not cookies.contains('modify'):
         cookies.set('modify', False)
-    if not cookies.contains('is_mod_phone'):
-        cookies.set('is_mod_phone', False)
+    if not cookies.contains('is_field_mod'):
+        cookies.set('is_field_mod', {})
 
 def current_roles(user):
     all_roles = ['root', 'admin', 'ddi', 'dean', 'default']
@@ -47,13 +47,40 @@ def save_profile_action(user, form, password, cookies):
         return (True, 'Rol updated')
     return (False, '')
 
+def set_flags(flags, form):
+    flags.set('is_mod_phone', 'button_phone' in form and 'phone' not in form)
+    flags.set('is_mod_name' , 'button_name'  in form and 'name'  not in form)
+    flags.set('is_mod_addr' , 'button_addr'  in form and 'addr'  not in form)
+    flags.set('is_mod_carne', 'button_carne' in form and 'carne' not in form)
+
+def execute_if_modification(user, flags, form):
+    if 'phone' in form:
+        update_profile_field(user, 'phone', form['phone'])
+        flags.set('is_mod_phone', False)
+        return True
+    if 'name' in form:
+        update_profile_field(user, 'name', form['name'])
+        flags.set('is_mod_name', False)
+        return True
+    if 'addr' in form:
+        update_profile_field(user, 'address', form['addr'])
+        flags.set('is_mod_addr', False)
+        return True
+    if 'carne' in form:
+        update_profile_field(user, 'id', form['carne'])
+        flags.set('is_mod_carne', False)
+        return True
+    if any(flags.get(x) for x in flags.dictionary):
+        return True
+    return False
+
 def add_quota_bonus(user, bonus, comment, until):
     return db.query('''insert into QuotaBonus (username, bonus, comment, expires)
                     values(\'{0}\',\'{1}\',\'{2}\',\'{3}\')'''.format(user, bonus, comment, until))
 
-def update_phone(username, phone):
-    return db.query('''update Users set phone = \'{0}\'
-                    where UserName = \'{1}\''''.format(phone, username), False)
+def update_profile_field(username, column, value):
+    return db.query('''update Users set {0} = \'{1}\'
+                    where UserName = \'{2}\''''.format(column, value, username), False)
 
 def update_password(username, password):
     return db.query('''update Users set Password = \'{0}\'
