@@ -50,6 +50,8 @@ def get_consumed(username):
                         from radacct
                         where UserName = \'{0}\'
                         and date_format(AcctStartTime, "%Y-%m-%d") >= \'{1}\'
-                        and date_format(AcctStopTime, "%Y-%m-%d") < \'{2}\''''.format(username
+                        and date_format(AcctStopTime, "%Y-%m-%d") >= \'{2}\'
+                        and date_format(AcctStopTime, "%Y-%m-%d") < \'{3}\''''.format(username
                         ,datetime(datetime.now().year, datetime.now().month, 1).date().isoformat()
+                        ,datetime(datetime.now().year, datetime.now().month, 1).date().isoformat()                        
                         ,datetime(datetime.now().year, datetime.now().month, datetime.now().day + 1).date().isoformat()))
