@@ -79,6 +79,7 @@
 
 {% if showing_details %}
 
+{% if len(session['details']) > 0 %}
 <h3> {{ word('logs', session['lang']) }}</h3>
 <table class="table">
     <tr>
@@ -118,6 +119,11 @@
             <a href="{{ url_for('index', user=user, group=group, page=total) }}">{{ word('last', session['lang']) }} </a>            
         {% endif %}
     </h4>
+{% endif %}
+
+{% if len(session['details']) == 0 %}
+<h3>{{ word('no_results', session['lang']) }}</h3>
+{% endif %}
 
 {% endif %}
 
