@@ -20,6 +20,8 @@ mail = Mail(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def start():
+    if cookies.contains('user'):
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
     login.set_cookies(cookies)
     if request.method == 'GET':
         return render_template('login.html', word=get_words)
@@ -177,6 +179,8 @@ def pending(page=1):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
     (data, headers) = pending_ctr.get_data()
     total = len(data) // 10 if len(data) % 10 == 0 else (len(data) // 10) + 1
+    if cookies.get('roles')['is_dean']:
+        data = [x for x in data if x[3] == cookies.get('area')]
     if int(page) > total and total > 0:
         return redirect(url_for('pending', page=1))
     return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x), enumerate=lambda x: enumerate(x),
@@ -185,9 +189,11 @@ def pending(page=1):
 @app.route('/authorize?username=<username>&ident=<dni>&authorized_by=<author>')
 def authorize(username, dni, author):
     if not authorize_ctr.check_pending(username, dni, author):
-        return 'Error'
+        flash('Error')
+        return redirect(url_for('pending', page=1))
     authorize_ctr.update_auth(username, dni, author)
-    return 'Success'
+    flash('Success')
+    return redirect(url_for('pending', page=1))
 
 if __name__ == '__main__':    
     app.run(debug=True, host='0.0.0.0', port=5000)

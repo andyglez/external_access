@@ -21,12 +21,15 @@
             <td class="data" colspan="10"> {{row[7]}} </td>
             <td class="data" colspan="10"> {{row[8]}} </td>
             <td class="data" colspan="10"> {{row[9]}} </td>
-            <td class="data" colspan="10"> {{row[10]}} </td>
+            <form action="{{ url_for('authorize', username=row[0], dni=row[4], author=session['user']) }}" method="GET">
+                <td> <input type="submit" value="Autorizar"></td>
+            </form>
         </tr>
         {% endif %}
     {% endfor %}
 </table>
 
+{% if len(data) > 0 %}
 <h3>{{ word('results', session['lang']) }}: {{ word('page', session['lang']) }} {{current}}/{{total}} ({{len(data)}} total)</h3>
     <h4>
         {% if current != 1 %}
@@ -45,5 +48,10 @@
             <a href="{{ url_for('pending', page=total) }}">{{ word('last', session['lang']) }} </a>            
         {% endif %}
     </h4>
+{% endif %}
+
+{% if len(data) == 0 %}
+<h3>{{ word('no_results', session['lang']) }}</h3>
+{% endif %}
 
 {% endblock %}
