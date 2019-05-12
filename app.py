@@ -9,7 +9,7 @@ from settings import database as db
 from settings import encryption as cr
 from utils import userinfo, time_conversion
 from datetime import datetime
-from controllers import main, login, index_ctr, request_ctr, profile_ctr, search_ctr, remove_ctr, create_ctr, pending_ctr, logout_ctr, authorize_ctr
+from controllers import main, login, index_ctr, request_ctr, profile_ctr, search_ctr, remove_ctr, create_ctr, pending_ctr, logout_ctr, authorize_ctr, password_ctr
 
 app = Flask(__name__)
 app.secret_key = str(urandom(24))
@@ -65,6 +65,23 @@ def request_form():
     request_ctr.make_request(mail, request.form, cookies.get('lang'))
     return redirect(url_for('start'))
 
+@app.route('/request?new_password', methods=['GET', 'POST'])
+def request_password():
+    if request.method == 'GET':
+        return render_template('password.html', word=get_words, confirm=False)
+    value, message = password_ctr.check_info(request.form['user'], request.form['email'], mail)
+    flash(message)
+    return redirect(url_for('request_password'))
+    
+@app.route('/request?new_password&user=<user>&dni=<dni>&e_addr=<e_addr>', methods=['GET', 'POST'])
+def confirm_password(user,dni, e_addr):
+    if request.method == 'GET':
+        return render_template('password.html', word=get_words, confirm=True, user=user, e_addr=e_addr)    
+    value, message = password_ctr.verify_email(user, request.form['pass'], request.form['conf'])
+    flash(message)
+    if value:
+        return redirect(url_for('login'))
+    return redirect(url_for('confirm_password', user, dni, e_addr))    
 @app.route('/logout')
 def logout():
     if not cookies.contains('user'):

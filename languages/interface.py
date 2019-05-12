@@ -5,6 +5,11 @@ def get_words(word, lang='es'):
             'es' : 'Usuario',
             'ca' : 'Usuari'
         },
+        'username': {
+            'en' : 'User',
+            'es' : 'Usuario',
+            'ca' : 'Usuari'
+        },
         'password': {
             'en' : 'Password',
             'es' : 'Contraseña',
@@ -249,6 +254,16 @@ def get_words(word, lang='es'):
             'en' : 'Important Functions',
             'es' : 'Funciones Importantes',
             'ca' : 'Funcions Importants'
+        },
+        'lost' : {
+            'en' : 'Lost your password?',
+            'es' : 'Ha perdido la contraseña?',
+            'ca' : 'Ha perdut la contrasenya?'
+        },
+        'newpass':{
+            'en' : 'Retrieve Password',
+            'es' : 'Recuperar Contraseña',
+            'ca' : 'Recuperar Contrasenya'
         }
     }
     return wds[word][lang]

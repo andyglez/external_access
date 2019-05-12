@@ -5,6 +5,7 @@
 <head>
     <meta content="text/html; charset=UTF-8"
         http-equiv="content-type" py:replace="''"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
     <title>{{word('auth_title', session['lang'])}}</title>
 </head>
 
@@ -45,18 +46,29 @@
                 </tr>
             </table>
         </form>
-        
-        <tr>
-            <td>
-                {{ word('unregistered', session['lang']) }}
-            </td>
-            <td>
-                <a href="{{ url_for('request_form') }}">
-                    {{ word('ask', session['lang']) }}
-                </a>
-            </td>
-        </tr>
+        <table>
+            <tr>
+                <td>
+                    {{ word('unregistered', session['lang']) }}
+                </td>
+                <td>
+                    <a href="{{ url_for('request_form') }}">
+                        {{ word('ask', session['lang']) }}
+                    </a>
+                </td>
+            </tr>
 
+            <tr>
+                <td>
+                    {{ word('lost', session['lang']) }}
+                </td>
+                <td>
+                    <a href="{{ url_for('request_password') }}">
+                        {{ word('newpass', session['lang']) }}
+                    </a>
+                </td>
+            </tr>
+        </table>
         <form action="" method="POST" name="choose">
             <table>
                 <tr>
