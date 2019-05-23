@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, make_response
 from flask_mail import Mail
 from languages import messages as msg
 from languages.interface import get_words
@@ -10,6 +10,7 @@ from settings import encryption as cr
 from utils import userinfo, time_conversion
 from datetime import datetime
 from controllers import main, login, index_ctr, request_ctr, profile_ctr, search_ctr, remove_ctr, create_ctr, pending_ctr, logout_ctr, authorize_ctr, password_ctr
+import pdfkit
 
 app = Flask(__name__)
 app.secret_key = str(urandom(24))
@@ -194,6 +195,15 @@ def authorize(username, dni, author):
     authorize_ctr.update_auth(username, dni, author)
     flash('Success')
     return redirect(url_for('pending', page=1))
+
+@app.route('/pdf/<name>&<dni><phone>&<e_mail>')
+def render_pdf(name, dni, phone, e_mail):
+    rendered = render_template('pdf_template.html', name=name, dni=dni, phone=phone, e_mail=e_mail)
+    pdf = pdfkit.from_string(rendered, False)
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=planilla.pdf'
+    return response
 
 if __name__ == '__main__':    
     app.run(debug=True, host='0.0.0.0', port=5000)
