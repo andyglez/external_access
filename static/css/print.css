@@ -1,0 +1,71 @@
+body {
+    background: rgb(255, 254, 254); 
+  }
+  page {
+    background: white;
+    display: block;
+  }
+  page[size="A4"] {  
+    width: 21cm;
+    height: 29.7cm;
+  }
+  page[size="A4"][layout="landscape"] {
+    width: 29.7cm;
+    height: 21cm;
+  }
+  page[size="A3"] {
+    width: 29.7cm;
+    height: 42cm;
+  }
+  page[size="A3"][layout="landscape"] {
+    width: 42cm;
+    height: 29.7cm;  
+  }
+  page[size="A5"] {
+    width: 14.8cm;
+    height: 21cm;
+  }
+  page[size="A5"][layout="landscape"] {
+    width: 21cm;
+    height: 14.8cm;  
+  }
+  @media print {
+    body, page {
+      margin: 0;
+      box-shadow: 0;
+    }
+  }
+  ul {
+    height: 50px;
+    -webkit-columns: 2;
+       -moz-columns: 2;
+            columns: 2;
+    -moz-column-fill: auto;
+         column-fill: auto;
+  }
+
+  p {
+    font-size: 8pt
+}
+
+.block {
+    border : 1px solid rgb(0, 0, 0);
+}
+
+.block-details {
+    padding : 5px 0px 5px 0px;
+    width : 100%;
+    color : #444444;
+    font-size : 10pt;
+}
+
+.info {
+    font-size: 0.5em;
+    border-top: 1px solid black;
+    
+    /* -- reduce the width of the h1 element to the size of it's content -- */
+    display: inline-block;
+    
+    /* -- add extra length to each side -- */
+    padding: 0 3.5rem;
+  }

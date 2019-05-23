@@ -196,13 +196,13 @@ def authorize(username, dni, author):
     flash('Success')
     return redirect(url_for('pending', page=1))
 
-@app.route('/pdf/<name>&<dni><phone>&<e_mail>')
+@app.route('/pdf/<name>&<dni>&<phone>&<e_mail>')
 def render_pdf(name, dni, phone, e_mail):
     rendered = render_template('pdf_template.html', name=name, dni=dni, phone=phone, e_mail=e_mail)
-    pdf = pdfkit.from_string(rendered, False)
+    pdf = pdfkit.from_string(rendered, False, css='.' + url_for('static', filename='css/print.css'))
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'attachment; filename=planilla.pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=Acceso-Externo-{0}.pdf'.format(name)
     return response
 
 if __name__ == '__main__':    
