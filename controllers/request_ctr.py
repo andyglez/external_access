@@ -28,7 +28,7 @@ def make_request(mail, form, lang):
     insert_into_pending(username, name, crypted, area, dni, form['email'], address, form['phone'], datetime.now().isoformat(), 'default', '')
 
     coworkers = db.query('select username, email from Users where area = \'{0}\''.format(area))
-    dean = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{}\''.format(x))) > 0][0]
+    dean = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{0}\''.format(x))) > 0][0]
 
     data = (name, form['email'], area, address)
     send_mail(mail, username, dni, dean, data)
