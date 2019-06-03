@@ -166,9 +166,9 @@ def get_words(word, lang='es'):
             'ca' : 'Buscar per'
         },
         'force' : {
-            'en' : 'Force Elimination',
-            'es' : 'Forzar Eliminación',
-            'ca' : 'Forçar Eliminació'
+            'en' : 'Delete',
+            'es' : 'Eliminar',
+            'ca' : 'Eliminar'
         },
         'create' : {
             'en' : 'Create User',
