@@ -259,7 +259,7 @@ def get_words(word, lang='es'):
             'en' : 'Administration Functions',
             'es' : 'Funciones Administrativas',
             'ca' : 'Funcions Administratives'
-        }
+        },
         'lost' : {
             'en' : 'Lost your password?',
             'es' : 'Ha perdido la contraseña?',
