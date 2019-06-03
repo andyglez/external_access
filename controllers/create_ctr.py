@@ -8,7 +8,7 @@ def dont_have_permissions(roles):
 
 def load_visual_options():
     groups = [x[0] for x in get_group_names()]
-    roles = ['root', 'admin', 'ddi', 'dean', 'default']
+    roles = ['root', 'admin', 'manager', 'dean', 'default']
     areas = [x[0] for x in get_areas()]
     return (groups, roles, areas)
 

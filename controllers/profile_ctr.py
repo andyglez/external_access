@@ -28,7 +28,7 @@ def set_cookies(cookies):
         cookies.set('is_field_mod', {})
 
 def current_roles(user):
-    all_roles = ['root', 'admin', 'ddi', 'dean', 'default']
+    all_roles = ['root', 'admin', 'manager', 'dean', 'default']
     rol, _ = get_roles(user)[0]
     roles = [x for x in all_roles if x != rol]
     return (rol, roles)

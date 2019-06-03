@@ -8,7 +8,7 @@ def check_dean(roles):
     return True if 'dean' in roles else False
 
 def check_ddi(roles):
-    return True if 'ddi' in roles else False
+    return True if 'manager' in roles else False
 
 def check_default(roles):
     return True if 'default' in roles else False
