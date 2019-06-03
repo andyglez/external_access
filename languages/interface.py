@@ -251,10 +251,15 @@ def get_words(word, lang='es'):
             'ca' : 'Informació General'
         },
         'func'   : {
-            'en' : 'Important Functions',
-            'es' : 'Funciones Importantes',
-            'ca' : 'Funcions Importants'
+            'en' : 'Profile Functions',
+            'es' : 'Funciones de Perfil',
+            'ca' : 'Funcions de Perfil'
         },
+        'func_star' :{
+            'en' : 'Administration Functions',
+            'es' : 'Funciones Administrativas',
+            'ca' : 'Funcions Administratives'
+        }
         'lost' : {
             'en' : 'Lost your password?',
             'es' : 'Ha perdido la contraseña?',

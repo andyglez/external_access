@@ -168,8 +168,11 @@
             </tr>
         </form>
     {% endif %}
+</table>
 
-    {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
+{% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
+<table class="block">
+    <h3>{{ word('func_star', session['lang']) }}</h3>
     <form action="" method="POST">
         <tr>
             <td>
@@ -188,7 +191,7 @@
             </td>
         </tr>
     </form>
-    {% endif %}
 </table>
+
 </div>
 {% endblock %}
