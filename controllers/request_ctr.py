@@ -21,17 +21,17 @@ def is_a_valid_request(mail_address, lang):
 def make_request(mail, form, lang):
     crypted = cr.encrypt(form['password'])
     (username, area) = process_info(form['email'])
-    result = consume_webservice(form['email'])
+    result = ('test_name', 'test_dni', 'test_address')#consume_webservice(form['email'])
     if result == -1:
         return 'error'
     (name, dni, address) = result
     insert_into_pending(username, name, crypted, area, dni, form['email'], address, form['phone'], datetime.now().isoformat(), 'default', '')
 
-    coworkers = db.query('select username, email from Users where area = \'{0}\''.format(area))
-    dean = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{0}\''.format(x))) > 0][0]
+    #coworkers = db.query('select username, email from Users where area = \'{0}\''.format(area))
+    #dean = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{0}\''.format(x))) > 0][0]
 
-    data = (name, form['email'], area, address)
-    send_mail(mail, username, dni, dean, data)
+    #data = (name, form['email'], area, address)
+    #send_mail(mail, username, dni, dean, data)
     return msg.request_sent_successfully(lang)
 
 def check_existance(username):
@@ -78,4 +78,4 @@ def send_mail(mail, username, dni, dean, data):
         'Area   : ' + area + '\n' + 
         'Direc. : ' + address + '\n' +
         'Para completar la autorización del usuario dé click en el siguiente enlace\n' +
-        'http://tesis.home.cu'+url_for('authorize', username=username, dni=dni, author=x.split('@')[0]), recip=x)
+        'http://accesotelefonico.uh.cu'+url_for('authorize', username=username, dni=dni, author=x.split('@')[0]), recip=x)

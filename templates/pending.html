@@ -10,6 +10,7 @@
     </tr>
     {% for i, row in enumerate(data) %}
         {% if in_page(i) %}
+            
         <tr>
             <td class="data" colspan="2"> {{i + 1}} </td>
             <td class="data" colspan="10"> {{row[0]}} </td>
@@ -21,12 +22,16 @@
             <td class="data" colspan="10"> {{row[7]}} </td>
             <td class="data" colspan="10"> {{row[8]}} </td>
             <td class="data" colspan="10"> {{row[9]}} </td>
-            <form action="{{ url_for('authorize', username=row[0], dni=row[4], author=session['user']) }}" method="GET">
-                <td> <input type="submit" value="Autorizar"></td>
-            </form>
-            <form action="{{ url_for('render_pdf', name=row[1], dni=row[4], phone=row[5], e_mail=row[6])}}" method="GET">
-                <td> <input type="submit" value="Obtener Planilla"></td>
-            </form>
+            {% if flags[i] and session['roles']['is_dean'] %}
+                <form action="{{ url_for('render_pdf', username=row[0], name=row[1], dni=row[4], phone=row[5], e_mail=row[6])}}" method="GET">
+                    <td> <input type="submit" value="Obtener Planilla"></td>
+                </form>
+            {% endif %}
+            {% if not flags[i] and session['roles']['is_ddi'] %}
+                <form action="{{ url_for('authorize', username=row[0], dni=row[4], author=session['user']) }}" method="GET">
+                    <td> <input type="submit" value="Autorizar"></td>
+                </form>
+            {% endif %}
         </tr>
         {% endif %}
     {% endfor %}

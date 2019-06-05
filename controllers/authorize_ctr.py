@@ -4,25 +4,18 @@ def check_pending(username, dni, author):
     data = db.query('select * from Pending where username = \'{}\''.format(username))
     if len(data) == 0:
         return False
-    if len(data[0][-1].split(',')) > 2:
-        return False
-
-    coworkers = db.query('select username, email from Users where area = \'{0}\''.format(data[0][3]))
-    dean = [x for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{}\''.format(x))) > 0][0]
-    if author != dean or author not in email.get_mail_authorizers():
-        return False
     return True
 
 def update_auth(username, dni, author):
     data = db.query('select * from Pending where username = \'{}\''.format(username))
-    if data[0][-1] == '':
-        db.query('update Pending set authorized_by = \'{0}\' where username = \'{1}\''.format(author, username))
-    elif len(data[0][-1].split(',') <= 2) and author not in data[0][-1]:
-        db.query('update Pending set authorized_by = \'{0}\' where username = \'{1}\''.format(data[0][-1] + ',' + author, username))
-    elif author not in data[0][-1]:
-        user, name, pwd, area, idn, email, address, phone, notes, group, _ = data[0]
-        db.query('''insert into Users (UserName, Name, Password, Area, id, email, address, phone, notes, GroupName)
+    user, name, pwd, area, idn, email, address, phone, notes, group, _ = data[0]
+    db.query('''insert into Users (UserName, Name, Password, Area, id, email, address, phone, notes, GroupName)
                 values (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\')'''
                 .format(user, name, pwd, area, idn, email, address, phone, notes, group), False)
-        db.query('delete from Pending where username = \'{}\''.format(username))
+    db.query('insert into DBRoles (username, roles) values (\'{0}\', \'{1}\')')
+    db.query('delete from Pending where username = \'{}\''.format(username))
+    return 0
+
+def authorize_dean_action(name, authorizer):
+    db.query('update Pending set authorized_by = \'{0}\' where username = \'{1}\''.format(authorizer, name))
     return 0

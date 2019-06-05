@@ -35,7 +35,7 @@
                             <a href="{{ url_for('create_user') }}">{{ word('create', session['lang']) }}...</a> |
                         </li>
                     {% endif %}                    
-                    {% if session['roles']['is_root'] or session['roles']['is_dean'] %}
+                    {% if session['roles']['is_root'] or session['roles']['is_dean'] or session['roles']['is_ddi'] %}
                         <li>
                             <a href="{{ url_for('pending', page=1) }}">{{ word('pendings', session['lang'])}}</a>
                         </li>

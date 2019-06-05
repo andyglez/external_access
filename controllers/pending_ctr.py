@@ -2,7 +2,7 @@ from settings import database as db
 from utils.cookies import Cookies
 
 def dont_have_permissions(roles):
-    return not(roles['is_root'] or roles['is_dean'])
+    return not(roles['is_root'] or roles['is_dean'] or roles['is_ddi'])
 
 def get_data():
     data = get_pendings()

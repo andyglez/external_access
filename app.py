@@ -4,7 +4,7 @@ from languages import messages as msg
 from languages.interface import get_words
 from utils import query_builder as qb
 from utils.cookies import Cookies
-from os import urandom
+import os
 from settings import database as db
 from settings import encryption as cr
 from utils import userinfo, time_conversion
@@ -13,7 +13,7 @@ from controllers import main, login, index_ctr, request_ctr, profile_ctr, search
 import pdfkit
 
 app = Flask(__name__)
-app.secret_key = str(urandom(24))
+app.secret_key = str(os.urandom(24))
 
 main.init_app(app)
 cookies = Cookies(session)
@@ -179,16 +179,19 @@ def pending(page=1):
     if pending_ctr.dont_have_permissions(cookies.get('roles')):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
     (data, headers) = pending_ctr.get_data()
+    flags = [x[-1] == '' for x in data]
     total = len(data) // 10 if len(data) % 10 == 0 else (len(data) // 10) + 1
     if cookies.get('roles')['is_dean']:
         data = [x for x in data if x[3] == cookies.get('area')]
     if int(page) > total and total > 0:
         return redirect(url_for('pending', page=1))
     return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x), enumerate=lambda x: enumerate(x),
-                            in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10,current=int(page), total=total)
+                            in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10,current=int(page), total=total, flags=flags)
 
 @app.route('/authorize?username=<username>&ident=<dni>&authorized_by=<author>')
 def authorize(username, dni, author):
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
     if not authorize_ctr.check_pending(username, dni, author):
         flash('Error')
         return redirect(url_for('pending', page=1))
@@ -196,10 +199,13 @@ def authorize(username, dni, author):
     flash('Success')
     return redirect(url_for('pending', page=1))
 
-@app.route('/pdf/<name>&<dni>&<phone>&<e_mail>')
-def render_pdf(name, dni, phone, e_mail):
+@app.route('/pdf/<username>&<name>&<dni>&<phone>&<e_mail>')
+def render_pdf(username, name, dni, phone, e_mail):
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    authorize_ctr.authorize_dean_action(username, cookies.get('user'))
     rendered = render_template('pdf_template.html', name=name, dni=dni, phone=phone, e_mail=e_mail)
-    pdf = pdfkit.from_string(rendered, False, css='.' + url_for('static', filename='css/print.css'))
+    pdf = pdfkit.from_string(rendered, False, css=os.path.dirname(os.path.abspath(__file__)) + url_for('static', filename='css/print.css'))
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'attachment; filename=Acceso-Externo-{0}.pdf'.format(name)
