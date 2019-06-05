@@ -21,17 +21,17 @@ def is_a_valid_request(mail_address, lang):
 def make_request(mail, form, lang):
     crypted = cr.encrypt(form['password'])
     (username, area) = process_info(form['email'])
-    result = ('test_name', 'test_dni', 'test_address')#consume_webservice(form['email'])
+    result = consume_webservice(form['email'])
     if result == -1:
         return 'error'
     (name, dni, address) = result
     insert_into_pending(username, name, crypted, area, dni, form['email'], address, form['phone'], datetime.now().isoformat(), 'default', '')
 
-    #coworkers = db.query('select username, email from Users where area = \'{0}\''.format(area))
-    #dean = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{0}\''.format(x))) > 0][0]
+    coworkers = db.query('select username, email from Users where area = \'{0}\''.format(area))
+    dean = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{0}\''.format(x))) > 0][0]
 
-    #data = (name, form['email'], area, address)
-    #send_mail(mail, username, dni, dean, data)
+    data = (name, form['email'], area, address)
+    send_mail(mail, username, dni, dean, data)
     return msg.request_sent_successfully(lang)
 
 def check_existance(username):
@@ -49,6 +49,8 @@ def process_info(mail):
     aux = mail.split('@')
     username = aux[0]
     area = aux[1].split('.')[0]
+    if area == 'iris':
+        return (username, 'ddi')
     return (username, area)
 
 def consume_webservice(mail):
@@ -67,15 +69,14 @@ def consume_webservice(mail):
 
 def send_mail(mail, username, dni, dean, data):
     (name, e_addr, area, address) = data
-    mail_objectives = email.get_mail_authorizers()
+    mail_objectives = []
     mail_objectives.append(dean)
     for x in mail_objectives:
         email.send_auth_request(mail,
-        'El usuario ' + username + ' ha sido correctamente validado en los servicios directorios de la Universidad\n' +
-        'Su información personal completa es la siguiente:\n' +
-        'Nombre : ' + name + '\n' +
-        'E-mail : ' + e_addr + '\n' + 
-        'Area   : ' + area + '\n' + 
-        'Direc. : ' + address + '\n' +
-        'Para completar la autorización del usuario dé click en el siguiente enlace\n' +
-        'http://accesotelefonico.uh.cu'+url_for('authorize', username=username, dni=dni, author=x.split('@')[0]), recip=x)
+        '''El usuario {0} ha sido correctamente validado en los servicios directorios de la Universidad
+        Su información personal completa es la siguiente:
+        Nombre : {1}
+        E-mail : {2}
+        Area   : {3}
+        Direc. : {4}
+        Para completar la autorización del usuario dé click en el siguiente enlace http://accesotelefonico.uh.cu'''.format(username, name, e_addr, area, address), recip=x)
