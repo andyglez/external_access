@@ -67,7 +67,7 @@
             <td class="data" colspan="2"> {{i + 1}} </td>
             <td class="data" colspan="10"> {{bonus // 3600}}</td>
             <td class="data" colspan="20"> {{comment}} </td>
-            <td class="data" colspan="40"> {{expires}} </td>
+            <td class="data" colspan="40"> {{clean_date(expires)}} </td>
         </tr>     
     {% endfor %}    
 </table>

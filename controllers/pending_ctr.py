@@ -6,7 +6,7 @@ def dont_have_permissions(roles):
 
 def get_data():
     data = get_pendings()
-    headers = [x[0] for x in db.query('show columns in Pending') if x[0] != 'password' and x[0] != 'authorized_by']
+    headers = [x[0] for x in db.query('show columns in Pending') if x[0] != 'password' and x[0] != 'authorized_by' and x[0] != 'groupname']
     return (data, headers)
 
 def get_pendings():
