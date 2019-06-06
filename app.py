@@ -55,7 +55,7 @@ def index(user, group, page=1):
             regular = regular, roaming = roaming, user = user, group = group, self_data=(user == cookies.get('user')),
             showing_details = cookies.get('show_details'), enumerate=lambda x: enumerate(x),
             in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10, current=int(page), total=total, data=data,
-            clean_date= lambda x: x.split()[0])
+            clean_date= lambda x: x.date())
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_form():
@@ -196,7 +196,7 @@ def pending(page=1):
         return redirect(url_for('pending', page=1))
     return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x), enumerate=lambda x: enumerate(x),
                             in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10,current=int(page), total=total, flags=flags,
-                            clean_date=lambda x: x.split('T')[0])
+                            clean_date=lambda x: x.split()[0])
 
 @app.route('/authorize?username=<username>&ident=<dni>&authorized_by=<author>')
 def authorize(username, dni, author):
