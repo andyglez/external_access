@@ -196,7 +196,7 @@ def pending(page=1):
         return redirect(url_for('pending', page=1))
     return render_template('pending.html', word=get_words, data=data, headers=headers, len=lambda x: len(x), enumerate=lambda x: enumerate(x),
                             in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10,current=int(page), total=total, flags=flags,
-                            clean_date=lambda x: x.split()[0])
+                            clean_date=lambda x: x.split('T')[0])
 
 @app.route('/authorize?username=<username>&ident=<dni>&authorized_by=<author>')
 def authorize(username, dni, author):
