@@ -24,3 +24,9 @@ def next_date(year, month):
     if month == 12:
         return (year+1, 1)
     return (year, month+1)
+
+def hours_to_seconds(hours):
+    return hours * 3600
+
+def seconds_to_hours(seconds):
+    return seconds / 3600

@@ -138,7 +138,7 @@ def get_words(word, lang='es'):
         'address' : {
             'en' : 'Address',
             'es' : 'Dirección',
-            'ca' : 'Direcció'
+            'ca' : 'Adreça'
         },
         'modify' : {
             'en' : 'Modify Password',
@@ -269,6 +269,21 @@ def get_words(word, lang='es'):
             'en' : 'Retrieve Password',
             'es' : 'Recuperar Contraseña',
             'ca' : 'Recuperar Contrasenya'
+        },
+        'bonus_time' : {
+            'en' : 'Time (in hours)',
+            'es' : 'Tiempo (en horas)',
+            'ca' : 'Temps (en hores)'
+        },
+        'comment': {
+            'en' : 'Comments',
+            'es' : 'Comentarios',
+            'ca' : 'Comentaris'
+        },
+        'expires': {
+            'en' : 'Expiration Date',
+            'es' : 'Fecha de Expiración',
+            'ca' : 'Data d\'expiració'
         }
     }
     return wds[word][lang]

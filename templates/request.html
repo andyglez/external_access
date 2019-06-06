@@ -6,6 +6,7 @@
     <meta content="text/html; charset=UTF-8"
         http-equiv="content-type" py:replace="''"/>
     <title>{{ word('ask', session['lang'])}}</title>
+    <script src="{{ url_for('static', filename='js/onlynumber.js') }}"></script>
 </head>
 
 <body onload="document.forms[0].user.focus();">
@@ -63,7 +64,7 @@
                         {{ word('phone', session['lang'])}}:
                     </td>
                     <td>
-                        <input type="text" name="phone" autocomplete="off"/>
+                        <input type="text" name="phone" autocomplete="off" onkeypress="return isNumberKey(event)"/>
                     </td>
                 </tr>
                 <tr>

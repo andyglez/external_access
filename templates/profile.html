@@ -66,7 +66,7 @@
                     {{ data[5] }}
                 {% endif %}
                 {% if flags['is_mod_phone'] %}
-                    <input type="text" value="{{ data[5] }}" name="phone" autocomplete="off"/>
+                    <input type="text" value="{{ data[5] }}" name="phone" autocomplete="off" onkeypress="return isNumberKey(event)"/>
                 {% endif %}
             </td>
             <td>
@@ -85,7 +85,7 @@
                     {{ data[6] }}
                 {% endif %}
                 {% if flags['is_mod_carne'] %}
-                    <input type="text" value="{{ data[6] }}" name="carne" autocomplete="off"/>
+                    <input type="text" value="{{ data[6] }}" name="carne" autocomplete="off" onkeypress="return isNumberKey(event)"/>
                 {% endif %}
             </td>
             <td>
@@ -178,13 +178,27 @@
             <td>
                 <input type="submit" value="{{ word('bonus', session['lang']) }}">
             </td>
+            <td></td>
+        </tr>
+        <tr>
             <td>
-                <input type="text" value="0" autocomplete="off" name="bonus"/>
+                {{ word('bonus_time', session['lang']) }}
+            </td>
+            <td>
+                <input type="number" value="0" autocomplete="off" name="bonus" onkeypress="return isNumberKey(event)"/>
             </td>
         </tr>
         <tr>
             <td>
+                {{ word('comment', session['lang']) }}
+            </td>
+            <td>
                 <input type="text" autocomplete="off" name="comment">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ word('expires', session['lang'])}}
             </td>
             <td>
                 <input type="date" name="until">

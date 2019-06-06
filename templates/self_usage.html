@@ -65,7 +65,7 @@
     {% for (i, (bonus, comment, expires)) in enumerate(data) %}
         <tr>
             <td class="data" colspan="2"> {{i + 1}} </td>
-            <td class="data" colspan="10"> {{bonus}} </td>
+            <td class="data" colspan="10"> {{bonus // 3600}}</td>
             <td class="data" colspan="20"> {{comment}} </td>
             <td class="data" colspan="40"> {{expires}} </td>
         </tr>     

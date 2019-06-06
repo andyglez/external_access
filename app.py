@@ -104,7 +104,15 @@ def profile(user):
     (current, rest) = profile_ctr.current_roles(user)
     if request.method == 'POST':
         if 'bonus' in request.form:
-            profile_ctr.add_quota_bonus(user, request.form['bonus'], request.form['comment'], request.form['until'])
+            if request.form['until'] != '' and request.form['comment'] != '':
+                d = datetime.strptime(request.form['until'], '%Y-%m-%d')
+                if request.form['bonus'].isnumeric() and int(request.form['bonus']) > 0 and d > datetime.today():
+                    seconds = time_conversion.hours_to_seconds(int(request.form['bonus']))
+                    profile_ctr.add_quota_bonus(user, seconds, request.form['comment'], request.form['until'])
+                else:
+                    flash('error')
+            else:
+                flash('error')
             return redirect(url_for('profile', user=user))
         flags = Cookies(cookies.get('is_field_mod'))
         profile_ctr.set_flags(flags, request.form)
