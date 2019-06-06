@@ -7,20 +7,29 @@ import urllib
 import ssl
 
 
-def is_a_valid_request(mail_address, lang):
-    data = check_email(mail_address)
+def is_a_valid_request(form, lang):
+    if form['user'] == '' or form['email'] == '' or form['phone'] == '':
+        return (False, msg.user_already_exists(form['user']))
+    data = check_email(form['email'])
     if len(data) > 0:
         return (False, msg.email_already_in_use(lang))
-    aux = mail_address.split('@')
-    if len(aux) > 2:
+    data = check_existance(form['user'])
+    if len(data) > 0:
+        return (False, msg.user_already_exists(lang))    
+    if form['password'] != form['confirm']:
+        return (False, msg.mismatch_new_password(lang))
+    if len(form['phone']) != 8:
+        return (False, 'error')
+    aux = form['email'].split('@')
+    if len(aux) > 2 or len(aux) < 2:
         return (False, 'error')
     if len(aux[1].split('.')) != 3:
         return (False, 'error')
     return (True, '')
 
-def make_request(mail, form, lang):
+def make_request(username, mail, form, lang):
     crypted = cr.encrypt(form['password'])
-    (username, area) = process_info(form['email'])
+    area = process_info(form['email'])
     result = consume_webservice(form['email'])
     if result == -1:
         return 'error'
@@ -50,8 +59,8 @@ def process_info(mail):
     username = aux[0]
     area = aux[1].split('.')[0]
     if area == 'iris':
-        return (username, 'ddi')
-    return (username, area)
+        return 'ddi'
+    return area
 
 def consume_webservice(mail):
     url = 'https://login.uh.cu/WebServices/CuoteService.asmx?WSDL'

@@ -28,6 +28,14 @@
             <table>
                 <tr>
                     <td>
+                        {{ word('user', session['lang']) }}:
+                    </td>
+                    <td>
+                        <input type="text" name="user" autocomplete="off"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         {{ word('email', session['lang']) }}:
                     </td>
                     <td>
@@ -40,6 +48,14 @@
                     </td>
                     <td>
                         <input type="password" name="password"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ word('verify', session['lang'])}} {{word('password', session['lang'])}}:
+                    </td>
+                    <td>
+                        <input type="password" name="confirm"/>
                     </td>
                 </tr>
                 <tr>
