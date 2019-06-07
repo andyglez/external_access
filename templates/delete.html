@@ -2,14 +2,10 @@
 {% block body %}
 
 <form action="" method="POST">
-    <table>
-        <tr>
-            <td><input type="text" name="reason"/></td>
-        </tr>
-        <tr>
-            <td><input type="submit" value="{{ word('force', session['lang']) }}"/></td>
-        </tr>
-    </table>
+    <input type="text" name="reason" class="form-control input-sm" placeholder="{{word('comment', session['lang'])}}" autocomplete="off"/>
+    <button type="submit" class="btn-sm btn-primary">
+            {{ word('force', session['lang']) }}
+    </button>
 </form>
 
 {% endblock %}

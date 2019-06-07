@@ -1,85 +1,108 @@
 {% extends "index.html" %}
 {% block body %}
 
-<div class="menu" style="float:left;">
-        <ul id="menu">
-            <li>
-                <a href="{{ url_for('search_none', category='name') }}">{{word('name', session['lang'])}}</a> |
-            </li>
-            <li>
-                <a href="{{ url_for('search_none', category='username') }}">{{ word('user', session['lang']) }}...</a> |
-            </li>
-            <li>
-                <a href="{{ url_for('search_none', category='email') }}">{{ word('email', session['lang']) }}...</a> |
-            </li>
-            <li>
-                <a href="{{ url_for('search_none', category='phone') }}">{{ word('phone', session['lang']) }}...</a> |
-            </li>
-            {% if session['roles']['is_root'] or session['roles']['is_ddi']%}
-            <li>
-                <a href="{{ url_for('search_none', category='area') }}">{{ word('area', session['lang']) }}...</a> |
-            </li>
-            {% endif %}
-        </ul>
-</div>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="form-inline">
+        <form action="{{ url_for('search_none', category='name') }}" style="float:left">
+            <button type="submit" class="btn btn-dark">{{word('name', session['lang'])}}</button>
+        </form>
+        <form action="{{ url_for('search_none', category='username') }}" style="float:left">
+            <button type="submit" class="btn btn-dark">{{word('user', session['lang'])}}</button>
+        </form>
+        <form action="{{ url_for('search_none', category='email') }}" style="float:left">
+            <button type="submit" class="btn btn-dark">{{word('email', session['lang'])}}</button>
+        </form>
+        <form action="{{ url_for('search_none', category='phone') }}" style="float:left">
+            <button type="submit" class="btn btn-dark">{{word('phone', session['lang'])}}</button>
+        </form>
+        {% if session['roles']['is_root'] or session['roles']['is_ddi']%}
+        <form action="{{ url_for('search_none', category='area') }}" style="float:left">
+            <button type="submit" class="btn btn-dark">{{word('area', session['lang'])}}</button>
+        </form>
+        {% endif %}
+    </div>
+</nav>
 
 <div style="float:none; clear:both; width:100%; border-bottom:1px solid #7F9DB9;"></div>
 
-<form action="" method="POST">
-    <table>
-        <tr>
-            <td><input type="text" name="query" value="{{ session['query_value'] }}" autocomplete="off"/></td>
-            <td><input type="submit" value="{{ word('search', session['lang']) }} {{ word(category, session['lang']) }}"/></td>
-        </tr>
-    </table>
-</form>
+<div class="container" style="position: relative; top: 20px">
+    <div class="form-inline">
+        <form action="" method="POST">
+            <div class="form-group fg-line">
+                <input type="text" name="query" class="form-control input-sm" placeholder="{{word('search', session['lang'])}} {{word(category, session['lang'])}}" autocomplete="off" value="{{ session['query_value']}}"/>
+            </div>
+            <button type="submit" class="btn btn-dark">{{word('search', session['lang'])}}</button>
+        </form>
+    </div>
 
 
 {% if flag %}
     {% if len(data) > 0 and current <= total %}
-    <table class="table">
+    <table class="table table-striped">
+        <tbody>
         {% for (i, (username, name, area, email, phone)) in enumerate(data) %}
             {% if in_page(i) %}
                 <tr>
-                    <td class="data"> <a href="{{ url_for('profile', user=username)}}">{{username}}</a> | </td>
-                    <td class="data"> {{name}} | </td>
-                    <td class="data"> {{area}} </td>
-                    <td class="data"> {{email}} </td>
-                    <td class="data"> {{phone}} </td>
+                    <td>
+                        <form action="{{ url_for('profile', user=username)}}">
+                            <button type="submit" class="btn-sm btn-light" name="button_name">
+                                {{username}}
+                            </button>
+                        </form>
+                    </td>
+                    <td> {{name}} </td>
+                    <td> {{area}} </td>
+                    <td> {{email}} </td>
+                    <td> {{phone}} </td>
                     {% if session['roles']['is_root'] or session['roles']['is_dean'] %}
-                        <td class="data">
+                        <td>
                             <form action="{{ url_for('remove', user=username, name=name, area=area) }}" method="GET">
-                                <input type="submit" value="{{ word('force', session['lang'])}}"/>
+                                <button type="submit" class="btn-sm btn-light">{{ word('force', session['lang'])}}</button>
                             </form>
                         </td>
                     {% endif %}
                 </tr>
             {% endif %}
-        {% endfor %} 
+        {% endfor %}
+        </tbody>
     </table>
 
     <h3>{{ word('results', session['lang']) }}: {{ word('page', session['lang']) }} {{current}}/{{total}} ({{len(data)}} total)</h3>
-    <h4>
+    <div class="form-inline">
         {% if current != 1 %}
-            <a href="{{ url_for('search', category=category, query=session['query_value'], page=1) }}">{{ word('first', session['lang']) }} </a>
-            ...
+        <form action="{{ url_for('search', category=category, query=session['query_value'], page=1) }}" method="GET">
+            <button type="submit" class="btn btn-secondary">
+                {{ word('first', session['lang']) }}
+            </button>
+        </form>
         {% endif %}    
         {% if current > 1 %}
-            <a href="{{ url_for('search', category=category, query=session['query_value'], page=current - 1) }}">{{ word('prev', session['lang']) }} </a>
-            .
+        <form action="{{ url_for('search', category=category, query=session['query_value'], page=current - 1) }}" method="GET">
+            <button type="submit" class="btn btn-secondary">
+                {{ word('prev', session['lang']) }}
+            </button>
+        </form>
         {% endif %}
         {% if current < total %}
-            <a href="{{ url_for('search', category=category, query=session['query_value'], page=current + 1) }}">{{ word('next', session['lang']) }} </a>
+        <form action="{{ url_for('search', category=category, query=session['query_value'], page=current + 1) }}" method="GET">
+            <button type="submit" class="btn btn-secondary">
+                {{ word('next', session['lang']) }}
+            </button>
+        </form>
         {% endif %}
         {% if current != total %}
-            ...
-            <a href="{{ url_for('search', category=category, query=session['query_value'], page=total) }}">{{ word('last', session['lang']) }} </a>            
+        <form action="{{ url_for('search', category=category, query=session['query_value'], page=total) }}" method="GET">
+            <button type="submit" class="btn btn-secondary">
+                {{ word('last', session['lang']) }}
+            </button>
+        </form>
         {% endif %}
-    </h4>
+    </div>
 
     {% endif %}
     {% if len(data) == 0 or current > total %}
     <h3>{{ word('no_results', session['lang']) }}</h3>
     {% endif %}
 {% endif %}
+</div>
 {% endblock %}

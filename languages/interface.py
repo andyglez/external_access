@@ -289,6 +289,16 @@ def get_words(word, lang='es'):
             'en' : 'Remote Access',
             'es' : 'Acceso Remoto',
             'ca' : 'Acces Remot'
+        },
+        'doc' : {
+            'en' : 'Obtain Document',
+            'es' : 'Obtener Documento',
+            'ca' : 'Obtenir Document'
+        },
+        'authorize': {
+            'en' : 'Authorize',
+            'es' : 'Autorizar',
+            'ca' : 'Autoritzar'
         }
     }
     return wds[word][lang]

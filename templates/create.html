@@ -2,91 +2,35 @@
 {% block body %}
 
 <form action="" method="POST">
-    <table>
-        <tr>
-            <td>{{ word('user', session['lang'])}}</td>
-            <td>:</td>
-            <td><input type="text" name="user" autocomplete="off"/></td>
-        </tr>
-        <tr>
-            <td>{{ word('name', session['lang'])}}</td>
-            <td>:</td>
-            <td><input type="text" name="name" autocomplete="off"/></td>
-        </tr>
-        <tr>
-            <td>{{ word('password', session['lang'])}}</td>
-            <td>:</td>
-            <td><input type="password" name="pass"/></td>
-        </tr>
-        <tr>
-                <td>{{ word('area', session['lang'])}}</td>
-                <td>:</td>
-                <td>
-                    <select name="area">
-                        {% for a in areas %}
-                            <option>{{a}}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>
-        <tr>
-            <td>ID</td>
-            <td>:</td>
-            <td><input type="text" name="id" autocomplete="off" onkeypress="return isNumberKey(event)"/></td>
-        </tr>
-        <tr>
-            <td>{{ word('email', session['lang']) }}</td>
-            <td>:</td>
-            <td><input type="text" name="email" autocomplete="off"/></td>
-        </tr>
-        <tr>
-            <td>{{ word('address', session['lang']) }}</td>
-            <td>:</td>
-            <td><input type="text" name="address" autocomplete="off"/></td>
-        </tr>
-        <tr>
-            <td>{{ word('phone', session['lang']) }}</td>
-            <td>:</td>
-            <td><input type="text" name="phone" autocomplete="off" onkeypress="return isNumberKey(event)"/></td>
-        </tr>
-        <tr>
-            <td>{{ word('notes', session['lang']) }}</td>
-            <td>:</td>
-            <td><input type="text" name="notes" autocomplete="off"/></td>
-        </tr>
-        <tr>
-            <td>{{ word('group', session['lang']) }}</td>
-            <td>:</td>
-            <td>
-                <select name="group">
-                    {% for g in group %}
-                        <option>{{g}}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>{{ word('authorized', session['lang']) }}</td>
-            <td>:</td>
-            <td><input type="date" name="authorized" autocomplete="off"/></td>
-        </tr>
-        <tr>
-            <td>Rol</td>
-            <td>:</td>
-            <td>
-                <select name="roles">
-                    {% for r in roles %}
-                        <option>{{r}}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" value="{{ word('create', session['lang']) }}">
-            </td>
-        </tr>
-    </table>
+    <div class="container">
+        <input type="text" name="user" class="form-control input-sm" placeholder="{{word('user', session['lang'])}}" autocomplete="off"/>
+        <input type="text" name="name" class="form-control input-sm" placeholder="{{word('name', session['lang'])}}" autocomplete="off"/>
+        <input type="password" name="pass" class="form-control input-sm" placeholder="{{word('comment', session['lang'])}}" autocomplete="off"/>
+        <input type="text" name="id" class="form-control input-sm" placeholder="ID" autocomplete="off" onkeypress="return isNumberKey(event)"/>
+        <input type="text" name="email" class="form-control input-sm" placeholder="{{word('email', session['lang'])}}" autocomplete="off"/>
+        <input type="text" name="address" class="form-control input-sm" placeholder="{{word('address', session['lang'])}}" autocomplete="off"/>
+        <input type="text" name="phone" class="form-control input-sm" placeholder="{{word('phone', session['lang'])}}" autocomplete="off" onkeypress="return isNumberKey(event)"/>
+        <input type="text" name="notes" class="form-control input-sm" placeholder="{{word('notes', session['lang'])}}" autocomplete="off"/>
+        <input type="date" name="authorized" class="form-control input-sm" placeholder="{{word('authorized', session['lang'])}}" autocomplete="off"/>        
+        <select name="area">
+            {% for a in areas %}
+                <option>{{a}}</option>
+            {% endfor %}
+        </select>
+        <select name="roles">
+            {% for r in roles %}
+                <option>{{r}}</option>
+            {% endfor %}
+        </select>
+        <select name="group">
+            {% for g in group %}
+                <option>{{g}}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn-sm btn-primary">
+            {{ word('create', session['lang']) }}
+        </button>
+    </div>
 </form>
 
 {% endblock %}
