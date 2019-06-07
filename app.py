@@ -214,7 +214,7 @@ def render_pdf(username, name, dni, phone, e_mail):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     authorize_ctr.authorize_dean_action(username, cookies.get('user'))
-    rendered = render_template('pdf_template.html', name=name, dni=dni, phone=phone, e_mail=e_mail)
+    rendered = render_template('pdf_template.html', name=name, dni=dni, phone=phone, e_mail=e_mail, year=datetime.now().year)
     pdf = pdfkit.from_string(rendered, False, css=os.path.dirname(os.path.abspath(__file__)) + url_for('static', filename='css/print.css'))
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
