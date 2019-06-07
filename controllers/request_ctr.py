@@ -8,8 +8,12 @@ import ssl
 
 
 def is_a_valid_request(form, lang):
-    if form['user'] == '' or form['email'] == '' or form['phone'] == '':
-        return (False, msg.user_already_exists(form['user']))
+    if form['user'] == '':
+        return (False, msg.request_authorization_messages('user', 'empty', lang))
+    if form['email'] == '':
+        return (False, msg.request_authorization_messages('email', 'empty', lang))
+    if form['phone'] == '':
+        return (False, msg.request_authorization_messages('phone', 'empty', lang))
     data = check_email(form['email'])
     if len(data) > 0:
         return (False, msg.email_already_in_use(lang))
@@ -19,12 +23,12 @@ def is_a_valid_request(form, lang):
     if form['password'] != form['confirm']:
         return (False, msg.mismatch_new_password(lang))
     if len(form['phone']) != 8:
-        return (False, 'error')
+        return (False, msg.request_authorization_messages('phone', 'length', lang))
     aux = form['email'].split('@')
-    if len(aux) > 2 or len(aux) < 2:
-        return (False, 'error')
+    if len(aux) != 2:
+        return (False, msg.request_authorization_messages('email', 'miss', lang))
     if len(aux[1].split('.')) != 3:
-        return (False, 'error')
+        return (False, msg.request_authorization_messages('email', 'addr', lang))
     return (True, '')
 
 def make_request(username, mail, form, lang):

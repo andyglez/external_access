@@ -9,6 +9,9 @@
 
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
         <script src="{{ url_for('static', filename='js/onlynumber.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/functions.js') }}"></script>
+        <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/telephone.png') }}"/>
         <script>
         function setFocus() {
             if (defaultInput) {
@@ -19,52 +22,47 @@
     </head>
 
     <body py:match="item.tag=='{http://www.w3.org/1999/xhtml}body'" py:attrs="item.items() + [('onload','setFocus();')]">
-        <div class="menu" style="float:left;">
-            <ul id="menu">
-                <li>
-                    <a href="{{ url_for('index', user=session['user'], group=session['group'], page=1) }}">{{word('home', session['lang'])}}</a> |
-                </li>
-                <li>
-                    <a href="{{ url_for('profile', user=session['user']) }}">{{ word('profile', session['lang']) }}...</a> |
-                </li>
+        <nav class="navbar navbar-primary bg-primary">
+            <div class="form-inline">
+                <form action="{{ url_for('index', user=session['user'], group=session['group'], page=1) }}">
+                    <button type="submit" class="btn btn-primary">{{word('home', session['lang'])}}</button>
+                </form>
+                <form action="{{ url_for('profile', user=session['user']) }}">
+                    <button type="submit" class="btn btn-primary">{{ word('profile', session['lang']) }}</button>
+                </form>
                 {% if not session['roles']['is_default'] %}
-                    <li>
-                        <a href="{{ url_for('search_none', category='name')}}">{{ word('search_by', session['lang']) }}...</a> |
-                    </li>
-                    {% if session['roles']['is_root'] %}
-                        <li>
-                            <a href="{{ url_for('create_user') }}">{{ word('create', session['lang']) }}...</a> |
-                        </li>
-                    {% endif %}                    
-                    {% if session['roles']['is_root'] or session['roles']['is_dean'] or session['roles']['is_ddi'] %}
-                        <li>
-                            <a href="{{ url_for('pending', page=1) }}">{{ word('pendings', session['lang'])}}</a>
-                        </li>
-                    {% endif %}
+                <form action="{{ url_for('search_none', category='name')}}">
+                    <button type="submit" class="btn btn-primary">{{ word('search_by', session['lang']) }}</button>
+                </form>
+                {% if session['roles']['is_root'] %}
+                <form action="{{ url_for('create_user') }}">
+                    <button type="submit" class="btn btn-primary">{{ word('create', session['lang']) }}</button>
+                </form>
                 {% endif %}
-            </ul>
-    </div>
-
-        <div class="menu" style="float:right;">
-            <ul>
-                <li>
-                    | <a href="{{ url_for('logout') }}">{{ word('exit', session['lang']) }}</a>
-                </li>
-            </ul>
+                {% if session['roles']['is_root'] or session['roles']['is_dean'] or session['roles']['is_ddi'] %}
+                <form action="{{ url_for('pending', page=1) }}">
+                    <button type="submit" class="btn btn-primary">{{ word('pendings', session['lang']) }}</button>
+                </form>
+                {% endif %}
+                {% endif %}                            
+            </div>
+            <form action="{{ url_for('logout') }}">
+                <button type="submit" class="btn btn-primary">{{ word('exit', session['lang']) }}</button>
+            </form>
+        </nav>
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div id="messages" class="alert alert-{{ category }} alert-dismissible" role="alert" style="background-color:lightblue">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="hide()"><span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
         </div>
-
-        <div style="float:none; clear:both; width:100%; border-bottom:1px solid #7F9DB9;"></div>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible" role="alert" style="background-color:lightblue">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
         {% block body %}{% endblock %}  
     </body>
 

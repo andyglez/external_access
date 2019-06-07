@@ -1,58 +1,57 @@
 {% extends "index.html" %}
 {% block body %}
 
-<div id="info">
-<table class="block">
+<div class="container">
+<table class="table table-striped">
     <h3>{{ word('general', session['lang']) }}</h3>
     <tr>
         <td>{{ word('user', session['lang']) }}</td>
-        <td>:</td>
         <td>{{ data[0]}}</td>
     </tr>
     <form action="" method="POST">
         <tr>
             <td>{{ word('name', session['lang']) }}</td>
-            <td>:</td>
             <td>
                 {% if not flags['is_mod_name'] %}
                     {{ data[1] }}
                 {% endif %}
                 {% if flags['is_mod_name'] %}
-                    <input type="text" value="{{ data[1] }}" name="name" autocomplete="off"/>
+                    <input type="text" name="name" class="form-control-sm input-sm" value="{{data[1]}}" autocomplete="off"/>
                 {% endif %}
             </td>
             <td>
                 {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-                    <input type="submit" value="{{ word('change', session['lang']) }} {{ word('name', session['lang']) }}" name="button_name">
+                    <button type="submit" class="btn-sm btn-light" name="button_name">
+                        <img src="{{ url_for('static', filename='images/edit.png') }}"></img>
+                    </button>
                 {% endif %}
             </td>
         </tr>
     </form>
     <tr>
         <td>{{ word('area', session['lang'])}}</td>
-        <td>:</td>
         <td>{{ data[2] }}</td>
     </tr>
     <tr>
         <td>{{ word('email', session['lang'])}}</td>
-        <td>:</td>
         <td>{{ data[3] }}</td>
     </tr>
     <form action="" method="POST">
         <tr>
             <td>{{ word('address', session['lang'])}}</td>
-            <td>:</td>
             <td>
                 {% if not flags['is_mod_addr'] %}
                     {{ data[4] }}
                 {% endif %}
                 {% if flags['is_mod_addr'] %}
-                    <input type="text" value="{{ data[4] }}" name="addr" autocomplete="off"/>
+                    <input type="text" name="addr" class="form-control-sm input-sm" value="{{data[4]}}" autocomplete="off"/>
                 {% endif %}
             </td>
             <td>
                 {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-                    <input type="submit" value="{{ word('change', session['lang']) }} {{ word('address', session['lang']) }}" name="button_addr">
+                <button type="submit" class="btn-sm btn-light" name="button_addr">
+                    <img src="{{ url_for('static', filename='images/edit.png') }}"></img>
+                </button>
                 {% endif %}
             </td>
         </tr>
@@ -60,18 +59,19 @@
     <form action="" method="POST">
         <tr>
             <td>{{ word('phone', session['lang']) }} </td>
-            <td>:</td>
             <td>
                 {% if not flags['is_mod_phone'] %}
                     {{ data[5] }}
                 {% endif %}
                 {% if flags['is_mod_phone'] %}
-                    <input type="text" value="{{ data[5] }}" name="phone" autocomplete="off" onkeypress="return isNumberKey(event)"/>
+                    <input type="text" class="form-control-sm input-sm" value="{{ data[5] }}" name="phone" autocomplete="off" onkeypress="return isNumberKey(event)"/>
                 {% endif %}
             </td>
             <td>
                 {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-                    <input type="submit" value="{{ word('change', session['lang']) }} {{ word('phone', session['lang']) }}" name="button_phone">
+                <button type="submit" class="btn-sm btn-light" name="button_phone">
+                    <img src="{{ url_for('static', filename='images/edit.png') }}"></img>
+                </button>
                 {% endif %}
             </td>
         </tr>
@@ -79,18 +79,19 @@
     <form action="" method="POST">
         <tr>
             <td>DNI</td>
-            <td>:</td>
             <td>
                 {% if not flags['is_mod_carne'] %}
                     {{ data[6] }}
                 {% endif %}
                 {% if flags['is_mod_carne'] %}
-                    <input type="text" value="{{ data[6] }}" name="carne" autocomplete="off" onkeypress="return isNumberKey(event)"/>
+                    <input type="text" class="form-control-sm input-sm" value="{{ data[6] }}" name="carne" autocomplete="off" onkeypress="return isNumberKey(event)"/>
                 {% endif %}
             </td>
             <td>
                 {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-                    <input type="submit" value="{{ word('change', session['lang']) }} DNI" name="button_carne">
+                <button type="submit" class="btn-sm btn-light" name="button_carne">
+                    <img src="{{ url_for('static', filename='images/edit.png') }}"></img>
+                </button>
                 {% endif %}
             </td>
         </tr>
@@ -99,7 +100,6 @@
     <form action="" method="POST">
         <tr>
             <td>Rol</td>
-            <td>:</td>
             <td>{{ rol }}</td>
             <td>
                 <select name=rol>
@@ -107,20 +107,24 @@
                         <option>{{x}}</option>
                     {% endfor %}
                 </select>
-                <input type="submit" value="{{ word('change', session['lang']) }} Rol">
+                <button type="submit" class="btn-sm btn-light">
+                    <img src="{{ url_for('static', filename='images/edit.png') }}"></img>
+                </button>
             </td>
         </tr>
     </form>
 {% endif %}
 </table>
 
-<table class="block">
+<table class="table">
     <h3>{{ word('func', session['lang']) }}</h3>
 {% if session['roles']['is_root'] or session['roles']['is_admin'] or session['roles']['is_ddi'] %}
     <form action="{{ url_for('index', user=user, group=group, page=1) }}" method="GET">
         <tr>
             <td>
-                <input type="submit" value="{{ word('more_details', session['lang']) }}">
+                <button type="submit" class="btn btn-primary">
+                    {{ word('more_details', session['lang']) }}
+                </button> 
             </td>
         </tr>
     </form>
@@ -131,7 +135,9 @@
     <tr>
         <td>
             <form action="" method="POST">
-                <input type="submit" value="{{ word('modify', session['lang']) }}">
+                <button type="submit" class="btn btn-primary">
+                    {{ word('modify', session['lang']) }}
+                </button> 
             </form>
         </td>
     </tr>
@@ -141,67 +147,54 @@
         <form action="" method="POST">
             <tr>
                 <td>
-                    {{ word('password', session['lang']) }}                  
-                </td>
-                <td>
-                    <input type="password" name="old_password">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{ word('new', session['lang']) }} {{ word('password', session['lang']) }}
-                </td>
-                <td>
-                    <input type="password" name="new_password">
+                    <div class="form-group fg-line">
+                        <input type="password" name="old_password" class="form-control-sm input-sm" placeholder="{{ word('password', session['lang'])}}"/>
+                    </div>
                 </td>
             </tr>
             <tr>
                 <td>
-                    {{ word('verify', session['lang']) }} {{ word('password', session['lang'])}}
-                </td>
-                <td>
-                    <input type="password" name="verify_password">
+                    <div class="form-group fg-line">
+                        <input type="password" name="new_password" class="form-control-sm input-sm" placeholder="{{ word('new', session['lang'])}} {{ word('password', session['lang'])}}"/>
+                    </div>
                 </td>
             </tr>
             <tr>
-                <td><input type="submit" value="{{ word('modify', session['lang']) }}"></td>
+                <td>
+                    <div class="form-group fg-line">
+                        <input type="password" name="verify_password" class="form-control-sm input-sm" placeholder="{{ word('verify', session['lang'])}} {{ word('password', session['lang'])}}"/>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-primary">
+                        {{ word('modify', session['lang']) }}
+                    </button> 
+                </td>
             </tr>
         </form>
     {% endif %}
 </table>
 
 {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-<table class="block">
+<table class="table">
     <h3>{{ word('func_star', session['lang']) }}</h3>
     <form action="" method="POST">
         <tr>
             <td>
-                <input type="submit" value="{{ word('bonus', session['lang']) }}">
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>
-                {{ word('bonus_time', session['lang']) }}
+                <button type="submit"  class="btn btn-primary">
+                    {{ word('bonus', session['lang']) }}
+                </button>
             </td>
             <td>
-                <input type="number" value="0" autocomplete="off" name="bonus" onkeypress="return isNumberKey(event)"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ word('comment', session['lang']) }}
+                <input type="number" name="bonus" autocomplete="off" class="form-control-sm input-sm" placeholder="{{ word('bonus_time', session['lang']) }}" onkeypress="return isNumberKey(event)"/>
             </td>
             <td>
-                <input type="text" autocomplete="off" name="comment">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ word('expires', session['lang'])}}
+                <input type="text" autocomplete="off" name="comment" class="form-control-sm input-sm" placeholder="{{ word('comment', session['lang']) }}">                
             </td>
             <td>
-                <input type="date" name="until">
+                <input type="date" name="until" class="form-control-sm input-sm" placeholder="{{ word('expires', session['lang']) }}">
             </td>
         </tr>
     </form>

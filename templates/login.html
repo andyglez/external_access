@@ -6,85 +6,72 @@
     <meta content="text/html; charset=UTF-8"
         http-equiv="content-type" py:replace="''"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/functions.js') }}"></script>    
     <title>{{word('auth_title', session['lang'])}}</title>
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/telephone.png') }}"/>
 </head>
 
-<body onload="document.forms[0].user.focus();">
-    <center>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible" role="alert" style="background-color:lightblue">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <form action="" method="POST" name="login">
-            <table>
-                <tr>
-                    <td>
-                        {{ word('user', session['lang'])}}:
-                    </td>
-                    <td>
-                        <input type="text" name="user" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {{ word('password', session['lang'])}}:
-                    </td>
-                    <td>
-                        <input type="password" name="password"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input type="submit" value="{{ word('enter', session['lang'])}}"/>
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <table>
-            <tr>
-                <td>
-                    {{ word('unregistered', session['lang']) }}
-                </td>
-                <td>
-                    <a href="{{ url_for('request_form') }}">
-                        {{ word('ask', session['lang']) }}
-                    </a>
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    {{ word('lost', session['lang']) }}
-                </td>
-                <td>
-                    <a href="{{ url_for('request_password') }}">
-                        {{ word('newpass', session['lang']) }}
-                    </a>
-                </td>
-            </tr>
-        </table>
-        <form action="" method="POST" name="choose">
-            <table>
-                <tr>
-                    <td>
-                        <input type="submit" value="{{ word('language', session['lang'])}}" default='es'/>
-                    </td>
-                    <td>
-                        <select name="language" default="{{session['lang']}}">
-                            <option>es</option>
-                            <option>en</option>
-                            <option>ca</option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </center>
-</body>
+<section id="main">
+    <nav class="navbar navbar-primary bg-primary">
+        <form action="{{url_for('start')}}" class="navbar-brand"><button type="submit" class="btn btn-primary"> {{ word('app_name', session['lang']) }} </button> </form>
+        <div class="form-inline">
+            <form method="POST"><button type="submit" class="btn btn-primary" name="language" value="es">es</button></form>
+            <form method="POST"><button type="submit" class="btn btn-primary" name="language" value="en">en</button></form>                    
+            <form method="POST"><button type="submit" class="btn btn-primary" name="language" value="ca">ca</button></form>                    
+        </div>
+    </nav>
+    <section id="login" style="position: relative; top: 80px">
+        <div class="container" style="width: 50%">
+            <center>
+                <div class="container" style="width: 50%">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div id="messages" class="alert alert-{{ category }} alert-dismissible" role="alert" style="background-color:lightblue">
+                                    {{ message }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="hide()"><span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    <form action="" method="POST" name="login">
+                        <div class="container" style="width: 50%">
+                            <div class="form-group fg-line">
+                                <input type="text" name="user" class="form-control input-sm" placeholder="{{word('user', session['lang'])}}" autocomplete="off"/>
+                            </div>
+                            <div class="form-group fg-line">
+                                <input type="password" name="password" class="form-control input-sm" placeholder="{{ word('password', session['lang'])}}"/>
+                            </div>                      
+                            <button type="submit" class="btn btn-primary">
+                                {{ word('enter', session['lang'])}}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </center>
+        </div>
+    </section>
+    <section id="functions" style="position: relative; top: 160px">
+        <div class="container" style="width: 50%">
+            <center>
+                <div class="container" style="width: 50%">
+                    <form action="{{url_for('request_form')}}" method="GET">
+                        <p>{{ word('unregistered', session['lang']) }}</p>
+                        <button type="submit" class="btn-sm btn-secondary">
+                            {{ word('ask', session['lang']) }}
+                        </button>
+                    </form>
+                    <form action="{{url_for('request_password')}}">
+                        <p>{{ word('lost', session['lang']) }}</p>
+                        <button type="submit" class="btn-sm btn-secondary">
+                            {{ word('newpass', session['lang']) }}
+                        </button>
+                    </form>
+                </div>
+            </center>
+        </div>
+    </section>
+</section>
 </html>

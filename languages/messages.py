@@ -70,6 +70,47 @@ def user_creation_successfull(language='es'):
     }
     return message[language]
 
+def request_authorization_messages(field, reason, language='es'):
+    options = {
+        'user' : {
+            'empty' : {
+                'en' : 'User field can\'t be empty',
+                'es' : 'El campo Usuario no debe estar vacío',
+                'ca' : 'El camp Usuari no ha de ser vacu'
+            }
+        },
+        'email' : {
+            'empty' : {
+                'en' : 'Email field can\'t be empty',
+                'es' : 'El campo Correo no debe estar vacío',
+                'ca' : 'El camp Correu no ha de ser vacu'
+            },
+            'miss' : {
+                'en' : 'Email must have an @ symbol',
+                'es' : 'El correo debe tener el símbolo @',
+                'ca' : 'El correu ha de tenir el símbol'
+            },
+            'addr' : {
+                'en' : 'Email must be a subdomain for uh.cu',
+                'es' : 'El correo debe ser un sub-dominio de uh.cu',
+                'ca' : 'El correu ha de ser un sub-domini de uh.cu'
+            }
+        },
+        'phone' : {
+            'empty' : {
+                'en' : 'Phone field can\'t be empty',
+                'es' : 'El campo Teléfono no debe estar vacío',
+                'ca' : 'El camp Teléfon no ha de ser vacu'
+            },
+            'length' : {
+                'en' : 'Phone field must contain 8 digits',
+                'es' : 'El campo Teléfono debe contener 8 dígitos',
+                'ca' : 'El camp Teléfon ha de contenir 8 dígits'
+            }
+        }
+    }
+    return options[field][reason][language]
+
 def get_headers(language='es'):
     phone = {
         'en': 'Phone',

@@ -6,75 +6,61 @@
     <meta content="text/html; charset=UTF-8"
         http-equiv="content-type" py:replace="''"/>
     <title>{{ word('ask', session['lang'])}}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
     <script src="{{ url_for('static', filename='js/onlynumber.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/functions.js') }}"></script>
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/telephone.png') }}"/>
 </head>
 
-<body onload="document.forms[0].user.focus();">
-    <center>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible" role="alert" style="background-color:lightblue">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <td>
-            <a href="{{ url_for('start') }}">
-                {{ word('dismiss', session['lang'])}}
-            </a>
-        </td>
-        <form action="" method="POST">
-            <table>
-                <tr>
-                    <td>
-                        {{ word('user', session['lang']) }}:
-                    </td>
-                    <td>
-                        <input type="text" name="user" autocomplete="off"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {{ word('email', session['lang']) }}:
-                    </td>
-                    <td>
-                        <input type="text" name="email" autocomplete="off"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {{ word('password', session['lang']) }}:
-                    </td>
-                    <td>
-                        <input type="password" name="password"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {{ word('verify', session['lang'])}} {{word('password', session['lang'])}}:
-                    </td>
-                    <td>
-                        <input type="password" name="confirm"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        {{ word('phone', session['lang'])}}:
-                    </td>
-                    <td>
-                        <input type="text" name="phone" autocomplete="off" onkeypress="return isNumberKey(event)"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input type="submit" value="{{ word('ask', session['lang']) }}"/>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </center>
-</body>
+<section id="main">
+    <nav class="navbar navbar-primary bg-primary">
+        <form action="{{url_for('start')}}" class="navbar-brand"><button type="submit" class="btn btn-primary"> {{ word('app_name', session['lang']) }} </button> </form>
+        <div class="form-inline">
+            <form action="{{url_for('start')}}" method="POST"><button type="submit" class="btn btn-primary" name="language" value="es">es</button></form>
+            <form action="{{url_for('start')}}" method="POST"><button type="submit" class="btn btn-primary" name="language" value="en">en</button></form>                    
+            <form action="{{url_for('start')}}" method="POST"><button type="submit" class="btn btn-primary" name="language" value="ca">ca</button></form>                    
+        </div>
+    </nav>
+    <section id="data" style="position: relative; top: 80px">
+        <div class="container" style="width: 50%">
+            <center>
+                <div class="container" style="width: 50%">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                        <div id="messages" class="alert alert-{{ category }} alert-dismissible" role="alert" style="background-color:lightblue">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="hide()"><span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                    <form action="" method="POST" name="login">
+                        <div class="container" style="width: 50%">
+                            <div class="form-group fg-line">
+                                <input type="text" name="user" class="form-control input-sm" placeholder="{{word('user', session['lang'])}}" autocomplete="off"/>
+                            </div>
+                            <div class="form-group fg-line">
+                                <input type="text" name="email" class="form-control input-sm" placeholder="{{ word('email', session['lang'])}}" autocomplete="off"/>
+                            </div>
+                            <div class="form-group fg-line">
+                                <input type="password" name="password" class="form-control input-sm" placeholder="{{ word('password', session['lang'])}}"/>
+                            </div>
+                            <div class="form-group fg-line">
+                                <input type="password" name="confirm" class="form-control input-sm" placeholder="{{ word('verify', session['lang'])}} {{word('password', session['lang'])}}"/>
+                            </div>     
+                            <div class="form-group fg-line">
+                                <input type="text" name="phone" class="form-control input-sm" placeholder="{{ word('phone', session['lang'])}}" onkeypress="return isNumberKey(event)" autocomplete="off"/>
+                            </div>                              
+                            <button type="submit" class="btn btn-primary">
+                                {{ word('ask', session['lang'])}}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </center>
+        </div>
+    </section>
+</section>
 </html>

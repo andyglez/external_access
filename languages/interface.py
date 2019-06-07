@@ -284,6 +284,11 @@ def get_words(word, lang='es'):
             'en' : 'Expiration Date',
             'es' : 'Fecha de Expiración',
             'ca' : 'Data d\'expiració'
+        },
+        'app_name': {
+            'en' : 'Remote Access',
+            'es' : 'Acceso Remoto',
+            'ca' : 'Acces Remot'
         }
     }
     return wds[word][lang]

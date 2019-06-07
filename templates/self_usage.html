@@ -7,7 +7,11 @@
             <h3>{{ word('welcome', session['lang']) }} {{session['user']}}</h3>
         {% endif %}
         {% if not self_data %}
-            <a href="{{ url_for('profile', user=user) }}">{{ word('profile', session['lang']) }}: {{user}}</a>
+        <form action="{{ url_for('profile', user=user) }}">
+            <button type="submit" class="btn-sm btn-secondary">
+                {{ word('profile', session['lang']) }}: {{user}}
+            </button>
+        </form>
         {% endif %}
     </div>
     <div style="padding-left:13px;">
@@ -16,11 +20,13 @@
         seconds_to_time(session['quota']['value']),
         seconds_to_time(session['quota']['bonus'])) }}
     </div>
-    <div style="float:left;margin-left:13px; margin-right:5px; height: 18px; width: 700px; border:1px solid #194373;">
-        <div style="height:18px; width: {{(7 * regular)}}px; background-color:#4780C2;"/></div>
-    </div>
-    <div style="padding-left:13px; font-weight : bold; font-size : 12pt; color : black;">
-        {{'%.2f' % regular}} %
+    <div class="form-inline" style="position: relative; left: 5px">
+        <div class="progress" style="width: 50%">
+            <div class="progress-bar" role="progressbar" style="width: {{regular}}%" aria-valuenow="{{regular}}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div style="padding-left: 13px; font-weight : bold; font-size : 12pt; color : black;">
+            {{'%.2f' % regular}} %
+        </div>
     </div>
     <div style="clear:both;padding-left:13px;">
         {{ word('quota_consumed', session['lang']) }}: {{seconds_to_time(session['consumed'])}}
@@ -38,11 +44,13 @@
         {{ '{0}: {1}'.format(word('quota', session['lang']),
         seconds_to_time(session['quota']['roaming'])) }}
     </div>
-    <div style="float:left;margin-left:13px; margin-right:5px; height: 18px; width: 700px; border:1px solid #194373;">
-        <div style="height:18px; width: {{(7 * roaming)}}px; background-color:#4780C2;"/></div>
-    </div>
-    <div style="padding-left:13px; font-weight : bold; font-size : 12pt; color : black;">
-        {{'%.2f' % roaming}} %
+    <div class="form-inline" style="position: relative; left: 5px">
+        <div class="progress" style="width: 50%">
+            <div class="progress-bar" role="progressbar" style="width: {{roaming}}%" aria-valuenow="{{roaming}}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div style="padding-left: 13px; font-weight : bold; font-size : 12pt; color : black;">
+            {{'%.2f' % roaming}} %
+        </div>
     </div>
     <div style="clear:both;padding-left:13px;">
         {{ word('quota_consumed', session['lang']) }}: {{seconds_to_time(session['roaming'])}}
@@ -53,78 +61,96 @@
 </div>
 {% endif %}
 
-{% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-<h3> Bonus </h3>
-<table class="table">
-    <tr>
-        <td class="td header", colspan="2">ID</td>
-        <td class="td header", colspan="10">Bonus</td>
-        <td class="td header", colspan="20">Comment</td>
-        <td class="td header", colspan="40">Expiration Date</td>
-    </tr>
-    {% for (i, (bonus, comment, expires)) in enumerate(data) %}
-        <tr>
-            <td class="data" colspan="2"> {{i + 1}} </td>
-            <td class="data" colspan="10"> {{bonus // 3600}}</td>
-            <td class="data" colspan="20"> {{comment}} </td>
-            <td class="data" colspan="40"> {{clean_date(expires)}} </td>
-        </tr>     
-    {% endfor %}    
-</table>
-{% endif %}  
-
-<form action="" method="POST">
-    <input type="submit" value="{{ word('less_details', session['lang']) if showing_details else word('more_details', session['lang'])}}"/>
-</form>
-
-{% if showing_details %}
-
-{% if len(session['details']) > 0 %}
-<h3> {{ word('logs', session['lang']) }}</h3>
-<table class="table">
-    <tr>
-        <td class="td header", colspan="2">ID</td>
-        {% for h in session['headers'] %}
-            <td class="td header", colspan="{{len(h)}}">{{h}}</td>
-        {% endfor %}
-    </tr>
-    {% for (i, (phone, stt, stp, consumed)) in enumerate(session['details']) %}
-        {% if in_page(i) %}
+<div class="container" style="float: left">
+    {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
+    <h3>Bonus</h3>
+    <table class="table table-striped">
+        <thead>
+            <th scope="col">ID</th>
+            <th scope="col">Bonus</th>
+            <th scope="col">Comment</th>
+            <th scope="col">Expiration Date</th>
+        </thead>
+        <tbody>
+        {% for (i, (bonus, comment, expires)) in enumerate(data) %}
             <tr>
-                <td class="data" colspan="2"> {{i + 1}} </td>
-                <td class="data" colspan="{{len(session['headers'][0])}}"> {{phone}} </td>
-                <td class="data" colspan="{{len(session['headers'][1])}})"> {{stt}} </td>
-                <td class="data" colspan="{{len(session['headers'][2])}})"> {{stp}} </td>
-                <td class="data" colspan="{{len(session['headers'][3])}})"> {{consumed}} </td>
-            </tr>
-        {% endif %}        
-    {% endfor %}    
-</table>
+                <th scope="row">{{i + 1}}</th>
+                <td> {{bonus // 3600}}</td>
+                <td> {{comment}} </td>
+                <td> {{clean_date(expires)}} </td>
+            </tr>     
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    <form action="" method="POST">
+        <button type="submit" class="btn btn-primary">
+            {{ word('less_details', session['lang']) if showing_details else word('more_details', session['lang'])}}
+        </button>
+    </form>
+    {% if showing_details %}
+        {% if len(session['details']) > 0 %}
+            <h3> {{ word('logs', session['lang']) }}</h3>
+            <table class="table table-striped">
+                <thead>
+                    <th scope="col">ID</td>
+                    {% for h in session['headers'] %}
+                        <th scope="col">{{h}}</td>
+                    {% endfor %}
+                </thead>
+                <tbody>
+                {% for (i, (phone, stt, stp, consumed)) in enumerate(session['details']) %}
+                    {% if in_page(i) %}
+                    <tr>
+                        <th scope="row"> {{i + 1}} </td>
+                        <td> {{phone}} </td>
+                        <td> {{stt}} </td>
+                        <td> {{stp}} </td>
+                        <td> {{consumed}} </td>
+                    </tr>
+                    {% endif %}        
+                {% endfor %}
+                </tbody>
+            </table>
 
-<h3>{{ word('results', session['lang']) }}: {{ word('page', session['lang']) }} {{current}}/{{total}} ({{len(session['details'])}} total)</h3>
-    <h4>
-        {% if current != 1 %}
-            <a href="{{ url_for('index', user=user, group=group, page=1) }}">{{ word('first', session['lang']) }} </a>
-            ...
-        {% endif %}    
-        {% if current > 1 %}
-            <a href="{{ url_for('index', user=user, group=group, page=current - 1) }}">{{ word('prev', session['lang']) }} </a>
-            .
+            <h3>{{ word('results', session['lang']) }}: {{ word('page', session['lang']) }} {{current}}/{{total}} ({{len(session['details'])}} total)</h3>
+            <div class="container">
+                {% if current != 1 %}
+                    <form action="{{ url_for('index', user=user, group=group, page=1) }}" method="GET">
+                        <button type="submit" class="btn btn-secondary">
+                            {{ word('first', session['lang']) }}
+                        </button>
+                    </form>
+                {% endif %}    
+                {% if current > 1 %}
+                    <form action="{{ url_for('index', user=user, group=group, page=current - 1) }}" method="GET">
+                        <button type="submit" class="btn btn-secondary">
+                            {{ word('prev', session['lang']) }}
+                        </button>
+                    </form>
+                {% endif %}
+                {% if current < total %}
+                    <form action="{{ url_for('index', user=user, group=group, page=current + 1) }}" method="GET">
+                        <button type="submit" class="btn btn-secondary">
+                            {{ word('next', session['lang']) }}
+                        </button>
+                    </form>
+                {% endif %}
+                {% if current != total %}
+                    <form action="{{ url_for('index', user=user, group=group, page=total) }}" method="GET">
+                        <button type="submit" class="btn btn-secondary">
+                            {{ word('last', session['lang']) }}
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
         {% endif %}
-        {% if current < total %}
-            <a href="{{ url_for('index', user=user, group=group, page=current + 1) }}">{{ word('next', session['lang']) }} </a>
-        {% endif %}
-        {% if current != total %}
-            ...
-            <a href="{{ url_for('index', user=user, group=group, page=total) }}">{{ word('last', session['lang']) }} </a>            
-        {% endif %}
-    </h4>
-{% endif %}
 
-{% if len(session['details']) == 0 %}
-<h3>{{ word('no_results', session['lang']) }}</h3>
-{% endif %}
+        {% if len(session['details']) == 0 %}
+            <h3>{{ word('no_results', session['lang']) }}</h3>
+        {% endif %}
 
-{% endif %}
+    {% endif %}
+</div>
 
 {% endblock %}
