@@ -7,7 +7,8 @@
         <center>
                 <h3> Planilla de solicitud de acceso telefónico </h3>
         </center>
-        <p>
+        <div class="container">
+                <p>
                     Por este medio garantizo que conozco la existencia de la Resolución
                     127/2007 del Ministerio de la Informática y las Comunicaciones y
                     que en particular he leído con atención los artículos:<br />
@@ -37,45 +38,42 @@
                     Qué al firmar el presente documento me comprometo a cumplir
                     con todo lo establecido en la mencionada resolución 127/2007 del
                     MIC.
-        </p>
-        <div class="block">
-            <h4>Datos del solicitante</h4>
+                </p>
+        </div>
+        <div class="container">
             <div class="block">
-                <table>
-                    <tr>
-                        <td><p>{{name}}</p></td>
-                        <td></td>
-                        <td><p>{{dni}}</p></td>
-                    </tr>
-                    <tr>
-                        <td class="info">Nombre y Apellidos</td>
-                        <td></td>
-                        <td class="info">Número de Carnet de Identidad</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="info">Categoría Docente e Investigativa</td>
-                        <td class="info">Grado Científico</td>
-                        <td class="info">Firma</td>
-                    </tr>
-                    <tr>
-                        <td><p>{{phone}}</p></td>
-                        <td></td>
-                        <td><p>{{e_mail}}</p></td>
-                    </tr>
-                    <tr>
-                        <td class="info">Teléfono</td>
-                        <td></td>
-                        <td class="info">Correo Electrónico</td>
-                    </tr>
-                </table>
+                <h4>Datos del solicitante</h4>
+                <div class="block">
+                    <div class="form-inline" style="height: 50px; display:inline">
+                        <div class="block">
+                            <p>Nombre y Apellidos: {{name}}</p>
+                        </div>
+                        <div class="block">
+                            <p>Carnet de Identidad: {{dni}}</p>
+                        </div>
+                    </div>
+                    <div class="form-inline" style="height: 50px; display:inline">
+                        <div class="block">
+                            <p>Categoría D/I:</p>
+                        </div>
+                        <div class="block">
+                            <p>Grado Científico:</p>
+                        </div>
+                        <div class="block">
+                            <p>Firma:</p>
+                        </div>
+                    </div>
+                    <div class="form-inline" style="height: 50px; display:inline">
+                        <div class="block">
+                            <p>Teléfono: {{phone}}</p>
+                        </div>
+                        <div class="block">
+                            <p>Correo Electrónico: {{e_mail}}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
         <p>Dirección Docente De Informatización | Universidad de la Habana | {{year}}</p>
     </body>
 </html>
