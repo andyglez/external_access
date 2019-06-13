@@ -225,7 +225,7 @@ def render_pdf(username, name, dni, phone, e_mail):
     response.headers['Content-Disposition'] = 'attachment; filename=Acceso-Remoto-{0}.pdf'.format(name)
     return response
 
-@app.route('/dismiss?<username>')
+@app.route('/dismiss?username=<username>')
 def dismiss(username):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
