@@ -291,9 +291,9 @@ def get_words(word, lang='es'):
             'ca' : 'Acces Remot'
         },
         'doc' : {
-            'en' : 'Obtain Document',
-            'es' : 'Obtener Documento',
-            'ca' : 'Obtenir Document'
+            'en' : 'Document',
+            'es' : 'Documento',
+            'ca' : 'Document'
         },
         'authorize': {
             'en' : 'Authorize',

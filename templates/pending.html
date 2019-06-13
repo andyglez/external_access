@@ -46,6 +46,13 @@
                             </button>
                         </td>
                     </form>
+                    <form action="{{ url_for('dismiss', username=row[0])}}" method="GET">
+                        <td>
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                {{ word('force', session['lang'])}}
+                            </button>
+                        </td>
+                    </form>
                 {% endif %}                
             </tr>
             {% endif %}

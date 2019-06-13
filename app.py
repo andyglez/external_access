@@ -225,5 +225,12 @@ def render_pdf(username, name, dni, phone, e_mail):
     response.headers['Content-Disposition'] = 'attachment; filename=Acceso-Remoto-{0}.pdf'.format(name)
     return response
 
+@app.route('/dismiss?<username>')
+def dismiss(username):
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    db.query('delete from Pending where username = \'{0}\''.format(username))
+    return redirect(url_for('pending', page=1))
+
 if __name__ == '__main__':    
     app.run(debug=True, host='0.0.0.0', port=5000)
