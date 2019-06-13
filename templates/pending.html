@@ -25,12 +25,12 @@
                     <form action="{{ url_for('authorize', username=row[0], dni=row[4], author=session['user'], action='ddi') }}" method="GET">
                         <td>
                             <button type="submit" class="btn btn-success btn-sm">
-                                {{ word('authorize', session['lang']) }}
+                                {{ word('confirm', session['lang']) }}
                             </button>
                         </td>
                     </form>
                 {% endif %}
-                {% if flags[i] and session['roles']['is_dean'] %}
+                {% if session['roles']['is_dean'] %}
                     <form action="{{ url_for('authorize', username=row[0], dni=row[4], author=session['user'], action='dean') }}" method="GET">
                         <td>
                             <button id="auth_button" type="submit" class="btn btn-success btn-sm" onclick="disable()">
@@ -45,14 +45,14 @@
                             </button>
                         </td>
                     </form>
-                    <form action="{{ url_for('dismiss', username=row[0])}}" method="GET">
-                        <td>
-                            <button type="submit" class="btn btn-danger btn-sm">
-                                {{ word('force', session['lang'])}}
-                            </button>
-                        </td>
-                    </form>
-                {% endif %}                
+                {% endif %}
+                <form action="{{ url_for('dismiss', username=row[0])}}" method="GET">
+                    <td>
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            {{ word('force', session['lang'])}}
+                        </button>
+                    </td>
+                </form>
             </tr>
             {% endif %}
         {% endfor %}

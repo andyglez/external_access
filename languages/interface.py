@@ -309,6 +309,11 @@ def get_words(word, lang='es'):
             'en' : 'Petition Date',
             'es' : 'Fecha de Petición',
             'ca' : 'Data de Petició'
+        },
+        'confirm': {
+            'en' : 'Confirm',
+            'es' : 'Confirmar',
+            'ca' : 'Confirmar'
         }
     }
     return wds[word][lang]
