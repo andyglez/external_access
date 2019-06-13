@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 {% block body %}
 
+    {% if len(data) > 0 %}
     <table class="table table-striped">
         <thead>
             <td scope="col">ID</td>
@@ -30,7 +31,7 @@
                         </td>
                     </form>
                 {% endif %}
-                {% flags[i] and if session['roles']['is_dean'] %}
+                {% if flags[i] and session['roles']['is_dean'] %}
                     <form action="{{ url_for('authorize', username=row[0], dni=row[4], author=session['user'], action='dean') }}" method="GET">
                         <td>
                             <button id="auth_button" type="submit" class="btn btn-success btn-sm" onclick="disable()">
@@ -61,7 +62,7 @@
         </tbody>
     </table>
 
-    {% if len(data) > 0 %}
+    
     <h3>{{ word('results', session['lang']) }}: {{ word('page', session['lang']) }} {{current}}/{{total}} ({{len(data)}} total)</h3>
     <div class="form-inline">
             {% if current != 1 %}
