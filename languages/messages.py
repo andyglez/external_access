@@ -6,6 +6,14 @@ def wrong_user_pass(language='es'):
     }
     return message[language]
 
+def user_not_found(username, language='es'):
+    message = {
+        'en': 'User '+username+' doesn\'t exist',
+        'es': 'Usuario '+username+' no existe',
+        'ca': 'Usuari '+username+' no existeix'
+    }
+    return message[language]
+
 def user_already_exists(username, language='es'):
     message = {
         'en': 'User '+username+' already exists',
@@ -22,11 +30,19 @@ def email_already_in_use(email, language='es'):
     }
     return message[language]
 
+def check_your_email(language='es'):
+    message = {
+        'en': 'Check your email',
+        'es': 'Compruebe el buzón de entrada de su correo',
+        'ca': 'Verifiqui la safata d\'entrada del seu correu'
+    }
+    return message[language]
+
 def request_sent_successfully(language='es'):
     message = {
-        'en': 'Successfull operation. Contact with your network admin within a few days',
-        'es': 'Operación exitosa. Contacte con su administrador de red en un par de días',
-        'ca': 'Operació exitosa. Contacti l\'administrador de la xarxa en uns dies'
+        'en': 'Successfull operation',
+        'es': 'Operación exitosa',
+        'ca': 'Operació exitosa'
     }
     return message[language]
 
@@ -57,8 +73,8 @@ def mismatch_new_password(language='es'):
 def successfull_pass_change(language='es'):
     message = {
         'en' : 'Password successfully changed',
-        'es' : 'La contraseña ha sido cambiada con éxito',
-        'ca' : 'La contrasenya ha sigut cambiat amb éxit'
+        'es' : 'Contraseña cambiada con éxito',
+        'ca' : 'Contrasenya cambiat amb éxit'
     }
     return message[language]
 

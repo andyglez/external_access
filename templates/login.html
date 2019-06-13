@@ -59,13 +59,13 @@
                 <div class="container" style="width: 50%">
                     <form action="{{url_for('request_form')}}" method="GET">
                         <p>{{ word('unregistered', session['lang']) }}</p>
-                        <button type="submit" class="btn-sm btn-secondary">
+                        <button type="submit" class="btn btn-success btn-sm">
                             {{ word('ask', session['lang']) }}
                         </button>
                     </form>
                     <form action="{{url_for('request_password')}}">
                         <p>{{ word('lost', session['lang']) }}</p>
-                        <button type="submit" class="btn-sm btn-secondary">
+                        <button type="submit" class="btn-sm btn-success btn-sm">
                             {{ word('newpass', session['lang']) }}
                         </button>
                     </form>

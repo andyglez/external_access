@@ -73,7 +73,7 @@ def request_form():
 def request_password():
     if request.method == 'GET':
         return render_template('password.html', word=get_words, confirm=False)
-    value, message = password_ctr.check_info(request.form['user'], request.form['email'], mail)
+    value, message = password_ctr.check_info(request.form['user'], request.form['email'], mail, cookies.get('lang'))
     flash(message)
     return redirect(url_for('request_password'))
     
@@ -81,11 +81,12 @@ def request_password():
 def confirm_password(user,dni, e_addr):
     if request.method == 'GET':
         return render_template('password.html', word=get_words, confirm=True, user=user, e_addr=e_addr)    
-    value, message = password_ctr.verify_email(user, request.form['pass'], request.form['conf'])
+    value, message = password_ctr.verify_email(user, request.form['pass'], request.form['conf'], cookies.get('lang'))
     flash(message)
     if value:
         return redirect(url_for('login'))
-    return redirect(url_for('confirm_password', user, dni, e_addr))    
+    return redirect(url_for('confirm_password', user, dni, e_addr))   
+
 @app.route('/logout')
 def logout():
     if not cookies.contains('user'):
@@ -218,7 +219,7 @@ def render_pdf(username, name, dni, phone, e_mail):
     pdf = pdfkit.from_string(rendered, False, css=os.path.dirname(os.path.abspath(__file__)) + url_for('static', filename='css/print.css'))
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'attachment; filename=Acceso-Externo-{0}.pdf'.format(name)
+    response.headers['Content-Disposition'] = 'attachment; filename=Acceso-Remoto-{0}.pdf'.format(name)
     return response
 
 if __name__ == '__main__':    
