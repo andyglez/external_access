@@ -299,6 +299,16 @@ def get_words(word, lang='es'):
             'en' : 'Authorize',
             'es' : 'Autorizar',
             'ca' : 'Autoritzar'
+        },
+        'id': {
+            'en' : 'DNI',
+            'es' : 'Carnet de Identidad',
+            'ca' : 'DNI'
+        },
+        'notes' : {
+            'en' : 'Petition Date',
+            'es' : 'Fecha de Petición',
+            'ca' : 'Data de Petició'
         }
     }
     return wds[word][lang]
