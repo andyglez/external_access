@@ -185,7 +185,7 @@ def get_words(word, lang='es'):
             'es' : 'No se encontraron resultados',
             'ca' : 'No s\'han trobat resultats'
         },
-        'notes' : {
+        'create_notes' : {
             'en' : 'Notes',
             'es' : 'Notas',
             'ca' : 'Notes'

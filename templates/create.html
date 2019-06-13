@@ -5,12 +5,12 @@
     <div class="container">
         <input type="text" name="user" class="form-control input-sm" placeholder="{{word('user', session['lang'])}}" autocomplete="off"/>
         <input type="text" name="name" class="form-control input-sm" placeholder="{{word('name', session['lang'])}}" autocomplete="off"/>
-        <input type="password" name="pass" class="form-control input-sm" placeholder="{{word('comment', session['lang'])}}" autocomplete="off"/>
-        <input type="text" name="id" class="form-control input-sm" placeholder="ID" autocomplete="off" onkeypress="return isNumberKey(event)"/>
+        <input type="password" name="pass" class="form-control input-sm" placeholder="{{word('password', session['lang'])}}" autocomplete="off"/>
+        <input type="text" name="id" class="form-control input-sm" placeholder="ID" autocomplete="off"/>
         <input type="text" name="email" class="form-control input-sm" placeholder="{{word('email', session['lang'])}}" autocomplete="off"/>
         <input type="text" name="address" class="form-control input-sm" placeholder="{{word('address', session['lang'])}}" autocomplete="off"/>
         <input type="text" name="phone" class="form-control input-sm" placeholder="{{word('phone', session['lang'])}}" autocomplete="off" onkeypress="return isNumberKey(event)"/>
-        <input type="text" name="notes" class="form-control input-sm" placeholder="{{word('notes', session['lang'])}}" autocomplete="off"/>
+        <input type="text" name="notes" class="form-control input-sm" placeholder="{{word('create_notes', session['lang'])}}" autocomplete="off"/>
         <input type="date" name="authorized" class="form-control input-sm" placeholder="{{word('authorized', session['lang'])}}" autocomplete="off"/>        
         <select name="area">
             {% for a in areas %}
@@ -27,7 +27,7 @@
                 <option>{{g}}</option>
             {% endfor %}
         </select>
-        <button type="submit" class="btn-sm btn-primary">
+        <button type="submit" class="btn btn-primary btn-sm">
             {{ word('create', session['lang']) }}
         </button>
     </div>
