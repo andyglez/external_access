@@ -2,7 +2,7 @@ from settings import database as db
 from utils.cookies import Cookies
 
 def dont_have_permissions(roles):
-    return not(roles['is_dean'] or roles['is_root'])
+    return not(roles['is_dean'] or roles['is_root'] or roles['is_ddi'])
 
 def log_removal(user, name, area, executor, reason):
     insert_removed_user(user, name, area, executor, reason)
@@ -13,4 +13,5 @@ def insert_removed_user(username, name, area, executor, reason):
                     values(\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\')'''.format(username, name, area, executor, reason), False)
 
 def delete_users(username):
+    db.query('delete from DBRoles where username = \'{0}\''.format(username))
     return db.query('delete from Users where UserName = \'{0}\''.format(username))

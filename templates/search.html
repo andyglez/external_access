@@ -45,7 +45,7 @@
                 <tr>
                     <td>
                         <form action="{{ url_for('profile', user=username)}}">
-                            <button type="submit" class="btn-sm btn-light" name="button_name">
+                            <button type="submit" class="btn btn-light btn-sm" name="button_name">
                                 {{username}}
                             </button>
                         </form>
@@ -54,10 +54,10 @@
                     <td> {{area}} </td>
                     <td> {{email}} </td>
                     <td> {{phone}} </td>
-                    {% if session['roles']['is_root'] or session['roles']['is_dean'] %}
+                    {% if session['roles']['is_root'] or session['roles']['is_dean'] or session['roles']['is_ddi'] %}
                         <td>
-                            <form action="{{ url_for('remove', user=username, name=name, area=area) }}" method="GET">
-                                <button type="submit" class="btn-sm btn-light">{{ word('force', session['lang'])}}</button>
+                            <form action="{{ url_for('remove', user=username, name=name, area=area, category=category, page=current) }}" method="GET">
+                                <button type="submit" class="btn btn-danger btn-sm">{{ word('force', session['lang'])}}</button>
                             </form>
                         </td>
                     {% endif %}

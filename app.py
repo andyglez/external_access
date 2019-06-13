@@ -157,15 +157,15 @@ def search(category, query='', page=1):
                             in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10,
                             current=int(page), total=total)
 
-@app.route('/remove?user=<user>&name=<name>&area=<area>', methods=['GET', 'POST'])
-def remove(user, name, area):
+@app.route('/remove?user=<user>&name=<name>&area=<area>&category=<category>&page=<page>', methods=['GET', 'POST'])
+def remove(user, name, area, category, page):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if remove_ctr.dont_have_permissions(cookies.get('roles')):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
     if request.method == 'POST' and 'reason' in request.form:
         remove_ctr.log_removal(user, name, area, cookies.get('user'), request.form['reason'])
-        return redirect(url_for('search', query=cookies.get('query_value')))
+        return redirect(url_for('search', category=category, query=cookies.get('query_value'), page=page))
     return render_template('delete.html', word=get_words)
 
 @app.route('/create', methods=['GET', 'POST'])
