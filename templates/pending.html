@@ -22,8 +22,7 @@
                 <td> {{row[6]}} </td>
                 <td> {{row[7]}} </td>
                 <td> {{clean_date(row[8])}} </td>
-                {% if not flags[i] %}
-                    {% if session['roles']['is_ddi'] %}
+                {% if not flags[i] and session['roles']['is_ddi'] %}
                     <form action="{{ url_for('authorize', username=row[0], dni=row[4], author=session['user'], action='ddi') }}" method="GET">
                         <td>
                             <button type="submit" class="btn btn-success btn-sm">
@@ -31,8 +30,8 @@
                             </button>
                         </td>
                     </form>
-                    {% endif %}
-                    {% if session['roles']['is_dean'] %}
+                {% endif %}
+                {% if flags[i] and session['roles']['is_dean'] %}
                     <form action="{{ url_for('authorize', username=row[0], dni=row[4], author=session['user'], action='dean') }}" method="GET">
                         <td>
                             <button id="auth_button" type="submit" class="btn btn-success btn-sm" onclick="disable()">
@@ -40,12 +39,9 @@
                             </button>
                         </td>
                     </form>
-                    {% endif %}
-                {% endif %}
-                {% if flags[i] and session['roles']['is_dean'] %}
                     <form action="{{ url_for('render_pdf', username=row[0], name=row[1], dni=row[4], phone=row[7], e_mail=row[5])}}" method="GET">
                         <td>
-                            <button type="submit" class="btn btn-success btn-sm">
+                            <button type="submit" class="btn btn-dark btn-sm">
                                 {{ word('doc', session['lang']) }}
                             </button>
                         </td>
