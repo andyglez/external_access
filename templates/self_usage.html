@@ -68,8 +68,8 @@
         <thead>
             <th scope="col">ID</th>
             <th scope="col">Bonus</th>
-            <th scope="col">Comment</th>
-            <th scope="col">Expiration Date</th>
+            <th scope="col">{{ word('comment', session['lang']) }}</th>
+            <th scope="col">{{ word('expires', session['lang']) }}</th>
         </thead>
         <tbody>
         {% for (i, (bonus, comment, expires)) in enumerate(data) %}

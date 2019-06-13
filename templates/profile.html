@@ -21,7 +21,7 @@
             </td>
             <td>
                 {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-                    <button type="submit" class="btn-sm btn-light" name="button_name">
+                    <button type="submit" class="btn btn-light btn-sm" name="button_name">
                         <img src="{{ url_for('static', filename='images/edit.png') }}"></img>
                     </button>
                 {% endif %}
