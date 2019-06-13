@@ -199,22 +199,25 @@ def pending(page=1):
                             in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10,current=int(page), total=total, flags=flags,
                             clean_date=lambda x: x.split('T')[0])
 
-@app.route('/authorize?username=<username>&ident=<dni>&authorized_by=<author>')
-def authorize(username, dni, author):
+@app.route('/authorize?username=<username>&ident=<dni>&authorized_by=<author>&action=<action>')
+def authorize(username, dni, author, action):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
+    if action == 'dean':
+        authorize_ctr.authorize_dean_action(username, cookies.get('user'))
+        flash(msg.request_sent_successfully(cookies.get('lang')))
+        return redirect(url_for('pending', page=1))
     if not authorize_ctr.check_pending(username, dni, author):
         flash('Error')
         return redirect(url_for('pending', page=1))
     authorize_ctr.update_auth(username, dni, author)
-    flash('Success')
+    flash(msg.request_sent_successfully(cookies.get('lang')))
     return redirect(url_for('pending', page=1))
 
 @app.route('/pdf/<username>&<name>&<dni>&<phone>&<e_mail>')
 def render_pdf(username, name, dni, phone, e_mail):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
-    authorize_ctr.authorize_dean_action(username, cookies.get('user'))
     rendered = render_template('pdf_template.html', name=name, dni=dni, phone=phone, e_mail=e_mail, year=datetime.now().year)
     pdf = pdfkit.from_string(rendered, False, css=os.path.dirname(os.path.abspath(__file__)) + url_for('static', filename='css/print.css'))
     response = make_response(pdf)

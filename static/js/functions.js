@@ -6,3 +6,7 @@ function hide(){
         x.style.display = "none";
     }
 }
+
+function disable(){
+    document.getElementById("auth_button").disabled = true
+}
