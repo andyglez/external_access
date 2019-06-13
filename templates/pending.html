@@ -1,7 +1,6 @@
 {% extends "index.html" %}
 {% block body %}
 
-<div class="container">
     <table class="table table-striped">
         <thead>
             <td scope="col">ID</td>
@@ -97,5 +96,4 @@
     {% if len(data) == 0 %}
     <h3>{{ word('no_results', session['lang']) }}</h3>
     {% endif %}
-</div>
 {% endblock %}
