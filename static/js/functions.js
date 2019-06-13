@@ -8,5 +8,5 @@ function hide(){
 }
 
 function disable(){
-    document.getElementById("auth_button").disabled = true
+    document.getElementById("auth_button").disabled = true;
 }
