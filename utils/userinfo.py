@@ -1,3 +1,7 @@
+from suds.client import Client
+import urllib
+import ssl
+
 def check_root(roles):
     return True if 'root' in roles else False
 
@@ -36,3 +40,17 @@ def get_user_quota(group, bonus):
 
 def percentage(consumed, total):
     return consumed * 100 / total
+
+def consume_webservice(mail):
+    url = 'https://login.uh.cu/WebServices/CuoteService.asmx?WSDL'
+    ssl._create_default_https_context = ssl._create_unverified_context
+    client = Client(url)
+
+    try:
+        results = client.service.DatosTrabajador(mail)
+        if not bool(results):
+            return -1
+        else:
+            return results[0][0]
+    except:
+        return -1

@@ -12,7 +12,7 @@ def update_auth(username, dni, author):
     db.query('''insert into Users (UserName, Name, Password, Area, id, email, address, phone, notes, GroupName)
                 values (\'{0}\', \'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\')'''
                 .format(user, name, pwd, area, idn, email, address, phone, notes, group), False)
-    db.query('insert into DBRoles (username, roles) values (\'{0}\', \'{1}\')')
+    db.query('insert into DBRoles (username, roles) values (\'{0}\', \'{1}\')'.format(username, 'default'))
     db.query('delete from Pending where username = \'{}\''.format(username))
     return 0
 

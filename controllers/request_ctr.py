@@ -2,10 +2,7 @@ from settings import database as db, encryption as cr, email
 from languages import messages as msg
 from datetime import datetime
 from flask import url_for
-from suds.client import Client
-import urllib
-import ssl
-
+from utils import userinfo
 
 def is_a_valid_request(form, lang):
     if form['user'] == '':
@@ -34,17 +31,18 @@ def is_a_valid_request(form, lang):
 def make_request(username, mail, form, lang):
     crypted = cr.encrypt(form['password'])
     area = process_info(form['email'])
-    result = consume_webservice(form['email'])
+    result = userinfo.consume_webservice(form['email'])
     if result == -1:
         return 'error'
-    (name, dni, address) = result
+    (name, dni, address) = (form['fullname'], form['dni'], form['address'])
     insert_into_pending(username, name, crypted, area, dni, form['email'], address, form['phone'], datetime.now().isoformat(), 'default', '')
 
     coworkers = db.query('select username, email from Users where area = \'{0}\''.format(area))
     dean = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{0}\''.format(x))) > 0][0]
 
     data = (name, form['email'], area, address)
-    send_mail(mail, username, dni, dean, data)
+    email.send_mail_to_dean(mail, username, dni, dean, data)
+    email.notify_user(mail, username, form['email'], 'start')
     return msg.request_sent_successfully(lang)
 
 def check_existance(username):
@@ -60,36 +58,7 @@ def insert_into_pending(username, name, password, area, dni, email, address, pho
 
 def process_info(mail):
     aux = mail.split('@')
-    username = aux[0]
     area = aux[1].split('.')[0]
-    if area == 'iris':
-        return 'ddi'
     return area
 
-def consume_webservice(mail):
-    url = 'https://login.uh.cu/WebServices/CuoteService.asmx?WSDL'
-    ssl._create_default_https_context = ssl._create_unverified_context
-    client = Client(url)
 
-    try:
-        results = client.service.DatosTrabajador(mail)
-        if not bool(results):
-            return -1
-        else:
-            return results[0][0]
-    except:
-        return -1
-
-def send_mail(mail, username, dni, dean, data):
-    (name, e_addr, area, address) = data
-    mail_objectives = []
-    mail_objectives.append(dean)
-    for x in mail_objectives:
-        email.send_auth_request(mail,
-        '''El usuario {0} ha sido correctamente validado en los servicios directorios de la Universidad
-        Su información personal completa es la siguiente:
-        Nombre : {1}
-        E-mail : {2}
-        Area   : {3}
-        Direc. : {4}
-        Para completar la autorización del usuario dé click en el siguiente enlace http://accesotelefonico.uh.cu'''.format(username, name, e_addr, area, address), recip=x)
