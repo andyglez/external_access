@@ -123,6 +123,27 @@ def request_authorization_messages(field, reason, language='es'):
                 'es' : 'El campo Teléfono debe contener 8 dígitos',
                 'ca' : 'El camp Teléfon ha de contenir 8 dígits'
             }
+        },
+        'name' : {
+            'empty' :{
+                'en' : 'Name field can\'t be empty',
+                'es' : 'El campo Nombre no debe estar vacío',
+                'ca' : 'El camp Nom no ha de ser vacu'
+            }
+        },
+        'dni' : {
+            'empty' :{
+                'en' : 'DNI field can\'t be empty',
+                'es' : 'El campo Carnet de Identidad no debe estar vacío',
+                'ca' : 'El camp DNI no ha de ser vacu'
+            }
+        },
+        'address' : {
+            'empty' :{
+                'en' : 'Address field can\'t be empty',
+                'es' : 'El campo Dirección no debe estar vacío',
+                'ca' : 'El camp Adreça no ha de ser vacu'
+            }
         }
     }
     return options[field][reason][language]

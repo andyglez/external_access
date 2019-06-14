@@ -205,13 +205,13 @@ def authorize(username, dni, author, action):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if action == 'dean':
-        authorize_ctr.authorize_dean_action(username, cookies.get('user'))
+        authorize_ctr.authorize_dean_action(username, cookies.get('user'), mail)
         flash(msg.request_sent_successfully(cookies.get('lang')))
         return redirect(url_for('pending', page=1))
     if not authorize_ctr.check_pending(username, dni, author):
         flash('Error')
         return redirect(url_for('pending', page=1))
-    authorize_ctr.update_auth(username, dni, author)
+    authorize_ctr.update_auth(username, dni, author, mail)
     flash(msg.request_sent_successfully(cookies.get('lang')))
     return redirect(url_for('pending', page=1))
 

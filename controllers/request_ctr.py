@@ -26,6 +26,12 @@ def is_a_valid_request(form, lang):
         return (False, msg.request_authorization_messages('email', 'miss', lang))
     if len(aux[1].split('.')) != 3:
         return (False, msg.request_authorization_messages('email', 'addr', lang))
+    if form['name'] == '':
+        return (False, msg.request_authorization_messages('name', 'empty', lang))
+    if form['dni'] == '':
+        return (False, msg.request_authorization_messages('dni', 'empty', lang))
+    if form['address'] == '':
+        return (False, msg.request_authorization_messages('address', 'empty', lang))
     return (True, '')
 
 def make_request(username, mail, form, lang):
