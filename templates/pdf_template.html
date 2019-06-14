@@ -41,39 +41,20 @@
                 </p>
         </div>
         <div class="container">
-            <div class="block">
-                <h4>Datos del solicitante</h4>
-                <div class="block">
-                    <div class="form-inline" style="height: 50px; display:inline">
-                        <div class="block">
-                            <p>Nombre y Apellidos: {{name}}</p>
-                        </div>
-                        <div class="block">
-                            <p>Carnet de Identidad: {{dni}}</p>
-                        </div>
-                    </div>
-                    <div class="form-inline" style="height: 50px; display:inline">
-                        <div class="block">
-                            <p>Categoría D/I:</p>
-                        </div>
-                        <div class="block">
-                            <p>Grado Científico:</p>
-                        </div>
-                        <div class="block">
-                            <p>Firma:</p>
-                        </div>
-                    </div>
-                    <div class="form-inline" style="height: 50px; display:inline">
-                        <div class="block">
-                            <p>Teléfono: {{phone}}</p>
-                        </div>
-                        <div class="block">
-                            <p>Correo Electrónico: {{e_mail}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h4>Datos del solicitante</h4>
+            <b>Nombre y Apellidos:</b><p> {{name}} </p>
+            <b>Carnet de Identidad:</b><p> {{dni}}</p>
+            <b>Categoría D/I:</b><p></p>
+            <b>Grado Científico:</b><p></p>
+            <b>Teléfono:</b><p> {{phone}}</p>
+            <b>Nombre de usuario:</b><p> {{user}} </p>
+            <b>Correo Electrónico:</b><p> {{e_mail}} </p>            
         </div>
-        <p>Dirección Docente De Informatización | Universidad de la Habana | {{year}}</p>
+        <div class="container">
+            <b>Autorizado por:</p>
+        </div>
     </body>
+    <footer>
+        <p>Dirección Docente De Informatización | Universidad de la Habana | {{year}}</p>
+    </footer>
 </html>
