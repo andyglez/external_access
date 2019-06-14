@@ -124,7 +124,7 @@ def profile(user):
         if not msg == '':
             flash(msg)
         return redirect(url_for('profile', user=user))
-    info[2] = db.query('select areaname from Areas where area = \'{0}\''.format(info[2]))[0]
+    info[2] = db.query('select areaname from Areas where area = \'{0}\''.format(info[2]))[0][0]
     return render_template('profile.html', word=get_words, data=info, rol=current, roles=rest, user=user, group=login.get_basic_info(user)[0][-1],
                     is_modifyer=(info[0] == cookies.get('user') or not (cookies.get('roles')['is_dean'] or cookies.get('roles')['is_ddi'])),
                     mod_pwd=cookies.get('modify'), flags=cookies.get('is_field_mod'))
