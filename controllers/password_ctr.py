@@ -1,4 +1,4 @@
-from settings import email, database as db
+from settings import email, database as db, encryption as cr
 from languages import messages as msg
 
 def check_info(user, e_addr, mail, lang='es'):
@@ -11,5 +11,6 @@ def check_info(user, e_addr, mail, lang='es'):
 def verify_email(user, pwd, conf, lang='es'):
     if pwd != conf:
         return False, msg.mismatch_new_password(lang)
-    db.query('update Users set password = \'{0}\' where username = \'{1}\''.format(pwd, user), False)
+    password = cr.encrypt(pwd)
+    db.query('update Users set password = \'{0}\' where username = \'{1}\''.format(password, user), False)
     return True, msg.successfull_pass_change(lang)

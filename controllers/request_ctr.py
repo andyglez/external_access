@@ -26,7 +26,7 @@ def is_a_valid_request(form, lang):
         return (False, msg.request_authorization_messages('email', 'miss', lang))
     if len(aux[1].split('.')) != 3:
         return (False, msg.request_authorization_messages('email', 'addr', lang))
-    if form['name'] == '':
+    if form['fullname'] == '':
         return (False, msg.request_authorization_messages('name', 'empty', lang))
     if form['dni'] == '':
         return (False, msg.request_authorization_messages('dni', 'empty', lang))
@@ -44,7 +44,10 @@ def make_request(username, mail, form, lang):
     insert_into_pending(username, name, crypted, area, dni, form['email'], address, form['phone'], datetime.now().isoformat(), 'default', '')
 
     coworkers = db.query('select username, email from Users where area = \'{0}\''.format(area))
-    dean = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{0}\''.format(x))) > 0][0]
+    list_of_deans = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{0}\''.format(x))) > 0]
+    if len(list_of_deans) == 0:
+        return 'error'
+    dean = list_of_deans[0]
 
     data = (name, form['email'], area, address)
     email.send_mail_to_dean(mail, username, dni, dean, data)

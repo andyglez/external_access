@@ -8,7 +8,7 @@
         {% endif %}
         {% if not self_data %}
         <form action="{{ url_for('profile', user=user) }}">
-            <button type="submit" class="btn-sm btn-secondary">
+            <button type="submit" class="btn btn-success btn-sm">
                 {{ word('profile', session['lang']) }}: {{user}}
             </button>
         </form>

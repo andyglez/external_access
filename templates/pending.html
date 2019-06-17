@@ -34,7 +34,7 @@
                 {% if flags[i] and session['roles']['is_dean'] %}
                     <form action="{{ url_for('authorize', username=row[0], dni=row[4], author=session['user'], action='dean') }}" method="GET">
                         <td>
-                            <button id="auth_button" type="submit" class="btn btn-success btn-sm" onclick="disable()">
+                            <button id="auth_button" type="submit" class="btn btn-success btn-sm">
                                 {{ word('authorize', session['lang']) }}
                             </button>
                         </td>

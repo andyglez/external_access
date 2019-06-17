@@ -66,7 +66,8 @@ def request_form():
     if not value:
         flash(message, category='error')
         return redirect(url_for('request_form'))
-    request_ctr.make_request(request.form['user'], mail, request.form, cookies.get('lang'))
+    resp = request_ctr.make_request(request.form['user'], mail, request.form, cookies.get('lang'))
+    flash(resp)
     return redirect(url_for('start'))
 
 @app.route('/request?new_password', methods=['GET', 'POST'])
@@ -84,7 +85,7 @@ def confirm_password(user,dni, e_addr):
     value, message = password_ctr.verify_email(user, request.form['pass'], request.form['conf'], cookies.get('lang'))
     flash(message)
     if value:
-        return redirect(url_for('login'))
+        return redirect(url_for('start'))
     return redirect(url_for('confirm_password', user, dni, e_addr))   
 
 @app.route('/logout')
@@ -219,7 +220,10 @@ def authorize(username, dni, author, action):
 def render_pdf(username, name, dni, phone, e_mail):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
-    rendered = render_template('pdf_template.html', user=username, name=name, dni=dni, phone=phone, e_mail=e_mail, year=datetime.now().year)
+    data = userinfo.consume_webservice(e_mail)
+    rendered = render_template('pdf_template.html', 
+                                user=username, name=name, dni=dni, phone=phone, e_mail=e_mail,
+                                year=datetime.now().year, cat=data.CatDocenteInvestigativa, ocp=data.CatOcupacional)
     pdf = pdfkit.from_string(rendered, False, css=os.path.dirname(os.path.abspath(__file__)) + url_for('static', filename='css/print.css'))
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
