@@ -314,6 +314,11 @@ def get_words(word, lang='es'):
             'en' : 'Confirm',
             'es' : 'Confirmar',
             'ca' : 'Confirmar'
+        },
+        'local_phones':{
+            'en' : 'Local Phones',
+            'es' : 'Teléfonos Locales',
+            'ca' : 'Teléfons Locals'
         }
     }
     return wds[word][lang]

@@ -38,6 +38,9 @@
                 <form action="{{ url_for('create_user') }}">
                     <button type="submit" class="btn btn-primary">{{ word('create', session['lang']) }}</button>
                 </form>
+                <form action="{{ url_for('local_phones') }}">
+                    <button type="submit" class="btn btn-primary">{{ word('local_phones', session['lang']) }}</button>
+                </form>
                 {% endif %}
                 {% if session['roles']['is_root'] or session['roles']['is_dean'] or session['roles']['is_ddi'] %}
                 <form action="{{ url_for('pending', page=1) }}">
