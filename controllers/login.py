@@ -20,7 +20,7 @@ def check_user_login(user, password, cookies):
     cookies.set('info', v[0] if len(v) > 0 else v)
     cookies.set('area', v[0][2])
     cookies.set('phone', v[0][5])
-    cookies.set('headers', [x for x in msg.get_headers(cookies.get('lang'))])
+    cookies.set('headers', msg.get_headers(cookies.get('lang')))
     return (True, '')
 
 def get_basic_info(username):
