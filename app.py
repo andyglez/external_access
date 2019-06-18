@@ -37,7 +37,7 @@ def start():
     return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1,
                         month=datetime.now().month, year=datetime.now().year))
 
-@app.route('/index?user=<user>&group=<group>&page=<page>&month=<month>&year=<year>', methods=['GET', 'POST'])
+@app.route('/index?user=<user>&group=<group>&page=<page>&month=<int:month>&year=<int:year>', methods=['GET', 'POST'])
 def index(user, group, page=1, month=datetime.now().month, year=datetime.now().year):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
