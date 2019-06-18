@@ -22,7 +22,8 @@ mail = Mail(app)
 @app.route('/', methods=['GET', 'POST'])
 def start():
     if cookies.contains('user'):
-        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1,
+                        month=datetime.now().month, year=datetime.now().year))
     login.set_cookies(cookies)
     if request.method == 'GET':
         return render_template('login.html', word=get_words)
@@ -33,14 +34,15 @@ def start():
     if not value:
         flash(message, category='error')
         return redirect(url_for('start'))
-    return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
+    return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1,
+                        month=datetime.now().month, year=datetime.now().year))
 
 @app.route('/index?user=<user>&group=<group>&page=<page>&month=<month>&year=<year>', methods=['GET', 'POST'])
 def index(user, group, page=1, month=datetime.now().month, year=datetime.now().year):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if user != cookies.get('user') and not (cookies.get('roles')['is_root'] or cookies.get('roles')['is_admin'] or cookies.get('roles')['is_ddi']):
-        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1), month, year)
     index_ctr.set_cookies(cookies)
     phone = login.get_profile_data(user)[0][5]
     (regular, roaming) = index_ctr.set_data_to_cookies(user, group, phone, cookies, month, year)
@@ -58,7 +60,7 @@ def index(user, group, page=1, month=datetime.now().month, year=datetime.now().y
             seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
             regular = regular, roaming = roaming, user = user, group = group, self_data=(user == cookies.get('user')),
             showing_details = cookies.get('show_details'), enumerate=lambda x: enumerate(x),
-            in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10, current=int(page), total=total, data=data,
+            in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10, current=int(page), total=total, data=data, mth=month, yr=year,
             clean_date= lambda x: x.date(), months=time_conversion.get_first_previous(year, month, 12), get_month=lambda x: time_conversion.int_to_month(x))
 
 @app.route('/request', methods=['GET', 'POST'])
@@ -114,7 +116,8 @@ def profile(user):
     profile_ctr.set_cookies(cookies)
     info = login.get_profile_data(user)[0]
     if profile_ctr.check_role_permissions(user, info, cookies):
-        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1,
+                        month=datetime.now().month, year=datetime.now().year))
     (current, rest) = profile_ctr.current_roles(user)
     if request.method == 'POST':
         if 'bonus' in request.form:
@@ -146,7 +149,8 @@ def search_none(category='name'):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if search_ctr.dont_have_permissions(cookies.get('roles')):
-        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1,
+                                month=datetime.now().month, year=datetime.now().year))
     if request.method == 'POST':
         if request.form['query'] == '':
             return redirect(url_for('search_none',category=category))
@@ -158,7 +162,8 @@ def search(category, query='', page=1):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if search_ctr.dont_have_permissions(cookies.get('roles')):
-        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1,
+                        month=datetime.now().month, year=datetime.now().year))
     if request.method == 'POST':
         return redirect(url_for('search', category=category, query=request.form['query'], page=str(page)))
     data = search_ctr.search(cookies, query, category)
@@ -175,7 +180,8 @@ def remove(user, name, area, category, page):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if remove_ctr.dont_have_permissions(cookies.get('roles')):
-        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1,
+                        month=datetime.now().month, year=datetime.now().year))
     if request.method == 'POST' and 'reason' in request.form:
         remove_ctr.log_removal(user, name, area, cookies.get('user'), request.form['reason'])
         return redirect(url_for('search', category=category, query=cookies.get('query_value'), page=page))
@@ -186,7 +192,8 @@ def create_user():
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if create_ctr.dont_have_permissions(cookies.get('roles')):
-        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1,
+                        month=datetime.now().month, year=datetime.now().year))
     (groups, roles, areas) = create_ctr.load_visual_options()
     if request.method == 'POST':
         if len(login.get_profile_data(request.form['user'])) > 0:
@@ -200,7 +207,8 @@ def pending(page=1):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if pending_ctr.dont_have_permissions(cookies.get('roles')):
-        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1,
+                        month=datetime.now().month, year=datetime.now().year))
     (data, headers) = pending_ctr.get_data()
     flags = [x[-1] == '' for x in data]
     total = len(data) // 10 if len(data) % 10 == 0 else (len(data) // 10) + 1

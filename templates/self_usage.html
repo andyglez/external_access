@@ -127,28 +127,28 @@
             <h3>{{ word('results', session['lang']) }}: {{ word('page', session['lang']) }} {{current}}/{{total}} ({{len(session['details'])}} total)</h3>
             <div class="form-inline">
                 {% if current != 1 %}
-                    <form action="{{ url_for('index', user=user, group=group, page=1) }}" method="GET">
+                    <form action="{{ url_for('index', user=user, group=group, page=1, month=mth, year=yr) }}" method="GET">
                         <button type="submit" class="btn btn-secondary">
                             {{ word('first', session['lang']) }}
                         </button>
                     </form>
                 {% endif %}    
                 {% if current > 1 %}
-                    <form action="{{ url_for('index', user=user, group=group, page=current - 1) }}" method="GET">
+                    <form action="{{ url_for('index', user=user, group=group, page=current - 1, month=mth, year=yr) }}" method="GET">
                         <button type="submit" class="btn btn-secondary">
                             {{ word('prev', session['lang']) }}
                         </button>
                     </form>
                 {% endif %}
                 {% if current < total %}
-                    <form action="{{ url_for('index', user=user, group=group, page=current + 1) }}" method="GET">
+                    <form action="{{ url_for('index', user=user, group=group, page=current + 1, month=mth, year=yr) }}" method="GET">
                         <button type="submit" class="btn btn-secondary">
                             {{ word('next', session['lang']) }}
                         </button>
                     </form>
                 {% endif %}
                 {% if current != total %}
-                    <form action="{{ url_for('index', user=user, group=group, page=total) }}" method="GET">
+                    <form action="{{ url_for('index', user=user, group=group, page=total, month=mth, year=yr) }}" method="GET">
                         <button type="submit" class="btn btn-secondary">
                             {{ word('last', session['lang']) }}
                         </button>

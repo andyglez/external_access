@@ -24,7 +24,7 @@
     <body py:match="item.tag=='{http://www.w3.org/1999/xhtml}body'" py:attrs="item.items() + [('onload','setFocus();')]">
         <nav class="navbar navbar-primary bg-primary">
             <div class="form-inline">
-                <form action="{{ url_for('index', user=session['user'], group=session['group'], page=1) }}">
+                <form action="{{ url_for('index', user=session['user'], group=session['group'], page=1, month=session['month'], year=session['year']) }}">
                     <button type="submit" class="btn btn-primary">{{word('home', session['lang'])}}</button>
                 </form>
                 <form action="{{ url_for('profile', user=session['user']) }}">

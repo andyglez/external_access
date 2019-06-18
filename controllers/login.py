@@ -2,9 +2,12 @@ from utils.cookies import Cookies
 from settings import database as db, encryption as cr
 from utils import userinfo
 from languages import messages as msg
+from datetime import datetime
 
 def set_cookies(cookies):
     cookies.set('current', 'start')
+    cookies.set('month', datetime.now().month)
+    cookies.set('year', datetime.now().year)
     if not cookies.contains('lang'):
         cookies.set('lang', 'es')
 
