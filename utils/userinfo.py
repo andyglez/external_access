@@ -44,9 +44,9 @@ def percentage(consumed, total):
 def consume_webservice(mail):
     url = 'https://login.uh.cu/WebServices/CuoteService.asmx?WSDL'
     ssl._create_default_https_context = ssl._create_unverified_context
-    client = Client(url)
 
     try:
+        client = Client(url)
         results = client.service.DatosTrabajador(mail)
         if not bool(results):
             return -1
