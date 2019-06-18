@@ -9,8 +9,8 @@ def set_cookies(cookies):
     if not cookies.contains('show_details'):
         cookies.set('show_details', False)
 
-def set_data_to_cookies(user, group, phone, cookies):
-    data = build_data_from_user_quota(user, group, phone)
+def set_data_to_cookies(user, group, phone, cookies, month, year):
+    data = build_data_from_user_quota(user, group, phone, month, year)
     (quota, regular_consumed, roaming_consumed, details, perc_regular, perc_roam) = data
     cookies.set('quota', quota)
     cookies.set('consumed', regular_consumed)
@@ -18,11 +18,11 @@ def set_data_to_cookies(user, group, phone, cookies):
     cookies.set('details', details)
     return (perc_regular, perc_roam)
 
-def build_data_from_user_quota(user, group, phone):
+def build_data_from_user_quota(user, group, phone, month, year):
     quota = get_quota(group)
     bonus = get_bonus(user)
     quota = userinfo.get_user_quota(quota, bonus)
-    consumed = get_consumed(user)
+    consumed = get_consumed(user, month, year)
     regular_consumed = sum([b.timestamp() - a.timestamp() for u, a, b, p, i in consumed if p in phone and b.timestamp() > 0])
     roaming_consumed = sum([b.timestamp() - a.timestamp() for u, a, b, p, i in consumed if p not in phone and b.timestamp() > 0])
     details = [(i, p, stt, stp if stp.timestamp() > 0 else "", stp.timestamp() - stt.timestamp() if stp.timestamp() > 0 else 0) for u, stt, stp, p, i in consumed]
@@ -45,10 +45,10 @@ def get_bonus(username):
                         where UserName = \'{0}\'
                         and date_format(Expires, "%Y-%m-%d") > \'{1}\''''.format(username, datetime.now().date().isoformat()))
 
-def get_consumed(username):
+def get_consumed(username, month, year):
     return db.query('''select UserName,AcctStartTime,AcctStopTime,CallingStationId,ConnectInfo_start
                         from radacct
                         where UserName = \'{0}@uh.cu\'
                         and date_format(AcctStartTime, "%Y-%m-%d") >= \'{1}\'
                         order by AcctStartTime desc'''.format(username
-                        ,datetime(datetime.now().year, datetime.now().month, 1).date().isoformat()))
+                        ,datetime(year, month, 1).date().isoformat()))

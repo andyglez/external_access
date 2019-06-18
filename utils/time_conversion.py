@@ -30,3 +30,14 @@ def hours_to_seconds(hours):
 
 def seconds_to_hours(seconds):
     return seconds / 3600
+
+def get_first_previous(year, month, total):
+    i = total
+    t_year = year
+    t_month = month
+    result = []
+    while i > 0:
+        (t_year, t_month) = previous_date(t_year, t_month)
+        result.append((t_year, t_month))
+        i -= 1
+    return result

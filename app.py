@@ -35,27 +35,31 @@ def start():
         return redirect(url_for('start'))
     return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
 
-@app.route('/index?user=<user>&group=<group>&page=<page>', methods=['GET', 'POST'])
-def index(user, group, page=1):
+@app.route('/index?user=<user>&group=<group>&page=<page>&month=<month>&year=<year>', methods=['GET', 'POST'])
+def index(user, group, page=1, month=datetime.now().month, year=datetime.now().year):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     if user != cookies.get('user') and not (cookies.get('roles')['is_root'] or cookies.get('roles')['is_admin'] or cookies.get('roles')['is_ddi']):
         return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1))
     index_ctr.set_cookies(cookies)
     phone = login.get_profile_data(user)[0][5]
-    (regular, roaming) = index_ctr.set_data_to_cookies(user, group, phone, cookies)
+    (regular, roaming) = index_ctr.set_data_to_cookies(user, group, phone, cookies, month, year)
     if request.method == 'POST':
+        if 'month' in request.form:
+            return redirect(url_for('index', user=user, group=group, page=1,
+                    month=time_conversion.month_to_int(request.form['month'].split()[0]),
+                    year=int(request.form['month'].split()[1])))
         cookies.set('show_details', not cookies.get('show_details'))
     total = len(cookies.get('details')) // 10 if len(cookies.get('details')) % 10 == 0 else (len(cookies.get('details')) // 10) + 1
     data = index_ctr.get_bonus_logs(user)
     if int(page) > total and total > 0:
-        return redirect(url_for('index', user=user, group=group, page=1))
+        return redirect(url_for('index', user=user, group=group, page=1, month=month, year=year))
     return render_template('self_usage.html', word= get_words, len= lambda x: len(x),
             seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
             regular = regular, roaming = roaming, user = user, group = group, self_data=(user == cookies.get('user')),
             showing_details = cookies.get('show_details'), enumerate=lambda x: enumerate(x),
             in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10, current=int(page), total=total, data=data,
-            clean_date= lambda x: x.date())
+            clean_date= lambda x: x.date(), months=time_conversion.get_first_previous(year, month, 12), get_month=lambda x: time_conversion.int_to_month(x))
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_form():
