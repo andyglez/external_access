@@ -277,7 +277,7 @@ def local_phones():
         db.query('insert into local_phones (phone, description) values (\'{0}\',\'{1}\')'.format(request.form['phone'], request.form['description']))
         return redirect(url_for('local_phones'))
     data = db.query('select * from local_phones')
-    return render_template('local', word=get_words, data=data)
+    return render_template('local.html', word=get_words, data=data)
 
 @app.route('/delete_local_phone?phone=<phone>&description=<description>')
 def delete_local_phone(phone, description):
