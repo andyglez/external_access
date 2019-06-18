@@ -3,7 +3,7 @@
 
 <div class="block block-details">
     <div style="padding-left:13px;">
-        {% if self_data %}
+        {% if self_data and to_date %}
             <h3>{{ word('welcome', session['lang']) }} {{session['user']}}</h3>
         {% endif %}
         {% if not self_data %}
@@ -12,6 +12,9 @@
                 {{ word('profile', session['lang']) }}: {{user}}
             </button>
         </form>
+        {% endif %}
+        {% if not to_date %}
+            <h3>{{ word('results', session['lang']) }}: {{ get_month(month) }} {{year }}</h3>
         {% endif %}
     </div>
     <div style="padding-left:13px;">
