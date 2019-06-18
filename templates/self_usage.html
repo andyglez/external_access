@@ -93,7 +93,7 @@
                         <td> {{comment}} </td>
                         <td> {{clean_date(expires)}} </td>
                         <td>
-                            <form action="{{ url_for('remove_bonus', user=user, bonus=bonus, comment=comment, group=group, month=mth, year=yr) }}">
+                            <form action="{{ url_for('remove_bonus', user=user, bonus=bonus, comment=comment, group=group, page=current, month=mth, year=yr) }}">
                                 <button type="submit" class="btn btn-danger btn-sm">
                                     {{ word('force', session['lang']) }}
                                 </button>
