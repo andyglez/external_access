@@ -50,7 +50,7 @@ def get_consumed(username, month, year):
     (a,b) = time_conversion.next_date(year, month)
     return db.query('''select UserName,AcctStartTime,AcctStopTime,CallingStationId,ConnectInfo_start
                         from radacct
-                        where (UserName = \'{0}@uh.cu\' or UserName = \'{1}\'
+                        where (UserName = \'{0}@uh.cu\' or UserName = \'{1}\')
                         and date_format(AcctStartTime, "%Y-%m-%d") >= \'{2}\'
                         and date_format(AcctStartTime, "%Y-%m-%d") < \'{3}\'
                         order by AcctStartTime desc'''.format(username, username,
