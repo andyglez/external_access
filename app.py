@@ -59,7 +59,7 @@ def index(user, group, page=1, month=datetime.now().month, year=datetime.now().y
     return render_template('self_usage.html', word= get_words, len= lambda x: len(x),
             seconds_to_time=lambda x: time_conversion.seconds_to_time(x),
             regular = regular, roaming = roaming, user = user, group = group, self_data=(user == cookies.get('user')),
-            showing_details = cookies.get('show_details'), enumerate=lambda x: enumerate(x), to_date=month==cookies.get('month') and year=cookies.get('year'),
+            showing_details = cookies.get('show_details'), enumerate=lambda x: enumerate(x), to_date=month==cookies.get('month') and year==cookies.get('year'),
             in_page=lambda i: i >= (int(page) - 1) * 10 and i < int(page) * 10, current=int(page), total=total, data=data, mth=month, yr=year,
             clean_date= lambda x: x.date(), months=time_conversion.get_first_previous(year, month, 12), get_month=lambda x: time_conversion.int_to_month(x))
 
