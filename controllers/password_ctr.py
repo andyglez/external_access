@@ -5,7 +5,8 @@ def check_info(user, e_addr, mail, lang='es'):
     result = db.query('select username, id from Users where username = \'{0}\' and email = \'{1}\''.format(user, e_addr))
     if len(result) == 0:
         return False, msg.user_not_found(user, lang)
-    email.send_new_pass(mail, user, result[0], e_addr)
+    (user, dni) = result[0]
+    email.send_new_pass(mail, user, dni, e_addr)
     return True, msg.check_your_email(lang)
 
 def verify_email(user, pwd, conf, lang='es'):

@@ -32,6 +32,10 @@ def is_a_valid_request(form, lang):
         return (False, msg.request_authorization_messages('dni', 'empty', lang))
     if form['address'] == '':
         return (False, msg.request_authorization_messages('address', 'empty', lang))
+    if len(form['dni']) > 11:
+        return (False, msg.dni_too_long(lang))
+    if userinfo.consume_webservice(form['email']) == -1:
+        return (False, msg.bad_webservice_return(form['email'], lang))
     return (True, '')
 
 def make_request(username, mail, form, lang):
@@ -41,13 +45,14 @@ def make_request(username, mail, form, lang):
     if result == -1:
         return 'error'
     (name, dni, address) = (form['fullname'], form['dni'], form['address'])
-    insert_into_pending(username, name, crypted, area, dni, form['email'], address, form['phone'], datetime.now().isoformat(), 'default', '')
 
     coworkers = db.query('select username, email from Users where area = \'{0}\''.format(area))
     list_of_deans = [y for (x, y) in coworkers if len(db.query('select (username) from DBRoles where roles = \'dean\' and username = \'{0}\''.format(x))) > 0]
     if len(list_of_deans) == 0:
         return 'error'
     dean = list_of_deans[0]
+
+    insert_into_pending(username, name, crypted, area, dni, form['email'], address, form['phone'], datetime.now().isoformat(), 'default', '')
 
     data = (name, form['email'], area, address)
     email.send_mail_to_dean(mail, username, dni, dean, data)

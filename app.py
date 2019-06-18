@@ -60,21 +60,28 @@ def index(user, group, page=1):
 @app.route('/request', methods=['GET', 'POST'])
 def request_form():
     cookies.set('current', 'request_form')
+    if not cookies.contains('show_req'):
+        cookies.set('show_req', False)
     if request.method == 'GET':
-        return render_template('request.html', word=get_words)
+        return render_template('request.html', word=get_words,
+        data=cookies.get('request') if cookies.get('show_req') else {},
+        show=cookies.get('show_req'))
     value, message = request_ctr.is_a_valid_request(request.form, cookies.get('lang'))
     if not value:
         flash(message, category='error')
+        cookies.set('request', request.form)
+        cookies.set('show_req', True)
         return redirect(url_for('request_form'))
     resp = request_ctr.make_request(request.form['user'], mail, request.form, cookies.get('lang'))
     flash(resp)
+    cookies.set('show_req', False)
     return redirect(url_for('start'))
 
 @app.route('/request?new_password', methods=['GET', 'POST'])
 def request_password():
     if request.method == 'GET':
         return render_template('password.html', word=get_words, confirm=False)
-    value, message = password_ctr.check_info(request.form['user'], request.form['email'], mail, cookies.get('lang'))
+    value, message = password_ctr.check_info(request.form['email'], mail, cookies.get('lang'))
     flash(message)
     return redirect(url_for('request_password'))
     
@@ -221,9 +228,11 @@ def render_pdf(username, name, dni, phone, e_mail):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
     data = userinfo.consume_webservice(e_mail)
+    author = cookies.get('info')[1]
     rendered = render_template('pdf_template.html', 
                                 user=username, name=name, dni=dni, phone=phone, e_mail=e_mail,
-                                year=datetime.now().year, cat=data.CatDocenteInvestigativa, ocp=data.CatOcupacional)
+                                year=datetime.now().year, cat=data.CatDocenteInvestigativa,
+                                ocp=data.CatOcupacional, author=author)
     pdf = pdfkit.from_string(rendered, False, css=os.path.dirname(os.path.abspath(__file__)) + url_for('static', filename='css/print.css'))
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'

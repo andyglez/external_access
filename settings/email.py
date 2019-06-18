@@ -7,6 +7,7 @@ mail_username = 'accesotelefonico@uh.cu'
 #mail_password = '***'
 #mail_use_tls = False
 #mail_use_ssl = True
+hostname = 'http://accesoremoto.uh.cu'
 
 def send_auth_request(mail, body, recip):
     msg = Message(subject='Petición de Autorización', recipients=[recip], sender=mail_username)
@@ -16,7 +17,7 @@ def send_auth_request(mail, body, recip):
 def send_new_pass(mail, user, dni, recip):
     msg = Message(subject='Nueva Contraseña', recipients=[recip], sender=mail_username)
     msg.body = 'Hola {0}. Pulse en el siguiente enlace para modificar su contraseña:\n'.format(user)
-    msg.body = msg.body + 'http://accesoremoto.uh.cu' + url_for('confirm_password', user=user, dni=dni, e_addr=recip)
+    msg.body = msg.body + hostname + url_for('confirm_password', user=user, dni=dni, e_addr=recip)
     mail.send(msg)
 
 def notify_user(mail, user, recip, action):
@@ -27,12 +28,12 @@ def notify_user(mail, user, recip, action):
         mail.send(msg)
     elif action == 'dean':
         msg = Message(subject='Autorización del Servicio', recipients=[recip], sender=mail_username)
-        msg.body = 'Hola {0}.\nSu petición ha sido procesada con éxito.\nVisite a su decano o jefe de área para obtener sus datos.'
+        msg.body = 'Hola {0}.\nSu petición ha sido procesada con éxito.\nVisite a su decano o jefe de área para obtener sus datos.'.format(user)
         mail.send(msg)
     elif action == 'ddi':
         msg = Message(subject='Usuario Confirmado', recipients=[recip], sender=mail_username)
-        msg.body = 'Hola {0}.\nSu autorización ha sido confirmada y su usuario ha sido habilitado.\n'
-        msg.body = msg.body + 'Visite el sitio de información que se encuentra en http://accesoremoto.uh.cu'
+        msg.body = 'Hola {0}.\nSu autorización ha sido confirmada y su usuario ha sido habilitado.\n'.format(user)
+        msg.body = msg.body + 'Visite el sitio de información que se encuentra en ' + hostname
         mail.send(msg)
 
 def send_mail_to_dean(mail, username, dni, dean, data):
@@ -47,7 +48,7 @@ Nombre : {1}
 E-mail : {2}
 Area   : {3}
 Direc. : {4}
-Para completar la autorización visite la aplicación el siguiente enlace http://accesoremoto.uh.cu'''.format(username, name, e_addr, area, address), recip=x)
+Para completar la autorización visite la aplicación el siguiente enlace {{5}}'''.format(username, name, e_addr, area, address, hostname), recip=x)
 
 def set_mail(config):
     config['MAIL_SERVER']= mail_server

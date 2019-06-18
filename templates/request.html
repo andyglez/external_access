@@ -24,7 +24,7 @@
     <section id="data" style="position: relative; top: 80px">
         <div class="container" style="width: 100%">
             <center>
-                <div class="container" style="width: 100%">
+                <div class="container" style="width: 50%">
                     {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                     {% for category, message in messages %}
@@ -37,35 +37,31 @@
                     {% endif %}
                     {% endwith %}
                     <form action="" method="POST" name="login">
-                        <div class="form-inline">
-                            <div class="form-group fg-line">
-                                <input type="text" name="user" class="form-control input-sm" placeholder="{{word('user', session['lang'])}}" autocomplete="off"/>
-                            </div>
-                            <div class="form-group fg-line" style="position: relative;left: 50px">
-                                <input type="password" name="password" class="form-control input-sm" placeholder="{{ word('password', session['lang'])}}"/>
-                            </div>
+                        <div class="form-group fg-line">
+                            <input type="text" name="user" class="form-control input-sm" placeholder="{{word('user', session['lang'])}}" autocomplete="off" value="{{ data['user'] if show else ""}}"/>
                         </div>
-                        <div class="form-inline" style="position: relative; top:10px">
-                            <div class="form-group fg-line">
-                                <input type="text" name="phone" class="form-control input-sm" placeholder="{{ word('phone', session['lang'])}}" onkeypress="return isNumberKey(event)" autocomplete="off"/>
-                            </div>                            
-                            <div class="form-group fg-line" style="position: relative; left: 50px">
-                                <input type="password" name="confirm" class="form-control input-sm" placeholder="{{ word('verify', session['lang'])}} {{word('password', session['lang'])}}"/>
-                            </div>
+                        <div class="form-group fg-line">
+                            <input type="text" name="phone" class="form-control input-sm" placeholder="{{ word('phone', session['lang'])}}" onkeypress="return isNumberKey(event)" autocomplete="off" value="{{ data['phone'] if show else ""}}"/>
                         </div>
-                        <div class="form-group fg-line" style="position: relative; top:20px">
-                            <input type="text" name="email" class="form-control input-sm" placeholder="{{ word('email', session['lang'])}}" autocomplete="off"/>
+                        <div class="form-group fg-line">
+                            <input type="password" name="password" class="form-control input-sm" placeholder="{{ word('password', session['lang'])}}" value="{{ data['password'] if show else ""}}"/>
                         </div>
-                        <div class="form-group fg-line" style="position: relative; top:30px">
-                            <input type="text" name="fullname" class="form-control input-sm" placeholder="{{ word('name', session['lang'])}}" autocomplete="off"/>
+                        <div class="form-group fg-line">
+                            <input type="password" name="confirm" class="form-control input-sm" placeholder="{{ word('verify', session['lang'])}} {{word('password', session['lang'])}}" value="{{ data['confirm'] if show else "" }}"/>
                         </div>
-                        <div class="form-group fg-line" style="position: relative; top:40px">
-                            <input type="text" name="dni" class="form-control input-sm" placeholder="{{ word('id', session['lang'])}}" autocomplete="off"/>
+                        <div class="form-group fg-line">
+                            <input type="text" name="email" class="form-control input-sm" placeholder="{{ word('email', session['lang'])}}" autocomplete="off" value="{{ data['email'] if show else "" }}"/>
                         </div>
-                        <div class="form-group fg-line" style="position: relative; top:50px">
-                            <input type="text" name="address" class="form-control input-sm" placeholder="{{ word('address', session['lang'])}}" autocomplete="off"/>
+                        <div class="form-group fg-line">
+                            <input type="text" name="fullname" class="form-control input-sm" placeholder="{{ word('name', session['lang'])}}" autocomplete="off" value="{{ data['fullname'] if show else ""}}"/>
                         </div>
-                        <button type="submit" class="btn btn-success" style="position: relative; top:60px">
+                        <div class="form-group fg-line">
+                            <input type="text" name="dni" class="form-control input-sm" placeholder="{{ word('id', session['lang'])}}" autocomplete="off" value="{{ data['dni'] if show else "" }}"/>
+                        </div>
+                        <div class="form-group fg-line">
+                            <input type="text" name="address" class="form-control input-sm" placeholder="{{ word('address', session['lang'])}}" autocomplete="off" value="{{ data['address'] if show else ""}}"/>
+                        </div>
+                        <button type="submit" class="btn btn-success">
                             {{ word('ask', session['lang'])}}
                         </button>
                     </form>

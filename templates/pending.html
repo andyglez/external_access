@@ -22,7 +22,7 @@
                 <td> {{row[6]}} </td>
                 <td> {{row[7]}} </td>
                 <td> {{clean_date(row[8])}} </td>
-                {% if not flags[i] and session['roles']['is_ddi'] %}
+                {% if not flags[i] and (session['roles']['is_ddi'] or session['roles']['is_root'] %}
                     <form action="{{ url_for('authorize', username=row[0], dni=row[4], author=session['user'], action='ddi') }}" method="GET">
                         <td>
                             <button type="submit" class="btn btn-success btn-sm">
@@ -40,7 +40,7 @@
                         </td>
                     </form>
                 {% endif %}
-                {% if session['roles']['is_dean'] %}
+                {% if not flags[i] and session['roles']['is_dean'] %}
                     <form action="{{ url_for('render_pdf', username=row[0], name=row[1], dni=row[4], phone=row[7], e_mail=row[5])}}" method="GET">
                         <td>
                             <button type="submit" class="btn btn-dark btn-sm">

@@ -48,7 +48,7 @@ def get_bonus(username):
 def get_consumed(username):
     return db.query('''select UserName,AcctStartTime,AcctStopTime,CallingStationId
                         from radacct
-                        where UserName = \'{0}\'
+                        where UserName = \'{0}@uh.cu\'
                         and date_format(AcctStartTime, "%Y-%m-%d") >= \'{1}\'
                         and date_format(AcctStopTime, "%Y-%m-%d") >= \'{2}\'
                         and date_format(AcctStopTime, "%Y-%m-%d") < \'{3}\'

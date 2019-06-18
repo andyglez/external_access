@@ -6,11 +6,11 @@ def wrong_user_pass(language='es'):
     }
     return message[language]
 
-def user_not_found(username, language='es'):
+def user_not_found(email, language='es'):
     message = {
-        'en': 'User '+username+' doesn\'t exist',
-        'es': 'Usuario '+username+' no existe',
-        'ca': 'Usuari '+username+' no existeix'
+        'en': 'Email '+email+' is not associated to any account',
+        'es': 'El correo '+email+' no está asociado a ninguna cuenta',
+        'ca': 'El correu '+email+' no és associat a cap compte'
     }
     return message[language]
 
@@ -27,6 +27,30 @@ def email_already_in_use(email, language='es'):
         'en': 'Email: '+email+' is already anchored to another account',
         'es': 'La dirección: '+email+' ya está anclado a otra cuenta',
         'ca': 'La direcció: '+email+' ja està ancorat amb altre conta'
+    }
+    return message[language]
+
+def bad_webservice_return(email, language='es'):
+    message = {
+        'en': 'Email ' +email+ ' is incorrect',
+        'es': 'El correo ' + email + ' es incorrecto',
+        'ca': 'El correu ' + email + ' es incorrecte'
+    }
+    return message[language]
+
+def dni_too_long(language='es'):
+    message = {
+        'en' : 'DNI must be at most of 11 characters',
+        'es' : 'El carnet debe ser de 11 caracteres a lo sumo',
+        'ca' : 'El DNI ha de ser quan més de 11 nombres'
+    }
+    return message['language']
+
+def no_dean_error(language='es'):
+    message = {
+        'en' : 'Error. Please contact with your administrator',
+        'es' : 'Error. Por favor contacte con su administrador',
+        'ca' : 'Error. Contacti amb el seu administrador si us plau'
     }
     return message[language]
 

@@ -22,7 +22,7 @@ def get_words(word, lang='es'):
         },
         'unregistered': {
             'en' : 'Not registered yet?',
-            'es' : 'No se ha registrado aún?',
+            'es' : '¿No se ha registrado aún?',
             'ca' : 'No s\'ha registrat encara?'
         },
         'ask': {
@@ -262,7 +262,7 @@ def get_words(word, lang='es'):
         },
         'lost' : {
             'en' : 'Lost your password?',
-            'es' : 'Ha perdido la contraseña?',
+            'es' : '¿Ha perdido la contraseña?',
             'ca' : 'Ha perdut la contrasenya?'
         },
         'newpass':{
@@ -291,9 +291,9 @@ def get_words(word, lang='es'):
             'ca' : 'Acces Remot'
         },
         'doc' : {
-            'en' : 'Document',
-            'es' : 'Documento',
-            'ca' : 'Document'
+            'en' : 'Download document',
+            'es' : 'Descargar planilla',
+            'ca' : 'Descarregar document'
         },
         'authorize': {
             'en' : 'Authorize',
