@@ -258,5 +258,12 @@ def dismiss(username):
     db.query('delete from Pending where username = \'{0}\''.format(username))
     return redirect(url_for('pending', page=1))
 
+@app.route('/remove_bonus?user=<user>&bonus=<bonus>&comment=<comment>&group=<group>&page=<page>&month=<month>&year=<year>')
+def remove_bonus(user, bonus, comment, group, page, month, year):
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    db.query('delete from QuotaBonus where UserName = \'{0}\' and Bonus = \'{1}\' and Comment = \'{2}\''.format(user, bonus, comment))
+    return redirect(url_for('index', user=user, group=group, page=page, month=month, year=year))
+
 if __name__ == '__main__':    
     app.run(debug=True, host='0.0.0.0', port=5000)
