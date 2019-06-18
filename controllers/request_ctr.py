@@ -13,10 +13,10 @@ def is_a_valid_request(form, lang):
         return (False, msg.request_authorization_messages('phone', 'empty', lang))
     data = check_email(form['email'])
     if len(data) > 0:
-        return (False, msg.email_already_in_use(lang))
+        return (False, msg.email_already_in_use(form['email'], lang))
     data = check_existance(form['user'])
     if len(data) > 0:
-        return (False, msg.user_already_exists(lang))    
+        return (False, msg.user_already_exists(form['user'], lang))    
     if form['password'] != form['confirm']:
         return (False, msg.mismatch_new_password(lang))
     if len(form['phone']) != 8:
