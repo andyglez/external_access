@@ -147,7 +147,7 @@
 <table class="table">
     <h3>{{ word('func', session['lang']) }}</h3>
 {% if session['roles']['is_root'] or session['roles']['is_admin'] or session['roles']['is_ddi'] %}
-    <form action="{{ url_for('index', user=user, group=group, page=1) }}" method="GET">
+    <form action="{{ url_for('index', user=user, group=group, page=1, month=session['month'], year=session['year']) }}" method="GET">
         <tr>
             <td>
                 <button type="submit" class="btn btn-primary">
