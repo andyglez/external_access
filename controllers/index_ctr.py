@@ -46,7 +46,7 @@ def get_bonus(username):
                         and date_format(Expires, "%Y-%m-%d") > \'{1}\''''.format(username, datetime.now().date().isoformat()))
 
 def get_consumed(username):
-    return db.query('''select UserName,AcctStartTime,AcctStopTime,CallingStationId,ConnectionInfo_start
+    return db.query('''select UserName,AcctStartTime,AcctStopTime,CallingStationId,ConnectInfo_start
                         from radacct
                         where UserName = \'{0}@uh.cu\'
                         and date_format(AcctStartTime, "%Y-%m-%d") >= \'{1}\'
