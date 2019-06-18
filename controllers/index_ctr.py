@@ -2,6 +2,7 @@ from utils.cookies import Cookies
 from utils import userinfo
 from settings import database as db
 from datetime import datetime
+from utils import time_conversion
 
 def set_cookies(cookies):
     cookies.reset_all_flags(excepted='show_details')
@@ -46,9 +47,12 @@ def get_bonus(username):
                         and date_format(Expires, "%Y-%m-%d") > \'{1}\''''.format(username, datetime.now().date().isoformat()))
 
 def get_consumed(username, month, year):
+    (a,b) = time_conversion.next_date(year, month)
     return db.query('''select UserName,AcctStartTime,AcctStopTime,CallingStationId,ConnectInfo_start
                         from radacct
                         where UserName = \'{0}@uh.cu\'
                         and date_format(AcctStartTime, "%Y-%m-%d") >= \'{1}\'
+                        and date_format(AcctStartTime, "%Y-%m-%d") < \'{2}\'
                         order by AcctStartTime desc'''.format(username
-                        ,datetime(year, month, 1).date().isoformat()))
+                        ,datetime(year, month, 1).date().isoformat()
+                        ,datetime(a, b, 1)))
