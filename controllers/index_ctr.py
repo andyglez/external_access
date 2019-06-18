@@ -25,7 +25,7 @@ def build_data_from_user_quota(user, group, phone):
     consumed = get_consumed(user)
     regular_consumed = sum([b.timestamp() - a.timestamp() for u, a, b, p, i in consumed if p in phone and b.timestamp() > 0])
     roaming_consumed = sum([b.timestamp() - a.timestamp() for u, a, b, p, i in consumed if p not in phone and b.timestamp() > 0])
-    details = [(i, p, stt, stp, stp.timestamp() - stt.timestamp() if stt.timestamp() > 0 else 0) for u, stt, stp, p, i in consumed]
+    details = [(i, p, stt, stp if stp.timestamp() > 0 else "", stp.timestamp() - stt.timestamp() if stp.timestamp() > 0 else 0) for u, stt, stp, p, i in consumed]
     return (quota, regular_consumed, roaming_consumed, details, regular_consumed * 100 / quota['total'], roaming_consumed * 100 / quota['roaming'])
 
 
