@@ -126,6 +126,7 @@ def profile(user):
                 if request.form['bonus'].isnumeric() and int(request.form['bonus']) > 0 and d > datetime.today():
                     seconds = time_conversion.hours_to_seconds(int(request.form['bonus']))
                     profile_ctr.add_quota_bonus(user, seconds, request.form['comment'], request.form['until'])
+                    flash(msg.request_sent_successfully(cookies.get('lang')))
                 else:
                     flash('error')
             else:
@@ -264,6 +265,29 @@ def remove_bonus(user, bonus, comment, group, page, month, year):
         return redirect(url_for('start'))
     db.query('delete from QuotaBonus where UserName = \'{0}\' and Bonus = \'{1}\' and Comment = \'{2}\''.format(user, bonus, comment))
     return redirect(url_for('index', user=user, group=group, page=page, month=month, year=year))
+
+@app.route('/local_phones', methods=['GET', 'POST'])
+def local_phones():
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    if not cookies.get('roles')['is_root']:
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1,
+                        month=datetime.now().month, year=datetime.now().year))
+    if request.method == 'POST':
+        db.query('insert into local_phones (phone, description) values (\'{0}\',\'{1}\')'.format(request.form['phone'], request.form['description']))
+        return redirect(url_for('local_phones'))
+    data = db.query('select * from local_phones')
+    return render_template('local', word=get_words, data=data)
+
+@app.route('/delete_local_phone?phone=<phone>&description=<description>')
+def delete_local_phone(phone, description):
+    if not cookies.contains('user'):
+        return redirect(url_for('start'))
+    if not cookies.get('roles')['is_root']:
+        return redirect(url_for('index', user=cookies.get('user'), group=cookies.get('group'), page=1,
+                        month=datetime.now().month, year=datetime.now().year))
+    db.query('delete from local_phones where phone = \'{0}\' and description = \'{1}\''.format(phone, description))
+    return redirect(url_for('local_phones'))
 
 if __name__ == '__main__':    
     app.run(debug=True, host='0.0.0.0', port=5000)
