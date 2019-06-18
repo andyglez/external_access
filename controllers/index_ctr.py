@@ -53,6 +53,6 @@ def get_consumed(username, month, year):
                         where (UserName = \'{0}@uh.cu\' or UserName = \'{1}\')
                         and date_format(AcctStartTime, "%Y-%m-%d") >= \'{2}\'
                         and date_format(AcctStartTime, "%Y-%m-%d") < \'{3}\'
-                        order by AcctStartTime desc'''.format(username, username,
+                        order by AcctStartTime desc'''.format(username, username
                         ,datetime(year, month, 1).date().isoformat()
                         ,datetime(a, b, 1)))
