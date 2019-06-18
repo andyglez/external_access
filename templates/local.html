@@ -12,7 +12,7 @@
                 <td>{{ phone }}</td>
                 <td>{{ desc }}</td>
                 <td>
-                    <form action="{{ url_for('delete_local_phone', phone=phone, desc=desc) }}">
+                    <form action="{{ url_for('delete_local_phone', phone=phone, description=desc) }}">
                         <button type="submit" class="btn btn-danger btn-sm">
                             {{ word('force', session['lang']) }}
                         </button>
