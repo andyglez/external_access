@@ -21,12 +21,12 @@
             </td>
             <td>
                 {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-                    {% if not flags['is_mod_addr'] %}
+                    {% if not flags['is_mod_name'] %}
                         <button type="submit" class="btn btn-light btn-sm" name="button_name">
                             <img src="{{ url_for('static', filename='images/edit.png') }}"></img>
                         </button>
                     {% endif %}
-                    {% if flags['is_mod_addr'] %}
+                    {% if flags['is_mod_name']  %}
                         <button type="submit" class="btn btn-light btn-sm" name="button_name">
                             <img src="{{ url_for('static', filename='images/ok.png') }}"></img>
                         </button>
@@ -83,12 +83,12 @@
             </td>
             <td>
                 {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-                    {% if not flags['is_mod_addr'] %}                   
+                    {% if not flags['is_mod_phone'] %}                   
                     <button type="submit" class="btn btn-light btn-sm" name="button_phone">
                         <img src="{{ url_for('static', filename='images/edit.png') }}"></img>
                     </button>
                     {% endif %}
-                    {% if flags['is_mod_addr'] %}
+                    {% if flags['is_mod_phone'] %}
                     <button type="submit" class="btn btn-light btn-sm" name="button_phone">
                         <img src="{{ url_for('static', filename='images/ok.png') }}"></img>
                     </button>
@@ -110,12 +110,12 @@
             </td>
             <td>
                 {% if session['roles']['is_root'] or session['roles']['is_ddi'] %}
-                    {% if not flags['is_mod_addr'] %}  
+                    {% if not flags['is_mod_carne'] %}  
                     <button type="submit" class="btn btn-light btn-sm" name="button_carne">
                         <img src="{{ url_for('static', filename='images/edit.png') }}"></img>
                     </button>
                     {% endif %}
-                    {% if flags['is_mod_addr'] %}
+                    {% if flags['is_mod_carne'] %}
                     <button type="submit" class="btn btn-light btn-sm" name="button_carne">
                         <img src="{{ url_for('static', filename='images/ok.png') }}"></img>
                     </button>
