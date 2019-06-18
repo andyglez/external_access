@@ -173,6 +173,11 @@ def request_authorization_messages(field, reason, language='es'):
     return options[field][reason][language]
 
 def get_headers(language='es'):
+    info_start = {
+        'en': 'Connection Info',
+        'es': 'Información de la conexión',
+        'ca': 'Informació de la connexió'
+    }
     phone = {
         'en': 'Phone',
         'es': 'Teléfono',
@@ -193,4 +198,4 @@ def get_headers(language='es'):
         'es': 'Consumido',
         'ca': 'Consumit'
     }
-    return [phone[language], start_time[language], stop_time[language], consumed[language]]
+    return [info_start[language], phone[language], start_time[language], stop_time[language], consumed[language]]

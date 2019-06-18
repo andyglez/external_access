@@ -23,9 +23,9 @@ def build_data_from_user_quota(user, group, phone):
     bonus = get_bonus(user)
     quota = userinfo.get_user_quota(quota, bonus)
     consumed = get_consumed(user)
-    regular_consumed = sum([b.timestamp() - a.timestamp() for u, a, b, p in consumed if p in phone])
-    roaming_consumed = sum([b.timestamp() - a.timestamp() for u, a, b, p in consumed if p not in phone])
-    details = [(p, stt, stp, stp.timestamp() - stt.timestamp()) for u, stt, stp, p in consumed]
+    regular_consumed = sum([b.timestamp() - a.timestamp() for u, a, b, p, i in consumed if p in phone and b.timestamp() > 0])
+    roaming_consumed = sum([b.timestamp() - a.timestamp() for u, a, b, p, i in consumed if p not in phone and b.timestamp() > 0])
+    details = [(i, p, stt, stp, stp.timestamp() - stt.timestamp() if stt.timestamp() > 0 else 0) for u, stt, stp, p, i in consumed]
     return (quota, regular_consumed, roaming_consumed, details, regular_consumed * 100 / quota['total'], roaming_consumed * 100 / quota['roaming'])
 
 
@@ -46,12 +46,10 @@ def get_bonus(username):
                         and date_format(Expires, "%Y-%m-%d") > \'{1}\''''.format(username, datetime.now().date().isoformat()))
 
 def get_consumed(username):
-    return db.query('''select UserName,AcctStartTime,AcctStopTime,CallingStationId
+    return db.query('''select UserName,AcctStartTime,AcctStopTime,CallingStationId,ConnectionInfo_start
                         from radacct
                         where UserName = \'{0}@uh.cu\'
                         and date_format(AcctStartTime, "%Y-%m-%d") >= \'{1}\'
-                        and date_format(AcctStopTime, "%Y-%m-%d") >= \'{2}\'
-                        and date_format(AcctStopTime, "%Y-%m-%d") < \'{3}\'
                         order by AcctStartTime desc'''.format(username
                         ,datetime(datetime.now().year, datetime.now().month, 1).date().isoformat()
                         ,datetime(datetime.now().year, datetime.now().month, 1).date().isoformat()                        

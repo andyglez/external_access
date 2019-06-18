@@ -100,9 +100,10 @@
                     {% endfor %}
                 </thead>
                 <tbody>
-                {% for (i, (phone, stt, stp, consumed)) in enumerate(session['details']) %}
+                {% for (i, (info_start, phone, stt, stp, consumed)) in enumerate(session['details']) %}
                     {% if in_page(i) %}
                     <tr>
+                        <td> {{info_start}} </td>
                         <td> {{phone}} </td>
                         <td> {{stt}} </td>
                         <td> {{stp}} </td>
