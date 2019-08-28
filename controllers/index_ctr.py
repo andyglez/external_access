@@ -24,10 +24,10 @@ def build_data_from_user_quota(user, group, phone, month, year):
     bonus = get_bonus(user)
     quota = userinfo.get_user_quota(quota, bonus)
     consumed = get_consumed(user, month, year)
-    regular_consumed = sum([b.timestamp() - a.timestamp() for u, a, b, p, i in consumed if p in phone and b.timestamp() > 0])
-    roaming_consumed = sum([b.timestamp() - a.timestamp() for u, a, b, p, i in consumed if p not in phone and b.timestamp() > 0])
-    details = [(i, p, stt, stp if stp.timestamp() > 0 else "", stp.timestamp() - stt.timestamp() if stp.timestamp() > 0 else 0) for u, stt, stp, p, i in consumed]
-    return (quota, regular_consumed, roaming_consumed, details, regular_consumed * 100 / quota['total'], roaming_consumed * 100 / quota['roaming'])
+    regular_consumed = sum([s for (u, a, b, p, i, s) in consumed if p in phone and type(b) != type(None) and type(s) != type(None) and b.timestamp() > 0])
+    roaming_consumed = sum([s for (u, a, b, p, i, s) in consumed if p not in phone and type(b) != type(None) and type(s) != type(None) and b.timestamp() > 0])
+    details = [(i, p, stt, stp if (type(stp) != type(None) and stp.timestamp() > 0) else "", s if type(s) != type(None) else 0) for u, stt, stp, p, i, s in consumed]
+    return (quota, regular_consumed, roaming_consumed, details, (regular_consumed * 100 / quota['total']) if quota['total'] > 0 else 0, (roaming_consumed * 100 / quota['roaming']) if quota['roaming'] > 0 else 0)
 
 
 def get_bonus_logs(user):
@@ -38,7 +38,7 @@ def get_bonus_logs(user):
 def get_quota(groupname):
     return db.query('''select Value, GroupName
                         from radgroupcheck
-                        where GroupName = \'{}\''''.format(groupname))
+                        where GroupName = \'{0}\''''.format(groupname))
 
 def get_bonus(username):
     return db.query('''select Bonus,UserName
@@ -48,7 +48,7 @@ def get_bonus(username):
 
 def get_consumed(username, month, year):
     (a,b) = time_conversion.next_date(year, month)
-    return db.query('''select UserName,AcctStartTime,AcctStopTime,CallingStationId,ConnectInfo_start
+    return db.query('''select UserName,AcctStartTime,AcctStopTime,CallingStationId,ConnectInfo_start,AcctSessionTime
                         from radacct
                         where (UserName = \'{0}@uh.cu\' or UserName = \'{1}\')
                         and date_format(AcctStartTime, "%Y-%m-%d") >= \'{2}\'

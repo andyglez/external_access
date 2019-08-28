@@ -48,7 +48,7 @@ Nombre : {1}
 E-mail : {2}
 Area   : {3}
 Direc. : {4}
-Para completar la autorización visite la aplicación el siguiente enlace {{5}}'''.format(username, name, e_addr, area, address, hostname), recip=x)
+Para completar la autorización navegue hacia el siguiente enlace {5}'''.format(username, name, e_addr, area, address, hostname), recip=x)
 
 def set_mail(config):
     config['MAIL_SERVER']= mail_server

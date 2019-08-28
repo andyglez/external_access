@@ -11,14 +11,14 @@ def is_a_valid_request(form, lang):
         return (False, msg.request_authorization_messages('email', 'empty', lang))
     if form['phone'] == '':
         return (False, msg.request_authorization_messages('phone', 'empty', lang))
-    data = check_email(form['email'])
-    if len(data) > 0:
+    if not check_email(form['email']):
         return (False, msg.email_already_in_use(form['email'], lang))
-    data = check_existance(form['user'])
-    if len(data) > 0:
+    if not check_existance(form['user']):
         return (False, msg.user_already_exists(form['user'], lang))    
     if form['password'] != form['confirm']:
         return (False, msg.mismatch_new_password(lang))
+    if len(form['password']) < 6:
+        return (False, msg.request_authorization_messages('password', 'length', lang))
     if len(form['phone']) != 8:
         return (False, msg.request_authorization_messages('phone', 'length', lang))
     aux = form['email'].split('@')
@@ -55,15 +55,22 @@ def make_request(username, mail, form, lang):
     insert_into_pending(username, name, crypted, area, dni, form['email'], address, form['phone'], datetime.now().isoformat(), 'default', '')
 
     data = (name, form['email'], area, address)
-    email.send_mail_to_dean(mail, username, dni, dean, data)
-    email.notify_user(mail, username, form['email'], 'start')
+    try:
+        email.send_mail_to_dean(mail, username, dni, dean, data)
+        email.notify_user(mail, username, form['email'], 'start')
+    except:
+        return 'error'
     return msg.request_sent_successfully(lang)
 
 def check_existance(username):
-    return db.query('select * from Users where Username=\'{}\''.format(username))
+    a = db.query('select * from Users where Username=\'{}\''.format(username))
+    b = db.query('select * from Pending where Username=\'{}\''.format(username))
+    return len(a) == 0 and len(b) == 0
 
 def check_email(mail):
-    return db.query('select * from Pending where email=\'{}\''.format(mail))
+    a = db.query('select * from Users where email=\'{}\''.format(mail))
+    b = db.query('select * from Pending where email=\'{}\''.format(mail))
+    return len(a) == 0 and len(b) == 0
 
 def insert_into_pending(username, name, password, area, dni, email, address, phone, notes, group, auth):
     return db.query('''insert into Pending (username, name, password, area, id, email, address, phone, notes, groupname, authorized_by)

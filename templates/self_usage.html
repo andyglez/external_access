@@ -38,7 +38,7 @@
         {{ word('remain', session['lang']) }}: {{seconds_to_time(session['quota']['total'] - session['consumed'])}}
     </div>
 </div>
-{% if session['quota']['roaming'] > 1 %}
+{% if group == 'full' %}
 <div class="block block-details">
     <div style="padding-left:13px;">
         <h3>Roaming</h3>

@@ -168,7 +168,14 @@ def request_authorization_messages(field, reason, language='es'):
                 'es' : 'El campo Dirección no debe estar vacío',
                 'ca' : 'El camp Adreça no ha de ser vacu'
             }
-        }
+        },
+        'password' : {
+                'length' : {
+                    'en' : 'Password must be of at least 6 characters long',
+                    'es' : 'La contraseña debe tener al menos 6 caracteres',
+                    'ca' : 'La contrasenya ha de tenir quan menys 6 caracters'
+                    }
+                }
     }
     return options[field][reason][language]
 
