@@ -35,6 +35,10 @@ def notify_user(mail, user, recip, action):
         msg.body = 'Hola {0}.\nSu autorización ha sido confirmada y su usuario ha sido habilitado.\n'.format(user)
         msg.body = msg.body + 'Visite el sitio de información que se encuentra en ' + hostname
         mail.send(msg)
+    elif action == 'del':
+        msg = Message(subject='Cuenta no autorizada', recipients=[recip], sender=mail_username)
+        msg.body = 'Lo sentimos. Sus datos no han sido aceptados y por tanto su cuenta no autorizada'
+        mail.send(msg)
 
 def send_mail_to_dean(mail, username, dni, dean, data):
     (name, e_addr, area, address) = data

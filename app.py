@@ -256,7 +256,7 @@ def render_pdf(username, name, dni, phone, e_mail):
 def dismiss(username):
     if not cookies.contains('user'):
         return redirect(url_for('start'))
-    db.query('delete from Pending where username = \'{0}\''.format(username))
+    authorize_ctr.dismiss_action(username, mail)
     return redirect(url_for('pending', page=1))
 
 @app.route('/remove_bonus?user=<user>&bonus=<bonus>&comment=<comment>&group=<group>&page=<page>&month=<month>&year=<year>')

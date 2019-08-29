@@ -22,3 +22,9 @@ def authorize_dean_action(name, authorizer, mail):
     em.notify_user(mail, name, e_addr, 'dean')
     db.query('update Pending set authorized_by = \'{0}\' where username = \'{1}\''.format(authorizer, name))
     return 0
+
+def dismiss_action(username, mail):
+    e_addr = db.query('select email, id from Pending where username = \'{0}\''.format(username))[0][0]
+    em.notify_user(mail, username, e_addr, 'del')
+    db.query('delete from Pending where username = \'{0}\''.format(username))
+    return 0
