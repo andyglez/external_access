@@ -1,24 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:py="http://purl.org/kid/ns#">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
+
 <head>
-    <meta content="text/html; charset=UTF-8"
-        http-equiv="content-type" py:replace="''"/>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''" />
     <title>{{ word('ask', session['lang'])}}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
     <script src="{{ url_for('static', filename='js/onlynumber.js') }}"></script>
     <script src="{{ url_for('static', filename='js/functions.js') }}"></script>
-    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/telephone.png') }}"/>
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/telephone.png') }}" />
 </head>
 
 <section id="main">
     <nav class="navbar navbar-primary bg-primary">
-        <form action="{{url_for('start')}}" class="navbar-brand"><button type="submit" class="btn btn-primary"> {{ word('app_name', session['lang']) }} </button> </form>
+        <form action="{{url_for('start')}}" class="navbar-brand"><button type="submit" class="btn btn-primary">
+                {{ word('app_name', session['lang']) }} </button> </form>
         <div class="form-inline">
-            <form action="{{url_for('start')}}" method="POST"><button type="submit" class="btn btn-primary" name="language" value="es">es</button></form>
-            <form action="{{url_for('start')}}" method="POST"><button type="submit" class="btn btn-primary" name="language" value="en">en</button></form>                    
-            <form action="{{url_for('start')}}" method="POST"><button type="submit" class="btn btn-primary" name="language" value="ca">ca</button></form>                    
+            <form action="{{url_for('start')}}" method="POST"><button type="submit" class="btn btn-primary"
+                    name="language" value="es">es</button></form>
+            <form action="{{url_for('start')}}" method="POST"><button type="submit" class="btn btn-primary"
+                    name="language" value="en">en</button></form>
+            <form action="{{url_for('start')}}" method="POST"><button type="submit" class="btn btn-primary"
+                    name="language" value="ca">ca</button></form>
         </div>
     </nav>
     <section id="data" style="position: relative; top: 80px">
@@ -28,46 +31,77 @@
                     {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                     {% for category, message in messages %}
-                        <div id="messages" class="alert alert-{{ category }} alert-dismissible" role="alert" style="background-color:lightblue">
-                            {{ message }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="hide()"><span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+                    <div id="messages" class="alert alert-{{ category }} alert-dismissible" role="alert"
+                        style="background-color:lightblue">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                            onclick="hide()"><span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     {% endfor %}
                     {% endif %}
                     {% endwith %}
-                    <form action="" method="POST" name="login">
-                        <div class="form-group fg-line">
-                            <input type="text" name="user" class="form-control input-sm" placeholder="{{word('user', session['lang'])}}" autocomplete="off" value="{{ data['user'] if show else ""}}"/>
-                        </div>
-                        <div class="form-group fg-line">
-                            <input type="text" name="phone" class="form-control input-sm" placeholder="{{ word('phone', session['lang'])}}" onkeypress="return isNumberKey(event)" autocomplete="off" value="{{ data['phone'] if show else ""}}"/>
-                        </div>
-                        <div class="form-group fg-line">
-                            <input type="password" name="password" class="form-control input-sm" placeholder="{{ word('password', session['lang'])}}" value="{{ data['password'] if show else ""}}"/>
-                        </div>
-                        <div class="form-group fg-line">
-                            <input type="password" name="confirm" class="form-control input-sm" placeholder="{{ word('verify', session['lang'])}} {{word('password', session['lang'])}}" value="{{ data['confirm'] if show else "" }}"/>
-                        </div>
-                        <div class="form-group fg-line">
-                            <input type="text" name="email" class="form-control input-sm" placeholder="{{ word('email', session['lang'])}}" autocomplete="off" value="{{ data['email'] if show else "" }}"/>
-                        </div>
-                        <div class="form-group fg-line">
-                            <input type="text" name="fullname" class="form-control input-sm" placeholder="{{ word('name', session['lang'])}}" autocomplete="off" value="{{ data['fullname'] if show else ""}}"/>
-                        </div>
-                        <div class="form-group fg-line">
-                            <input type="text" name="dni" class="form-control input-sm" placeholder="{{ word('id', session['lang'])}}" autocomplete="off" value="{{ data['dni'] if show else "" }}"/>
-                        </div>
-                        <div class="form-group fg-line">
-                            <input type="text" name="address" class="form-control input-sm" placeholder="{{ word('address', session['lang'])}}" autocomplete="off" value="{{ data['address'] if show else ""}}"/>
-                        </div>
-                        <button type="submit" class="btn btn-success">
-                            {{ word('ask', session['lang'])}}
-                        </button>
-                    </form>
                 </div>
             </center>
-        </div>
+            <form action="" method="POST" name="login">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="user">{{word('user', session['lang'])}}</label>
+                        <input type="text" name="user" id="user" class="form-control input-sm" placeholder="e.j pepe"
+                            autocomplete="off" value="{{ data['user'] if show else ""}}" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="phone">{{word('phone', session['lang'])}}</label>
+                        <input type="text" name="phone" id="phone" class="form-control input-sm"
+                            placeholder="e.j 7777777" onkeypress="return isNumberKey(event)" autocomplete="off"
+                            value="{{ data['phone'] if show else ""}}" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="email">{{word('email', session['lang'])}}</label>
+                        <input type="text" name="email" id="email" class="form-control input-sm"
+                            placeholder="e.j pepe@area.uh.cu" autocomplete="off"
+                            value="{{ data['email'] if show else "" }}" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-9">
+                        <label for="fullname">{{word('name', session['lang'])}}</label>
+                        <input type="text" name="fullname" id="fullname" class="form-control input-sm"
+                            placeholder="e.j Pepe Perez Perez" autocomplete="off"
+                            value="{{ data['fullname'] if show else ""}}" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="dni">{{word('id', session['lang'])}}</label>
+                        <input type="text" name="dni" id="dni" class="form-control input-sm" placeholder="99999999999"
+                            autocomplete="off" value="{{ data['dni'] if show else "" }}" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="address">{{ word('address', session['lang'])}}</label>
+                        <input type="text" name="address" id="address" class="form-control input-sm"
+                            placeholder="e.j Calle Pepe #666 e/ Pipe y Papo" autocomplete="off"
+                            value="{{ data['address'] if show else ""}}" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="password">{{ word('password', session['lang'])}}</label>
+                        <input type="password" name="password" id="password" class="form-control input-sm"
+                            placeholder="+8 (,.;# etc...)" value="{{ data['password'] if show else ""}}" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="confirm">{{ word('verify', session['lang'])}}
+                            {{word('password', session['lang'])}}</label>
+                        <input type="password" name="confirm" id="confirm" class="form-control input-sm" placeholder=""
+                            value="{{ data['confirm'] if show else "" }}" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    {{ word('ask', session['lang'])}}
+                </button>
+            </form>
     </section>
 </section>
+
 </html>
