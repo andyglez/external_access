@@ -12,7 +12,7 @@
     <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/telephone.png') }}"/>
 </head>
 
-<section id="main">
+<body>
     <nav class="navbar navbar-primary bg-primary">
         <form action="{{url_for('start')}}" class="navbar-brand"><button type="submit" class="btn btn-primary"> {{ word('app_name', session['lang']) }} </button> </form>
         <div class="form-inline">
@@ -21,57 +21,54 @@
             <form method="POST"><button type="submit" class="btn btn-primary" name="language" value="ca">ca</button></form>                    
         </div>
     </nav>
-    <section id="login" style="position: relative; top: 80px">
-        <div class="container" style="width: 50%">
-            <center>
-                <div class="container" style="width: 50%">
-                    {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                            {% for category, message in messages %}
-                                <div id="messages" class="alert alert-{{ category }} alert-dismissible" role="alert" style="background-color:lightblue">
-                                    {{ message }}
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="hide()"><span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endwith %}
-                    <form action="" method="POST" name="login">
-                        <div class="container" style="width: 50%">
-                            <div class="form-group fg-line">
-                                <input type="text" name="user" class="form-control input-sm" placeholder="{{word('user', session['lang'])}}" autocomplete="off"/>
-                            </div>
-                            <div class="form-group fg-line">
-                                <input type="password" name="password" class="form-control input-sm" placeholder="{{ word('password', session['lang'])}}"/>
-                            </div>                      
-                            <button type="submit" class="btn btn-primary">
-                                {{ word('enter', session['lang'])}}
-                            </button>
-                        </div>
-                    </form>
+    <div class="container" id="login" style="position: relative; top: 40px">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div id="messages" class="alert alert-{{ category }} alert-dismissible" role="alert" style="background-color:lightblue">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="hide()"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <center>
+            <form action="" method="POST" name="login">
+                <div class="row align-items-center justify-content-center">
+                    <div class="form-group col-md-3">
+                        <input type="text" name="user" class="form-control input-sm" placeholder="{{word('user', session['lang'])}}" autocomplete="off">
+                    </div>
+            	</div>
+			    <div class="row align-items-center justify-content-center">
+                    <div class="form-group col-md-3">
+                        <input type="password" name="password" class="form-control input-sm" placeholder="{{ word('password', session['lang'])}}">
+                    </div>
+			    </div>
+			    <div class="row align-items-center justify-content-center">
+                    <div class="form-group col-md-3">
+                        <button type="submit" class="btn btn-primary">{{ word('enter', session['lang'])}}</button>
+                    </div>
                 </div>
-            </center>
-        </div>
-    </section>
-    <section id="functions" style="position: relative; top: 160px">
-        <div class="container" style="width: 50%">
-            <center>
-                <div class="container" style="width: 50%">
-                    <form action="{{url_for('request_form')}}" method="GET">
-                        <p>{{ word('unregistered', session['lang']) }}</p>
-                        <button type="submit" class="btn btn-success btn-sm">
-                            {{ word('ask', session['lang']) }}
-                        </button>
-                    </form>
-                    <form action="{{url_for('request_password')}}">
-                        <p>{{ word('lost', session['lang']) }}</p>
-                        <button type="submit" class="btn btn-success btn-sm">
-                            {{ word('newpass', session['lang']) }}
-                        </button>
-                    </form>
-                </div>
-            </center>
-        </div>
-    </section>
-</section>
+            </form>
+        </center>
+    </div>
+    <div class="container" id="functions" style="position: relative; top: 120px">
+        <center>
+            <div class="container">
+                <form action="{{url_for('request_form')}}" method="GET" class="form-group">
+                    <p>{{ word('unregistered', session['lang']) }}</p>
+                    <button type="submit" class="btn btn-success btn-sm">
+                        {{ word('ask', session['lang']) }}
+                    </button>
+                </form>
+                <form action="{{url_for('request_password')}}" class="form-group">
+                    <p>{{ word('lost', session['lang']) }}</p>
+                    <button type="submit" class="btn btn-success btn-sm">
+                        {{ word('newpass', session['lang']) }}
+                    </button>
+                </form>
+            </div>
+        </center>
+    </div>
+</body>
 </html>
